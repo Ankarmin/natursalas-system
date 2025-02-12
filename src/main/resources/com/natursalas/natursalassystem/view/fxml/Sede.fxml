@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="719.0"
+           prefWidth="1213.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+            <children>
+                <BorderPane layoutX="129.0" layoutY="113.0" prefHeight="719.2" prefWidth="1213.6"
+                            AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                            AnchorPane.topAnchor="0.0">
+                    <top>
+                        <AnchorPane prefHeight="34.0" prefWidth="1214.0" styleClass="white-bg"
+                                    stylesheets="@../css/SedeDesign.css" BorderPane.alignment="CENTER">
+                            <children>
+                                <AnchorPane layoutX="58.0" layoutY="-83.0" prefHeight="34.0" prefWidth="242.0"
+                                            styleClass="gb-color-1" stylesheets="@../css/SedeDesign.css"
+                                            AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                                            AnchorPane.topAnchor="0.0">
+                                    <children>
+                                        <Label layoutX="59.0" layoutY="1.0" text="NaturSalas">
+                                            <font>
+                                                <Font name="System Bold" size="24.0"/>
+                                            </font>
+                                        </Label>
+                                    </children>
+                                </AnchorPane>
+                                <Button layoutX="1065.0" mnemonicParsing="false" styleClass="button-2"
+                                        stylesheets="@../css/SedeDesign.css" text="Cerrar sesión"
+                                        AnchorPane.rightAnchor="14.199999999999818" AnchorPane.topAnchor="0.0"/>
+                                <Label layoutX="258.0" layoutY="4.0" prefHeight="18.0" prefWidth="222.0" text="Inicio"
+                                       AnchorPane.leftAnchor="258.0" AnchorPane.topAnchor="4.0">
+                                    <font>
+                                        <Font size="18.0"/>
+                                    </font>
+                                </Label>
+                                <Label layoutX="377.0" layoutY="8.0" prefHeight="18.0" prefWidth="250.0"
+                                       text="MM:DD:YYYY"/>
+                                <Label layoutX="648.0" layoutY="9.0" text="Label"/>
+                            </children>
+                        </AnchorPane>
+                    </top>
+                    <left>
+                        <AnchorPane prefHeight="640.0" prefWidth="242.0" styleClass="gb-color-1"
+                                    stylesheets="@../css/SedeDesign.css" BorderPane.alignment="CENTER">
+                            <children>
+                                <ImageView fitHeight="105.0" fitWidth="110.0" layoutX="68.0" layoutY="24.0"
+                                           pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../assets/fontUserGreen.png"/>
+                                    </image>
+                                </ImageView>
+                                <Label layoutX="107.0" layoutY="145.0" text="Administrador">
+                                    <font>
+                                        <Font size="18.0"/>
+                                    </font>
+                                </Label>
+                                <Label layoutX="38.0" layoutY="145.0" text="Cuenta:">
+                                    <font>
+                                        <Font size="18.0"/>
+                                    </font>
+                                </Label>
+                                <Line endX="100.0" layoutX="120.0" layoutY="201.0" startX="-100.0"/>
+                                <Button layoutX="21.0" layoutY="235.0" mnemonicParsing="false" prefHeight="46.0"
+                                        prefWidth="200.0" styleClass="button-1" stylesheets="@../css/SedeDesign.css"
+                                        text="Inicio"/>
+                                <Button layoutX="21.0" layoutY="295.0" mnemonicParsing="false" prefHeight="46.0"
+                                        prefWidth="200.0" styleClass="button-1" stylesheets="@../css/SedeDesign.css"
+                                        text="Pacientes"/>
+                                <Button layoutX="21.0" layoutY="358.0" mnemonicParsing="false" prefHeight="46.0"
+                                        prefWidth="200.0" styleClass="button-1" stylesheets="@../css/SedeDesign.css"
+                                        text="Ventas"/>
+                                <Button layoutX="21.0" layoutY="420.0" mnemonicParsing="false" prefHeight="46.0"
+                                        prefWidth="200.0" styleClass="button-1" stylesheets="@../css/SedeDesign.css"
+                                        text="Productos"/>
+                            </children>
+                        </AnchorPane>
+                    </left>
+                    <center>
+                        <AnchorPane prefHeight="606.0" prefWidth="972.0" BorderPane.alignment="CENTER"/>
+                    </center>
+                </BorderPane>
+            </children>
+        </AnchorPane>
+    </children>
+</StackPane>

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SalesDetailDAO implements ISalesDetailDAO {
-    private Connection connection;
+    private final Connection connection;
 
     public SalesDetailDAO(Connection connection) {
         this.connection = connection;

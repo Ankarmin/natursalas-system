@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LocationDAO implements ILocationDAO {
-    private Connection connection;
+    private final Connection connection;
 
     public LocationDAO(Connection connection) {
         this.connection = connection;
@@ -15,12 +15,10 @@ public class LocationDAO implements ILocationDAO {
 
     @Override
     public boolean addLocation(LocationDTO newLocation) {
-        String query = "INSERT INTO location (idLocation, locationName, address, city) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO location (idLocation, address) VALUES (?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, newLocation.getIdLocation());
-            stmt.setString(2, newLocation.getLocationName());
-            stmt.setString(3, newLocation.getAddress());
-            stmt.setString(4, newLocation.getCity());
+            stmt.setString(2, newLocation.getAddress());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -30,12 +28,10 @@ public class LocationDAO implements ILocationDAO {
 
     @Override
     public boolean updateLocation(LocationDTO updatedLocation) {
-        String query = "UPDATE location SET locationName = ?, address = ?, city = ? WHERE idLocation = ?";
+        String query = "UPDATE location SET address = ? WHERE idLocation = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setString(1, updatedLocation.getLocationName());
-            stmt.setString(2, updatedLocation.getAddress());
-            stmt.setString(3, updatedLocation.getCity());
-            stmt.setString(4, updatedLocation.getIdLocation());
+            stmt.setString(1, updatedLocation.getAddress());
+            stmt.setString(2, updatedLocation.getIdLocation());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -62,7 +58,7 @@ public class LocationDAO implements ILocationDAO {
             stmt.setString(1, locationId);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return new LocationDTO(rs.getString("idLocation"), rs.getString("locationName"), rs.getString("address"), rs.getString("city"));
+                return new LocationDTO(rs.getString("idLocation"), rs.getString("address"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -77,7 +73,7 @@ public class LocationDAO implements ILocationDAO {
         try (Statement stmt = connection.createStatement()) {
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
-                locations.add(new LocationDTO(rs.getString("idLocation"), rs.getString("locationName"), rs.getString("address"), rs.getString("city")));
+                locations.add(new LocationDTO(rs.getString("idLocation"), rs.getString("address")));
             }
         } catch (SQLException e) {
             e.printStackTrace();

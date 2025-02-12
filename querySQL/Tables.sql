@@ -1,9 +1,7 @@
 -- Tabla que almacena las ubicaciones o locales
 CREATE TABLE location (
     idLocation VARCHAR(50) PRIMARY KEY,
-    locationName VARCHAR(100) NOT NULL,
-    address VARCHAR(100),
-    city VARCHAR(50)
+    address VARCHAR(100)
 );
 
 -- Tabla que almacena los usuarios y su rol asociado
@@ -11,8 +9,8 @@ CREATE TABLE user (
     idUser INT AUTO_INCREMENT PRIMARY KEY,
     userName VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(50) NOT NULL,
-    role ENUM('admin', 'local') NOT NULL DEFAULT 'local',
-    idLocation VARCHAR(50) UNIQUE,
+    role ENUM('admin', 'user') NOT NULL DEFAULT 'user',
+    idLocation VARCHAR(50) NULL,
     FOREIGN KEY (idLocation) REFERENCES location(idLocation)
 );
 
@@ -49,8 +47,7 @@ CREATE TABLE productsIncrease (
     dateOfEntry DATE NOT NULL,
     quantity INT NOT NULL CHECK (quantity > 0),
     idLocation VARCHAR(50) NOT NULL,
-    FOREIGN KEY (idProduct, idLocation) REFERENCES product(idProduct, idLocation),
-    FOREIGN KEY (idLocation) REFERENCES location(idLocation)
+    FOREIGN KEY (idProduct, idLocation) REFERENCES product(idProduct, idLocation)
 );
 
 -- Tabla que almacena las ventas realizadas
@@ -85,7 +82,7 @@ CREATE TRIGGER afterProductsIncrease
 AFTER INSERT ON productsIncrease
 FOR EACH ROW
 BEGIN
-    UPDATE products
+    UPDATE product
     SET stock = stock + NEW.quantity
     WHERE idProduct = NEW.idProduct AND idLocation = NEW.idLocation;
 END$$
@@ -97,7 +94,7 @@ CREATE TRIGGER afterSalesDetailsInsert
 AFTER INSERT ON salesDetail
 FOR EACH ROW
 BEGIN
-    UPDATE products
+    UPDATE product
     SET stock = stock - NEW.quantity
     WHERE idProduct = NEW.idProduct AND idLocation = NEW.idLocation;
 END$$
@@ -111,7 +108,7 @@ FOR EACH ROW
 BEGIN
     DECLARE currentStock INT;
     SELECT stock INTO currentStock
-    FROM products
+    FROM product
     WHERE idProduct = NEW.idProduct AND idLocation = NEW.idLocation;
 
     IF currentStock < NEW.quantity THEN

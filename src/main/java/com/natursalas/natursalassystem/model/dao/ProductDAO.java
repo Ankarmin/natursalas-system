@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductDAO implements IProductDAO {
-    private Connection connection;
+    private final Connection connection;
 
     public ProductDAO(Connection connection) {
         this.connection = connection;

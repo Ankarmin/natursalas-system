@@ -4,7 +4,7 @@ public class UserDTO {
     private int idUser;
     private String userName;
     private String password;
-    private String role;
+    private String role; // Nuevo campo
     private String idLocation;
 
     public UserDTO() {

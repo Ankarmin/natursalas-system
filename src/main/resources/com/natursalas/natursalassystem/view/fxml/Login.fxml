@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0"
+           prefWidth="450.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.natursalas.natursalassystem.controller.LoginController">
+    <children>
+        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+            <children>
+                <AnchorPane layoutX="125.0" layoutY="119.0" prefHeight="700.0" prefWidth="450.0" styleClass="white-gb"
+                            stylesheets="@../css/PageDesign.css" AnchorPane.bottomAnchor="0.0"
+                            AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <children>
+                        <ImageView fitHeight="88.0" fitWidth="88.0" layoutX="181.0" layoutY="60.0" pickOnBounds="true"
+                                   preserveRatio="true">
+                            <image>
+                                <Image url="@../assets/user_font.png"/>
+                            </image>
+                        </ImageView>
+                        <Label layoutX="136.0" layoutY="159.0" text="Ingresar cuenta">
+                            <font>
+                                <Font name="Tahoma" size="26.0"/>
+                            </font>
+                        </Label>
+                        <TextField fx:id="txtNombreUsuario" layoutX="64.0" layoutY="272.0" prefHeight="42.0"
+                                   prefWidth="322.0" promptText="Nombre de usuario"
+                                   stylesheets="@../css/PageDesign.css">
+                            <font>
+                                <Font name="Tahoma" size="14.0"/>
+                            </font>
+                            <styleClass>
+                                <String fx:value="text-field-1"/>
+                                <String fx:value="white-gb"/>
+                            </styleClass>
+                        </TextField>
+                        <PasswordField fx:id="txtContrasenaUsuario" layoutX="65.0" layoutY="337.0" prefHeight="42.0"
+                                       prefWidth="322.0" promptText="Contraseña" stylesheets="@../css/PageDesign.css">
+                            <styleClass>
+                                <String fx:value="white-gb"/>
+                                <String fx:value="text-field-1"/>
+                            </styleClass>
+                            <font>
+                                <Font name="Tahoma" size="14.0"/>
+                            </font>
+                        </PasswordField>
+                        <TextField fx:id="txtMostrarContrasena" layoutX="65.0" layoutY="337.0" prefHeight="42.0"
+                                   prefWidth="322.0" promptText="Contraseña" stylesheets="@../css/PageDesign.css"
+                                   visible="false">
+                            <styleClass>
+                                <String fx:value="text-field-1"/>
+                                <String fx:value="white-gb"/>
+                            </styleClass>
+                            <font>
+                                <Font name="Tahoma" size="14.0"/>
+                            </font>
+                        </TextField>
+                        <CheckBox fx:id="checkBoxMostrarContrasena" layoutX="65.0" layoutY="405.0"
+                                  mnemonicParsing="false" onAction="#mostrarContrasena" text="Mostrar contraseña">
+                            <font>
+                                <Font name="Tahoma" size="14.0"/>
+                            </font>
+                        </CheckBox>
+                        <Button fx:id="bttnIngresar" layoutX="65.0" layoutY="451.0" mnemonicParsing="false"
+                                onAction="#ingresar" prefHeight="51.0" prefWidth="322.0"
+                                stylesheets="@../css/PageDesign.css" text="Ingresar">
+                            <font>
+                                <Font name="Tahoma Bold" size="18.0"/>
+                            </font>
+                            <styleClass>
+                                <String fx:value="button-1"/>
+                                <String fx:value="radius"/>
+                            </styleClass>
+                        </Button>
+                    </children>
+                </AnchorPane>
+            </children>
+        </AnchorPane>
+    </children>
+</StackPane>

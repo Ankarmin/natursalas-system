@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PatientDAO implements IPatientDAO {
-    private Connection connection;
+    private final Connection connection;
 
     public PatientDAO(Connection connection) {
         this.connection = connection;

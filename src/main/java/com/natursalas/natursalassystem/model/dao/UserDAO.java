@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDAO implements IUserDAO {
-    private Connection connection;
+    private final Connection connection;
 
     public UserDAO(Connection connection) {
         this.connection = connection;
@@ -84,5 +84,18 @@ public class UserDAO implements IUserDAO {
             e.printStackTrace();
         }
         return users;
+    }
+
+    public boolean loginUser(String userName, String password) {
+        String query = "SELECT * FROM user WHERE userName = ? AND password = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, userName);
+            stmt.setString(2, password);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

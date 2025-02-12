@@ -1,9 +1,10 @@
-package com.natursalas.natursalassystem.model.view;
+package com.natursalas.natursalassystem.util;
 
-import java.util.Optional;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+
+import java.util.Optional;
 
 public class AlertMessages {
     private Alert alert;
@@ -32,11 +33,7 @@ public class AlertMessages {
         alert.setContentText(mensaje);
         Optional<ButtonType> option = alert.showAndWait();
 
-        if (option.get().equals(ButtonType.OK)) {
-            return true;
-        } else {
-            return false;
-        }
+        return option.get().equals(ButtonType.OK);
 
     }
 }
