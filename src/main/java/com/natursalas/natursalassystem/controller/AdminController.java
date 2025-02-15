@@ -273,7 +273,7 @@ public class AdminController implements Initializable {
         new Thread() {
 
             public void run() {
-                SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a");
+                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a");
                 while (true) {
                     try {
 
