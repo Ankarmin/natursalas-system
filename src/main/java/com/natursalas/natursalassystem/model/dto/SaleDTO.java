@@ -3,41 +3,41 @@ package com.natursalas.natursalassystem.model.dto;
 import java.sql.Timestamp;
 
 public class SaleDTO {
-    private int idSale;
-    private String idPatient;
+    private String idSale;
+    private String DNI;
     private String diagnosis;
     private String category;
     private Timestamp saleDate;
     private String idLocation;
-    private int idUser;
+    private String email;
 
     public SaleDTO() {
     }
 
-    public SaleDTO(int idSale, String idPatient, String diagnosis, String category, Timestamp saleDate, String idLocation, int idUser) {
+    public SaleDTO(String idSale, String DNI, String diagnosis, String category, Timestamp saleDate, String idLocation, String email) {
         this.idSale = idSale;
-        this.idPatient = idPatient;
+        this.DNI = DNI;
         this.diagnosis = diagnosis;
         this.category = category;
         this.saleDate = saleDate;
         this.idLocation = idLocation;
-        this.idUser = idUser;
+        this.email = email;
     }
 
-    public int getIdSale() {
+    public String getIdSale() {
         return idSale;
     }
 
-    public void setIdSale(int idSale) {
+    public void setIdSale(String idSale) {
         this.idSale = idSale;
     }
 
-    public String getIdPatient() {
-        return idPatient;
+    public String getDNI() {
+        return DNI;
     }
 
-    public void setIdPatient(String idPatient) {
-        this.idPatient = idPatient;
+    public void setDNI(String DNI) {
+        this.DNI = DNI;
     }
 
     public String getDiagnosis() {
@@ -72,11 +72,11 @@ public class SaleDTO {
         this.idLocation = idLocation;
     }
 
-    public int getIdUser() {
-        return idUser;
+    public String getEmail() {
+        return email;
     }
 
-    public void setIdUser(int idUser) {
-        this.idUser = idUser;
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

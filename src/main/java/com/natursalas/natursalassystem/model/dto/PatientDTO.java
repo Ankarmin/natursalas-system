@@ -3,7 +3,7 @@ package com.natursalas.natursalassystem.model.dto;
 import java.sql.Date;
 
 public class PatientDTO {
-    private String idPatient;
+    private String DNI;
     private String firstName;
     private String lastName;
     private int age;
@@ -16,8 +16,8 @@ public class PatientDTO {
     public PatientDTO() {
     }
 
-    public PatientDTO(String idPatient, String firstName, String lastName, int age, String phoneNumber, Date dateOfConsultation, Date dateOfBirth, String district, String idLocation) {
-        this.idPatient = idPatient;
+    public PatientDTO(String DNI, String firstName, String lastName, int age, String phoneNumber, Date dateOfConsultation, Date dateOfBirth, String district, String idLocation) {
+        this.DNI = DNI;
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
@@ -28,12 +28,12 @@ public class PatientDTO {
         this.idLocation = idLocation;
     }
 
-    public String getIdPatient() {
-        return idPatient;
+    public String getDNI() {
+        return DNI;
     }
 
-    public void setIdPatient(String idPatient) {
-        this.idPatient = idPatient;
+    public void setDNI(String DNI) {
+        this.DNI = DNI;
     }
 
     public String getFirstName() {

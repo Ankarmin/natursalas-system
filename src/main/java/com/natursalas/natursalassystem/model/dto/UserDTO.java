@@ -1,37 +1,27 @@
 package com.natursalas.natursalassystem.model.dto;
 
 public class UserDTO {
-    private int idUser;
-    private String userName;
+    private String email;
     private String password;
-    private String role; // Nuevo campo
+    private String role;
     private String idLocation;
 
     public UserDTO() {
     }
 
-    public UserDTO(int idUser, String userName, String password, String role, String idLocation) {
-        this.idUser = idUser;
-        this.userName = userName;
+    public UserDTO(String email, String password, String role, String idLocation) {
+        this.email = email;
         this.password = password;
         this.role = role;
         this.idLocation = idLocation;
     }
 
-    public int getIdUser() {
-        return idUser;
+    public String getEmail() {
+        return email;
     }
 
-    public void setIdUser(int idUser) {
-        this.idUser = idUser;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {

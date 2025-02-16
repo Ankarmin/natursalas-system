@@ -6,8 +6,7 @@ CREATE TABLE location (
 
 -- Tabla que almacena los usuarios y su rol asociado
 CREATE TABLE user (
-    idUser INT AUTO_INCREMENT PRIMARY KEY,
-    userName VARCHAR(50) NOT NULL UNIQUE,
+    email VARCHAR(50) PRIMARY KEY,
     password VARCHAR(50) NOT NULL,
     role ENUM('admin', 'user') NOT NULL DEFAULT 'user',
     idLocation VARCHAR(50) NULL,
@@ -16,7 +15,7 @@ CREATE TABLE user (
 
 -- Tabla que almacena los pacientes y sus datos personales
 CREATE TABLE patient (
-    idPatient CHAR(8) PRIMARY KEY,
+    DNI CHAR(8) PRIMARY KEY,
     firstName VARCHAR(50) NOT NULL,
     lastName VARCHAR(50) NOT NULL,
     age INT NOT NULL CHECK (age > 0),
@@ -52,26 +51,25 @@ CREATE TABLE productsIncrease (
 
 -- Tabla que almacena las ventas realizadas
 CREATE TABLE sale (
-    idSale INT AUTO_INCREMENT PRIMARY KEY,
-    idPatient CHAR(8),
+    idSale CHAR(36) DEFAULT (UUID()) PRIMARY KEY,
+    DNI CHAR(8),
     diagnosis TEXT NOT NULL,
     category VARCHAR(30) NOT NULL,
     saleDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     idLocation VARCHAR(50) NOT NULL,
-    idUser INT NOT NULL,
-    FOREIGN KEY (idPatient) REFERENCES patient(idPatient),
-    FOREIGN KEY (idLocation) REFERENCES location(idLocation),
-    FOREIGN KEY (idUser) REFERENCES user(idUser)
+    FOREIGN KEY (DNI) REFERENCES patient(DNI),
+    FOREIGN KEY (idLocation) REFERENCES location(idLocation)
 );
 
 -- Tabla para almacenar los detalles de los productos vendidos en cada venta
 CREATE TABLE salesDetail (
-    idSale INT NOT NULL,
+    idSale VARCHAR(36) NOT NULL,
     idProduct VARCHAR(20) NOT NULL,
     idLocation VARCHAR(50) NOT NULL,
     quantity INT NOT NULL CHECK (quantity > 0),
     price INT NOT NULL CHECK (price >= 0),
-    PRIMARY KEY (idSale, idProduct, idLocation),
+    subtotal INT GENERATED ALWAYS AS (quantity * price) STORED,
+    PRIMARY KEY (idSale, idProduct),
     FOREIGN KEY (idSale) REFERENCES sale(idSale),
     FOREIGN KEY (idProduct, idLocation) REFERENCES product(idProduct, idLocation)
 );
@@ -94,9 +92,17 @@ CREATE TRIGGER afterSalesDetailsInsert
 AFTER INSERT ON salesDetail
 FOR EACH ROW
 BEGIN
+    DECLARE saleLocation VARCHAR(50);
+    
+    -- Obtener la ubicación desde la tabla sale
+    SELECT idLocation INTO saleLocation
+    FROM sale
+    WHERE idSale = NEW.idSale;
+
+    -- Actualizar el stock del producto en la ubicación correspondiente
     UPDATE product
     SET stock = stock - NEW.quantity
-    WHERE idProduct = NEW.idProduct AND idLocation = NEW.idLocation;
+    WHERE idProduct = NEW.idProduct AND idLocation = saleLocation;
 END$$
 DELIMITER ;
 
@@ -109,7 +115,7 @@ BEGIN
     DECLARE currentStock INT;
     SELECT stock INTO currentStock
     FROM product
-    WHERE idProduct = NEW.idProduct AND idLocation = NEW.idLocation;
+    WHERE idProduct = NEW.idProduct AND idLocation = (SELECT idLocation FROM sale WHERE idSale = NEW.idSale);
 
     IF currentStock < NEW.quantity THEN
         SIGNAL SQLSTATE '45000'
@@ -140,5 +146,15 @@ BEGIN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'dateOfBirth debe ser anterior a la fecha actual';
     END IF;
+END$$
+DELIMITER ;
+
+-- Trigger para calcular automáticamente la edad al insertar un paciente
+DELIMITER $$
+CREATE TRIGGER beforeInsertPatient
+BEFORE INSERT ON patient
+FOR EACH ROW
+BEGIN
+    SET NEW.age = TIMESTAMPDIFF(YEAR, NEW.dateOfBirth, CURDATE());
 END$$
 DELIMITER ;

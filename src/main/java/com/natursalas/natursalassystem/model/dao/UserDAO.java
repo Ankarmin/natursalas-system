@@ -15,9 +15,9 @@ public class UserDAO implements IUserDAO {
 
     @Override
     public boolean addUser(UserDTO newUser) {
-        String query = "INSERT INTO user (userName, password, role, idLocation) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO user (email, password, role, idLocation) VALUES (?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setString(1, newUser.getUserName());
+            stmt.setString(1, newUser.getEmail());
             stmt.setString(2, newUser.getPassword());
             stmt.setString(3, newUser.getRole());
             stmt.setString(4, newUser.getIdLocation());
@@ -30,13 +30,12 @@ public class UserDAO implements IUserDAO {
 
     @Override
     public boolean updateUser(UserDTO updatedUser) {
-        String query = "UPDATE user SET userName = ?, password = ?, role = ?, idLocation = ? WHERE idUser = ?";
+        String query = "UPDATE user SET password = ?, role = ?, idLocation = ? WHERE email = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setString(1, updatedUser.getUserName());
-            stmt.setString(2, updatedUser.getPassword());
-            stmt.setString(3, updatedUser.getRole());
-            stmt.setString(4, updatedUser.getIdLocation());
-            stmt.setInt(5, updatedUser.getIdUser());
+            stmt.setString(1, updatedUser.getPassword());
+            stmt.setString(2, updatedUser.getRole());
+            stmt.setString(3, updatedUser.getIdLocation());
+            stmt.setString(4, updatedUser.getEmail());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -45,10 +44,10 @@ public class UserDAO implements IUserDAO {
     }
 
     @Override
-    public boolean deleteUser(Integer userId) {
-        String query = "DELETE FROM user WHERE idUser = ?";
+    public boolean deleteUser(String email) {
+        String query = "DELETE FROM user WHERE email = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setInt(1, userId);
+            stmt.setString(1, email);
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -57,13 +56,13 @@ public class UserDAO implements IUserDAO {
     }
 
     @Override
-    public UserDTO getUser(Integer userId) {
-        String query = "SELECT * FROM user WHERE idUser = ?";
+    public UserDTO getUser(String email) {
+        String query = "SELECT * FROM user WHERE email = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setInt(1, userId);
+            stmt.setString(1, email);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return new UserDTO(rs.getInt("idUser"), rs.getString("userName"), rs.getString("password"), rs.getString("role"), rs.getString("idLocation"));
+                return new UserDTO(rs.getString("email"), rs.getString("password"), rs.getString("role"), rs.getString("idLocation"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -78,7 +77,7 @@ public class UserDAO implements IUserDAO {
         try (Statement stmt = connection.createStatement()) {
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
-                users.add(new UserDTO(rs.getInt("idUser"), rs.getString("userName"), rs.getString("password"), rs.getString("role"), rs.getString("idLocation")));
+                users.add(new UserDTO(rs.getString("email"), rs.getString("password"), rs.getString("role"), rs.getString("idLocation")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -86,10 +85,10 @@ public class UserDAO implements IUserDAO {
         return users;
     }
 
-    public boolean loginUser(String userName, String password) {
-        String query = "SELECT * FROM user WHERE userName = ? AND password = ?";
+    public boolean loginUser(String email, String password) {
+        String query = "SELECT * FROM user WHERE email = ? AND password = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setString(1, userName);
+            stmt.setString(1, email);
             stmt.setString(2, password);
             ResultSet rs = stmt.executeQuery();
             return rs.next();
@@ -97,5 +96,19 @@ public class UserDAO implements IUserDAO {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public UserDTO getUserDetails(String email) {
+        String query = "SELECT email, password, role, idLocation FROM user WHERE email = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, email);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new UserDTO(rs.getString("email"), rs.getString("password"), rs.getString("role"), rs.getString("idLocation"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

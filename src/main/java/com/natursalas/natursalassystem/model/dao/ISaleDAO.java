@@ -10,9 +10,9 @@ public interface ISaleDAO {
 
     boolean updateSale(SaleDTO updatedSale);
 
-    boolean deleteSale(Integer saleId);
+    boolean deleteSale(String idSale);
 
-    SaleDTO getSale(Integer saleId);
+    SaleDTO getSale(String idSale);
 
     List<SaleDTO> getAllSales();
 }

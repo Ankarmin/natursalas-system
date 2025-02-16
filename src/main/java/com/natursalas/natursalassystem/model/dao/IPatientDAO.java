@@ -10,9 +10,9 @@ public interface IPatientDAO {
 
     boolean updatePatient(PatientDTO updatedPatient);
 
-    boolean deletePatient(Integer patientId);
+    boolean deletePatient(String DNI);
 
-    PatientDTO getPatient(Integer patientId);
+    PatientDTO getPatient(String DNI);
 
     List<PatientDTO> getAllPatients();
 }

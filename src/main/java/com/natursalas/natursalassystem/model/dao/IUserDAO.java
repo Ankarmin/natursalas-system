@@ -10,9 +10,9 @@ public interface IUserDAO {
 
     boolean updateUser(UserDTO updatedUser);
 
-    boolean deleteUser(Integer userId);
+    boolean deleteUser(String email);
 
-    UserDTO getUser(Integer userId);
+    UserDTO getUser(String email);
 
     List<UserDTO> getAllUsers();
 }

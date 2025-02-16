@@ -17,7 +17,7 @@ public class SalesDetailDAO implements ISalesDetailDAO {
     public boolean addSalesDetail(SalesDetailDTO newSalesDetail) {
         String query = "INSERT INTO salesDetail (idSale, idProduct, idLocation, quantity, price) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setInt(1, newSalesDetail.getIdSale());
+            stmt.setString(1, newSalesDetail.getIdSale());
             stmt.setString(2, newSalesDetail.getIdProduct());
             stmt.setString(3, newSalesDetail.getIdLocation());
             stmt.setInt(4, newSalesDetail.getQuantity());
@@ -35,7 +35,7 @@ public class SalesDetailDAO implements ISalesDetailDAO {
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, updatedSalesDetail.getQuantity());
             stmt.setInt(2, updatedSalesDetail.getPrice());
-            stmt.setInt(3, updatedSalesDetail.getIdSale());
+            stmt.setString(3, updatedSalesDetail.getIdSale());
             stmt.setString(4, updatedSalesDetail.getIdProduct());
             stmt.setString(5, updatedSalesDetail.getIdLocation());
             return stmt.executeUpdate() > 0;
@@ -68,7 +68,7 @@ public class SalesDetailDAO implements ISalesDetailDAO {
             stmt.setString(3, idLocation);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return new SalesDetailDTO(rs.getInt("idSale"), rs.getString("idProduct"), rs.getString("idLocation"), rs.getInt("quantity"), rs.getInt("price"));
+                return new SalesDetailDTO(rs.getString("idSale"), rs.getString("idProduct"), rs.getString("idLocation"), rs.getInt("quantity"), rs.getInt("price"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -83,7 +83,7 @@ public class SalesDetailDAO implements ISalesDetailDAO {
         try (Statement stmt = connection.createStatement()) {
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
-                salesDetails.add(new SalesDetailDTO(rs.getInt("idSale"), rs.getString("idProduct"), rs.getString("idLocation"), rs.getInt("quantity"), rs.getInt("price")));
+                salesDetails.add(new SalesDetailDTO(rs.getString("idSale"), rs.getString("idProduct"), rs.getString("idLocation"), rs.getInt("quantity"), rs.getInt("price")));
             }
         } catch (SQLException e) {
             e.printStackTrace();

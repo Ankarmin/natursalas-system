@@ -15,14 +15,15 @@ public class SaleDAO implements ISaleDAO {
 
     @Override
     public boolean addSale(SaleDTO newSale) {
-        String query = "INSERT INTO sale (idPatient, diagnosis, category, saleDate, idLocation, idUser) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO sale (idSale, DNI, diagnosis, category, saleDate, idLocation, email) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setString(1, newSale.getIdPatient());
-            stmt.setString(2, newSale.getDiagnosis());
-            stmt.setString(3, newSale.getCategory());
-            stmt.setTimestamp(4, newSale.getSaleDate());
-            stmt.setString(5, newSale.getIdLocation());
-            stmt.setInt(6, newSale.getIdUser());
+            stmt.setString(1, newSale.getIdSale());
+            stmt.setString(2, newSale.getDNI());
+            stmt.setString(3, newSale.getDiagnosis());
+            stmt.setString(4, newSale.getCategory());
+            stmt.setTimestamp(5, newSale.getSaleDate());
+            stmt.setString(6, newSale.getIdLocation());
+            stmt.setString(7, newSale.getEmail());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -32,15 +33,15 @@ public class SaleDAO implements ISaleDAO {
 
     @Override
     public boolean updateSale(SaleDTO updatedSale) {
-        String query = "UPDATE sale SET idPatient = ?, diagnosis = ?, category = ?, saleDate = ?, idLocation = ?, idUser = ? WHERE idSale = ?";
+        String query = "UPDATE sale SET DNI = ?, diagnosis = ?, category = ?, saleDate = ?, idLocation = ?, email = ? WHERE idSale = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setString(1, updatedSale.getIdPatient());
+            stmt.setString(1, updatedSale.getDNI());
             stmt.setString(2, updatedSale.getDiagnosis());
             stmt.setString(3, updatedSale.getCategory());
             stmt.setTimestamp(4, updatedSale.getSaleDate());
             stmt.setString(5, updatedSale.getIdLocation());
-            stmt.setInt(6, updatedSale.getIdUser());
-            stmt.setInt(7, updatedSale.getIdSale());
+            stmt.setString(6, updatedSale.getEmail());
+            stmt.setString(7, updatedSale.getIdSale());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -49,10 +50,10 @@ public class SaleDAO implements ISaleDAO {
     }
 
     @Override
-    public boolean deleteSale(Integer saleId) {
+    public boolean deleteSale(String idSale) {
         String query = "DELETE FROM sale WHERE idSale = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setInt(1, saleId);
+            stmt.setString(1, idSale);
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -61,13 +62,13 @@ public class SaleDAO implements ISaleDAO {
     }
 
     @Override
-    public SaleDTO getSale(Integer saleId) {
+    public SaleDTO getSale(String idSale) {
         String query = "SELECT * FROM sale WHERE idSale = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setInt(1, saleId);
+            stmt.setString(1, idSale);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return new SaleDTO(rs.getInt("idSale"), rs.getString("idPatient"), rs.getString("diagnosis"), rs.getString("category"), rs.getTimestamp("saleDate"), rs.getString("idLocation"), rs.getInt("idUser"));
+                return new SaleDTO(rs.getString("idSale"), rs.getString("DNI"), rs.getString("diagnosis"), rs.getString("category"), rs.getTimestamp("saleDate"), rs.getString("idLocation"), rs.getString("email"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -82,7 +83,7 @@ public class SaleDAO implements ISaleDAO {
         try (Statement stmt = connection.createStatement()) {
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
-                sales.add(new SaleDTO(rs.getInt("idSale"), rs.getString("idPatient"), rs.getString("diagnosis"), rs.getString("category"), rs.getTimestamp("saleDate"), rs.getString("idLocation"), rs.getInt("idUser")));
+                sales.add(new SaleDTO(rs.getString("idSale"), rs.getString("DNI"), rs.getString("diagnosis"), rs.getString("category"), rs.getTimestamp("saleDate"), rs.getString("idLocation"), rs.getString("email")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
