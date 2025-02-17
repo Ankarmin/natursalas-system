@@ -24,6 +24,9 @@ public class AdminController implements Initializable {
     private Button bttnInformacion;
 
     @FXML
+    private Button bttnInventarios;
+
+    @FXML
     private Button bttnPacientes;
 
     @FXML
@@ -72,6 +75,27 @@ public class AdminController implements Initializable {
     private TableView<?> informacion_tableViewVentasPorSede;
 
     @FXML
+    private TableColumn<?, ?> inventarios_columna_cantidadAumentada;
+
+    @FXML
+    private TableColumn<?, ?> inventarios_columna_categoriaProducto;
+
+    @FXML
+    private TableColumn<?, ?> inventarios_columna_fecha;
+
+    @FXML
+    private TableColumn<?, ?> inventarios_columna_idProducto;
+
+    @FXML
+    private TableColumn<?, ?> inventarios_columna_nombreProducto;
+
+    @FXML
+    private TableColumn<?, ?> inventarios_columna_sede;
+
+    @FXML
+    private TableView<?> inventarios_tableView;
+
+    @FXML
     private Label lblFecha;
 
     @FXML
@@ -87,6 +111,9 @@ public class AdminController implements Initializable {
     private Button pacientes_bttnBuscar;
 
     @FXML
+    private TableColumn<?, ?> pacientes_columna_apellidos;
+
+    @FXML
     private TableColumn<?, ?> pacientes_columna_dni;
 
     @FXML
@@ -96,7 +123,7 @@ public class AdminController implements Initializable {
     private TableColumn<?, ?> pacientes_columna_nacimiento;
 
     @FXML
-    private TableColumn<?, ?> pacientes_columna_nombre;
+    private TableColumn<?, ?> pacientes_columna_nombres;
 
     @FXML
     private TableColumn<?, ?> pacientes_columna_sede;
@@ -150,16 +177,13 @@ public class AdminController implements Initializable {
     private TextField pacientes_editar_txtFieldUbicacion;
 
     @FXML
-    private TableColumn<?, ?> pacientes_historial_columna_cantidad;
+    private TableColumn<?, ?> pacientes_historial_columna_diagnostico;
 
     @FXML
     private TableColumn<?, ?> pacientes_historial_columna_fecha;
 
     @FXML
     private TableColumn<?, ?> pacientes_historial_columna_precioTotal;
-
-    @FXML
-    private TableColumn<?, ?> pacientes_historial_columna_producto;
 
     @FXML
     private TableColumn<?, ?> pacientes_historial_columna_sede;
@@ -201,25 +225,25 @@ public class AdminController implements Initializable {
     private AnchorPane panelVentas;
 
     @FXML
+    private AnchorPane pnlInventarios;
+
+    @FXML
     private Button ventas_bttnFiltrar;
 
     @FXML
     private TableColumn<?, ?> ventas_columna_PrecioTotal;
 
     @FXML
-    private TableColumn<?, ?> ventas_columna_cantidadVendida;
+    private TableColumn<?, ?> ventas_columna_diagnostico;
 
     @FXML
-    private TableColumn<?, ?> ventas_columna_codigo;
+    private TableColumn<?, ?> ventas_columna_dniPaciente;
+
+    @FXML
+    private TableColumn<?, ?> ventas_columna_fechaVenta;
 
     @FXML
     private TableColumn<?, ?> ventas_columna_paciente;
-
-    @FXML
-    private TableColumn<?, ?> ventas_columna_precioUnitario;
-
-    @FXML
-    private TableColumn<?, ?> ventas_columna_producto;
 
     @FXML
     private TableColumn<?, ?> ventas_columna_sede;
@@ -249,21 +273,31 @@ public class AdminController implements Initializable {
             panelPacientes.setVisible(false);
             panelVentas.setVisible(false);
             panelCrearCuenta.setVisible(false);
+            pnlInventarios.setVisible(false);
         } else if(event.getSource() == bttnPacientes){
             panelInformacion.setVisible(false);
             panelPacientes.setVisible(true);
             panelVentas.setVisible(false);
             panelCrearCuenta.setVisible(false);
+            pnlInventarios.setVisible(false);
         } else if(event.getSource() == bttnVentas){
             panelInformacion.setVisible(false);
             panelPacientes.setVisible(false);
             panelVentas.setVisible(true);
             panelCrearCuenta.setVisible(false);
+            pnlInventarios.setVisible(false);
         } else if(event.getSource() == bttnCrearCuenta){
             panelInformacion.setVisible(false);
             panelPacientes.setVisible(false);
             panelVentas.setVisible(false);
             panelCrearCuenta.setVisible(true);
+            pnlInventarios.setVisible(false);
+        } else if(event.getSource() == bttnInventarios){
+            panelInformacion.setVisible(false);
+            panelPacientes.setVisible(false);
+            panelVentas.setVisible(false);
+            panelCrearCuenta.setVisible(false);
+            pnlInventarios.setVisible(true);
         }
     }
 

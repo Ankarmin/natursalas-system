@@ -78,8 +78,9 @@
                                 <Button fx:id="bttnInformacion" layoutX="21.0" layoutY="235.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="200.0" styleClass="button-1" stylesheets="@../css/AdminDesign.css" text="Información" />
                                 <Button fx:id="bttnPacientes" layoutX="21.0" layoutY="295.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="200.0" styleClass="button-1" stylesheets="@../css/AdminDesign.css" text="Pacientes" />
                                 <Button fx:id="bttnVentas" layoutX="21.0" layoutY="358.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="200.0" styleClass="button-1" stylesheets="@../css/AdminDesign.css" text="Ventas" />
-                                <Button fx:id="bttnCrearCuenta" layoutX="21.0" layoutY="420.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="200.0" styleClass="button-1" stylesheets="@../css/AdminDesign.css" text="Crear cuenta" />
-                        <Button fx:id="bttnCerrarSesion" layoutX="21.0" layoutY="481.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="200.0" styleClass="button-2" stylesheets="@../css/AdminDesign.css" text="Cerrar sesión" />
+                                <Button fx:id="bttnCrearCuenta" layoutX="21.0" layoutY="477.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="200.0" styleClass="button-1" stylesheets="@../css/AdminDesign.css" text="Crear cuenta" />
+                        <Button fx:id="bttnCerrarSesion" layoutX="21.0" layoutY="538.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="200.0" styleClass="button-2" stylesheets="@../css/AdminDesign.css" text="Cerrar sesión" />
+                        <Button fx:id="bttnInventarios" layoutX="20.0" layoutY="419.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="200.0" styleClass="button-1" stylesheets="@../css/AdminDesign.css" text="Inventarios" />
                             </children>
                      <styleClass>
                         <String fx:value="gb-color-1" />
@@ -90,7 +91,7 @@
                     <center>
                         <AnchorPane prefHeight="606.0" prefWidth="972.0" BorderPane.alignment="CENTER">
                      <children>
-                        <AnchorPane fx:id="panelInformacion" layoutX="120.0" layoutY="130.0" prefHeight="660.8" prefWidth="971.2" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <AnchorPane fx:id="panelInformacion" layoutX="120.0" layoutY="130.0" prefHeight="660.8" prefWidth="971.2" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
                               <AnchorPane layoutX="15.2" layoutY="14.0" prefHeight="220.0" prefWidth="962.0" stylesheets="@../css/AdminDesign.css" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
                                  <styleClass>
@@ -249,10 +250,11 @@
                                        <columns>
                                           <TableColumn fx:id="pacientes_columna_sede" prefWidth="75.0" text="SEDE" />
                                           <TableColumn fx:id="pacientes_columna_dni" prefWidth="75.0" text="DNI" />
-                                          <TableColumn fx:id="pacientes_columna_nombre" prefWidth="75.0" text="NOMBRE" />
+                                          <TableColumn fx:id="pacientes_columna_nombres" prefWidth="75.0" text="NOMBRES" />
+                                          <TableColumn fx:id="pacientes_columna_apellidos" prefWidth="75.0" text="APELLIDOS" />
                                           <TableColumn fx:id="pacientes_columna_edad" prefWidth="75.0" text="EDAD" />
                                           <TableColumn fx:id="pacientes_columna_telefono" prefWidth="75.0" text="TELÉFONO" />
-                                          <TableColumn fx:id="pacientes_columna_nacimiento" prefWidth="75.0" text="FECHA DE NACIMIENTO" />
+                                          <TableColumn fx:id="pacientes_columna_nacimiento" prefWidth="75.0" text="NACIMIENTO" />
                                        </columns>
                                        <columnResizePolicy>
                                           <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -280,8 +282,7 @@
                                             <columns>
                                               <TableColumn fx:id="pacientes_historial_columna_fecha" prefWidth="75.0" text="FECHA" />
                                               <TableColumn fx:id="pacientes_historial_columna_sede" prefWidth="75.0" text="SEDE" />
-                                                <TableColumn fx:id="pacientes_historial_columna_producto" prefWidth="75.0" text="PRODUCTO" />
-                                                <TableColumn fx:id="pacientes_historial_columna_cantidad" prefWidth="75.0" text="CANTIDAD" />
+                                                <TableColumn fx:id="pacientes_historial_columna_diagnostico" prefWidth="75.0" text="DIAGNÓSTICO" />
                                                 <TableColumn fx:id="pacientes_historial_columna_precioTotal" prefWidth="75.0" text="PRECIO TOTAL" />
                                             </columns>
                                              <columnResizePolicy>
@@ -315,27 +316,27 @@
                                           <Font size="18.0" />
                                        </font>
                                     </Label>
-                                    <Label fx:id="pacientes_historial_name" layoutX="114.0" layoutY="32.0" text="Name">
+                                    <Label fx:id="pacientes_historial_name" layoutX="114.0" layoutY="32.0">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
                                     </Label>
-                                    <Label fx:id="pacientes_historial_lastName" layoutX="114.0" layoutY="73.0" text="Last name">
+                                    <Label fx:id="pacientes_historial_lastName" layoutX="114.0" layoutY="73.0">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
                                     </Label>
-                                    <Label fx:id="pacientes_historial_dni" layoutX="74.0" layoutY="115.0" text="dni">
+                                    <Label fx:id="pacientes_historial_dni" layoutX="74.0" layoutY="115.0">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
                                     </Label>
-                                    <Label fx:id="pacientes_historial_telefono" layoutX="114.0" layoutY="157.0" text="cellphone">
+                                    <Label fx:id="pacientes_historial_telefono" layoutX="114.0" layoutY="157.0">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
                                     </Label>
-                                    <Label fx:id="pacientes_historial_nacimiento" layoutX="207.0" layoutY="202.0" text="date of birth">
+                                    <Label fx:id="pacientes_historial_nacimiento" layoutX="207.0" layoutY="202.0">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
@@ -361,11 +362,10 @@
                                     <TableView fx:id="ventas_tableViewVentas" layoutX="81.0" layoutY="192.0" prefHeight="280.0" prefWidth="922.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                       <columns>
                                         <TableColumn fx:id="ventas_columna_sede" prefWidth="75.0" text="SEDE" />
-                                          <TableColumn fx:id="ventas_columna_paciente" prefWidth="75.0" text="PACIENTE" />
-                                          <TableColumn fx:id="ventas_columna_codigo" prefWidth="75.0" text="CÓDIGO" />
-                                          <TableColumn fx:id="ventas_columna_producto" prefWidth="75.0" text="PRODUCTO" />
-                                          <TableColumn fx:id="ventas_columna_precioUnitario" prefWidth="75.0" text="PRECIO UNITARIO" />
-                                          <TableColumn fx:id="ventas_columna_cantidadVendida" prefWidth="75.0" text="CANTIDAD VENDIDA" />
+                                          <TableColumn fx:id="ventas_columna_fechaVenta" prefWidth="75.0" text="FECHA DE VENTA" />
+                                          <TableColumn fx:id="ventas_columna_dniPaciente" prefWidth="75.0" text="DNI DEL PACIENTE" />
+                                          <TableColumn fx:id="ventas_columna_paciente" prefWidth="75.0" text="NOMBRE DEL PACIENTE" />
+                                          <TableColumn fx:id="ventas_columna_diagnostico" prefWidth="75.0" text="DIAGNÓSTICO" />
                                           <TableColumn fx:id="ventas_columna_PrecioTotal" prefWidth="75.0" text="PRECIO TOTAL" />
                                       </columns>
                                        <columnResizePolicy>
@@ -426,7 +426,7 @@
                               </AnchorPane>
                            </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="panelCrearCuenta" layoutX="191.0" layoutY="104.0" prefHeight="660.8" prefWidth="971.2" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <AnchorPane fx:id="panelCrearCuenta" layoutX="191.0" layoutY="104.0" prefHeight="660.8" prefWidth="971.2" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
                               <Label layoutX="36.0" layoutY="27.0" styleClass="text" stylesheets="@../css/AdminDesign.css" text="Cuentas registradas">
                                  <font>
@@ -543,6 +543,37 @@
                                     <Font size="18.0" />
                                  </font>
                               </Label>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane fx:id="pnlInventarios" layoutX="133.0" layoutY="184.0" prefHeight="660.8" prefWidth="971.2" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <Label layoutX="22.0" layoutY="23.0" styleClass="text" stylesheets="@../css/AdminDesign.css" text="Incremento de productos por sede">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <AnchorPane layoutX="22.0" layoutY="77.0" prefHeight="546.0" prefWidth="929.0" stylesheets="@../css/AdminDesign.css">
+                                 <styleClass>
+                                    <String fx:value="white-bg" />
+                                    <String fx:value="shadow" />
+                                    <String fx:value="radius" />
+                                 </styleClass>
+                                 <children>
+                                    <TableView fx:id="inventarios_tableView" layoutX="159.0" layoutY="100.0" prefHeight="546.4" prefWidth="929.6" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                      <columns>
+                                        <TableColumn fx:id="inventarios_columna_fecha" prefWidth="75.0" text="FECHA" />
+                                          <TableColumn fx:id="inventarios_columna_sede" prefWidth="75.0" text="SEDE" />
+                                          <TableColumn fx:id="inventarios_columna_idProducto" prefWidth="75.0" text="ID PRODUCTO" />
+                                          <TableColumn fx:id="inventarios_columna_nombreProducto" prefWidth="75.0" text="NOMBRE PRODUCTO" />
+                                          <TableColumn fx:id="inventarios_columna_categoriaProducto" prefWidth="75.0" text="CATEGORÍA PRODUCTO" />
+                                          <TableColumn fx:id="inventarios_columna_cantidadAumentada" prefWidth="75.0" text="CANTIDAD AUMENTADA" />
+                                      </columns>
+                                       <columnResizePolicy>
+                                          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                       </columnResizePolicy>
+                                    </TableView>
+                                 </children>
+                              </AnchorPane>
                            </children>
                         </AnchorPane>
                      </children></AnchorPane>
