@@ -1,15 +1,30 @@
 package com.natursalas.natursalassystem.controller;
 
+import com.natursalas.natursalassystem.model.dao.PatientDAO;
+import com.natursalas.natursalassystem.model.dao.SaleDAO;
+import com.natursalas.natursalassystem.model.dao.SalesDetailDAO;
+import com.natursalas.natursalassystem.model.dto.PatientDTO;
+import com.natursalas.natursalassystem.model.dto.SaleDTO;
+import com.natursalas.natursalassystem.model.dto.SaleDetailView;
+import com.natursalas.natursalassystem.model.dto.SalesDetailDTO;
+import com.natursalas.natursalassystem.service.DatabaseConnection;
+import com.natursalas.natursalassystem.util.AlertMessages;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class AdminController implements Initializable {
@@ -111,25 +126,25 @@ public class AdminController implements Initializable {
     private Button pacientes_bttnBuscar;
 
     @FXML
-    private TableColumn<?, ?> pacientes_columna_apellidos;
+    private TableColumn<PatientDTO, String> pacientes_columna_apellidos;
 
     @FXML
-    private TableColumn<?, ?> pacientes_columna_dni;
+    private TableColumn<PatientDTO, String> pacientes_columna_dni;
 
     @FXML
-    private TableColumn<?, ?> pacientes_columna_edad;
+    private TableColumn<PatientDTO, String> pacientes_columna_edad;
 
     @FXML
-    private TableColumn<?, ?> pacientes_columna_nacimiento;
+    private TableColumn<PatientDTO, String> pacientes_columna_nacimiento;
 
     @FXML
-    private TableColumn<?, ?> pacientes_columna_nombres;
+    private TableColumn<PatientDTO, String> pacientes_columna_nombres;
 
     @FXML
-    private TableColumn<?, ?> pacientes_columna_sede;
+    private TableColumn<PatientDTO, String> pacientes_columna_sede;
 
     @FXML
-    private TableColumn<?, ?> pacientes_columna_telefono;
+    private TableColumn<PatientDTO, String> pacientes_columna_telefono;
 
     @FXML
     private Button pacientes_crear_bttnCrear;
@@ -177,16 +192,16 @@ public class AdminController implements Initializable {
     private TextField pacientes_editar_txtFieldUbicacion;
 
     @FXML
-    private TableColumn<?, ?> pacientes_historial_columna_diagnostico;
+    private TableColumn<SaleDetailView, String> pacientes_historial_columna_diagnostico;
 
     @FXML
-    private TableColumn<?, ?> pacientes_historial_columna_fecha;
+    private TableColumn<SaleDetailView, Timestamp> pacientes_historial_columna_fecha;
 
     @FXML
-    private TableColumn<?, ?> pacientes_historial_columna_precioTotal;
+    private TableColumn<SaleDetailView, Integer> pacientes_historial_columna_precioTotal;
 
     @FXML
-    private TableColumn<?, ?> pacientes_historial_columna_sede;
+    private TableColumn<SaleDetailView, String> pacientes_historial_columna_sede;
 
     @FXML
     private Label pacientes_historial_dni;
@@ -201,13 +216,13 @@ public class AdminController implements Initializable {
     private Label pacientes_historial_name;
 
     @FXML
-    private TableView<?> pacientes_historial_tableViewMovimientos;
+    private TableView<SaleDetailView> pacientes_historial_tableViewMovimientos;
 
     @FXML
     private Label pacientes_historial_telefono;
 
     @FXML
-    private TableView<?> pacientes_tableViewPacientes;
+    private TableView<PatientDTO> pacientes_tableViewPacientes;
 
     @FXML
     private TextField pacientes_txtFieldBuscarDNI;
@@ -264,69 +279,47 @@ public class AdminController implements Initializable {
     private ComboBox<?> ventas_filtrar_sede;
 
     @FXML
-    private TableView<?> ventas_tableViewVentas;
+    private TableView<SaleDetailView> ventas_tableViewVentas;
 
-    // PA CAMBIAR ENTRE PANELES
-    public void switchForm(ActionEvent event){
-        if(event.getSource() == bttnInformacion){
-            panelInformacion.setVisible(true);
-            panelPacientes.setVisible(false);
-            panelVentas.setVisible(false);
-            panelCrearCuenta.setVisible(false);
-            pnlInventarios.setVisible(false);
-        } else if(event.getSource() == bttnPacientes){
-            panelInformacion.setVisible(false);
-            panelPacientes.setVisible(true);
-            panelVentas.setVisible(false);
-            panelCrearCuenta.setVisible(false);
-            pnlInventarios.setVisible(false);
-        } else if(event.getSource() == bttnVentas){
-            panelInformacion.setVisible(false);
-            panelPacientes.setVisible(false);
-            panelVentas.setVisible(true);
-            panelCrearCuenta.setVisible(false);
-            pnlInventarios.setVisible(false);
-        } else if(event.getSource() == bttnCrearCuenta){
-            panelInformacion.setVisible(false);
-            panelPacientes.setVisible(false);
-            panelVentas.setVisible(false);
-            panelCrearCuenta.setVisible(true);
-            pnlInventarios.setVisible(false);
-        } else if(event.getSource() == bttnInventarios){
-            panelInformacion.setVisible(false);
-            panelPacientes.setVisible(false);
-            panelVentas.setVisible(false);
-            panelCrearCuenta.setVisible(false);
-            pnlInventarios.setVisible(true);
-        }
+    private final AlertMessages alerta = new AlertMessages();
+    private PatientDAO patientDAO;
+    private SaleDAO saleDAO;
+    private SalesDetailDAO salesDetailDAO;
+    private final ObservableList<PatientDTO> pacientesList = FXCollections.observableArrayList();
+    private final ObservableList<SaleDetailView> saleDetailViewsList = FXCollections.observableArrayList();
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        configurarBaseDatos();
+        configurarColumnasPacientes();
+        configurarColumnasHistorial();
+        cargarPacientes();
+        iniciarReloj();
+        agregarEventoDobleClickPacientes();
     }
 
-    // PA PONER LA FECHA Y HORA EN TIEMPO REAL
-    public void runTime() {
+    public void switchForm(ActionEvent event) {
+        panelInformacion.setVisible(event.getSource() == bttnInformacion);
+        panelPacientes.setVisible(event.getSource() == bttnPacientes);
+        panelVentas.setVisible(event.getSource() == bttnVentas);
+        panelCrearCuenta.setVisible(event.getSource() == bttnCrearCuenta);
+        pnlInventarios.setVisible(event.getSource() == bttnInventarios);
+    }
 
-        new Thread() {
-
-            public void run() {
-                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a");
-                while (true) {
-                    try {
-
-                        Thread.sleep(1000); // 1000 ms = 1s
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    Platform.runLater(() -> {
-                        lblFecha.setText(format.format(new Date()));
-                    });
+    private void iniciarReloj() {
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a");
+        new Thread(() -> {
+            while (true) {
+                try {
+                    Thread.sleep(1000);
+                    Platform.runLater(() -> lblFecha.setText(format.format(new Date())));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
-        }.start();
-
+        }).start();
     }
 
-    //pa mostrar contraseña ps serrano gaaa
     @FXML
     public void mostrarContrasena() {
         if (pacientes_editar_mostrarContrasena.isSelected()) {
@@ -350,8 +343,72 @@ public class AdminController implements Initializable {
         }
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        runTime();
+    private void configurarColumnasPacientes() {
+        pacientes_columna_sede.setCellValueFactory(new PropertyValueFactory<>("idLocation"));
+        pacientes_columna_dni.setCellValueFactory(new PropertyValueFactory<>("DNI"));
+        pacientes_columna_nombres.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+        pacientes_columna_apellidos.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        pacientes_columna_edad.setCellValueFactory(new PropertyValueFactory<>("age"));
+        pacientes_columna_telefono.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
+        pacientes_columna_nacimiento.setCellValueFactory(new PropertyValueFactory<>("dateOfBirth"));
+    }
+
+    private void configurarColumnasHistorial() {
+        pacientes_historial_columna_fecha.setCellValueFactory(new PropertyValueFactory<>("saleDate"));
+        pacientes_historial_columna_diagnostico.setCellValueFactory(new PropertyValueFactory<>("diagnosis"));
+        pacientes_historial_columna_precioTotal.setCellValueFactory(new PropertyValueFactory<>("subtotal"));
+        pacientes_historial_columna_sede.setCellValueFactory(new PropertyValueFactory<>("idLocation"));
+    }
+
+    private void cargarHistorialVentas(String dni) {
+        saleDetailViewsList.clear();
+        List<SaleDTO> sales = saleDAO.getSalesByDNI(dni);
+        for (SaleDTO sale : sales) {
+            List<SalesDetailDTO> salesDetails = salesDetailDAO.getSalesDetailsBySaleId(sale.getIdSale());
+            for (SalesDetailDTO salesDetail : salesDetails) {
+                saleDetailViewsList.add(new SaleDetailView(sale.getSaleDate(), sale.getIdLocation(), sale.getDiagnosis(), salesDetail.getSubtotal()));
+            }
+        }
+        pacientes_historial_tableViewMovimientos.setItems(saleDetailViewsList);
+        pacientes_historial_tableViewMovimientos.refresh();
+    }
+
+    private void cargarPacientes() {
+        pacientesList.clear();
+        List<PatientDTO> pacientes = patientDAO.getAllPatients();
+        if (pacientes != null && !pacientes.isEmpty()) {
+            pacientesList.addAll(pacientes);
+        }
+        pacientes_tableViewPacientes.setItems(pacientesList);
+        pacientes_tableViewPacientes.refresh();
+    }
+
+    private void configurarBaseDatos() {
+        Connection connection = DatabaseConnection.getConnection();
+        if (connection != null) {
+            patientDAO = new PatientDAO(connection);
+            saleDAO = new SaleDAO(connection);
+            salesDetailDAO = new SalesDetailDAO(connection);
+        } else {
+            alerta.mensajeError("No se pudo establecer la conexión con la base de datos.");
+        }
+    }
+
+    private void agregarEventoDobleClickPacientes() {
+        pacientes_tableViewPacientes.setRowFactory(tv -> {
+            TableRow<PatientDTO> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (!row.isEmpty())) {
+                    PatientDTO rowData = row.getItem();
+                    cargarHistorialVentas(rowData.getDNI());
+                    pacientes_historial_name.setText(rowData.getFirstName());
+                    pacientes_historial_lastName.setText(rowData.getLastName());
+                    pacientes_historial_dni.setText(rowData.getDNI());
+                    pacientes_historial_telefono.setText(rowData.getPhoneNumber());
+                    pacientes_historial_nacimiento.setText(rowData.getDateOfBirth().toString());
+                }
+            });
+            return row;
+        });
     }
 }

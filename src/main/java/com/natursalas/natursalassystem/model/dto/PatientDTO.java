@@ -8,7 +8,7 @@ public class PatientDTO {
     private String lastName;
     private int age;
     private String phoneNumber;
-    private Date dateOfConsultation;
+    private Date dateOfEntry;
     private Date dateOfBirth;
     private String district;
     private String idLocation;
@@ -16,13 +16,13 @@ public class PatientDTO {
     public PatientDTO() {
     }
 
-    public PatientDTO(String DNI, String firstName, String lastName, int age, String phoneNumber, Date dateOfConsultation, Date dateOfBirth, String district, String idLocation) {
+    public PatientDTO(String DNI, String firstName, String lastName, int age, String phoneNumber, Date dateOfEntry, Date dateOfBirth, String district, String idLocation) {
         this.DNI = DNI;
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
         this.phoneNumber = phoneNumber;
-        this.dateOfConsultation = dateOfConsultation;
+        this.dateOfEntry = dateOfEntry;
         this.dateOfBirth = dateOfBirth;
         this.district = district;
         this.idLocation = idLocation;
@@ -68,12 +68,12 @@ public class PatientDTO {
         this.phoneNumber = phoneNumber;
     }
 
-    public Date getDateOfConsultation() {
-        return dateOfConsultation;
+    public Date getDateOfEntry() {
+        return dateOfEntry;
     }
 
-    public void setDateOfConsultation(Date dateOfConsultation) {
-        this.dateOfConsultation = dateOfConsultation;
+    public void setDateOfEntry(Date dateOfEntry) {
+        this.dateOfEntry = dateOfEntry;
     }
 
     public Date getDateOfBirth() {
@@ -98,5 +98,20 @@ public class PatientDTO {
 
     public void setIdLocation(String idLocation) {
         this.idLocation = idLocation;
+    }
+
+    @Override
+    public String toString() {
+        return "PatientDTO{" +
+                "DNI='" + DNI + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", age=" + age +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", dateOfConsultation=" + dateOfEntry +
+                ", dateOfBirth=" + dateOfBirth +
+                ", district='" + district + '\'' +
+                ", idLocation='" + idLocation + '\'' +
+                '}';
     }
 }

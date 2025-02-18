@@ -68,7 +68,7 @@ public class SalesDetailDAO implements ISalesDetailDAO {
             stmt.setString(3, idLocation);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return new SalesDetailDTO(rs.getString("idSale"), rs.getString("idProduct"), rs.getString("idLocation"), rs.getInt("quantity"), rs.getInt("price"));
+                return new SalesDetailDTO(rs.getString("idSale"), rs.getString("idProduct"), rs.getString("idLocation"), rs.getInt("quantity"), rs.getInt("price"), rs.getInt("subtotal"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -83,7 +83,22 @@ public class SalesDetailDAO implements ISalesDetailDAO {
         try (Statement stmt = connection.createStatement()) {
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
-                salesDetails.add(new SalesDetailDTO(rs.getString("idSale"), rs.getString("idProduct"), rs.getString("idLocation"), rs.getInt("quantity"), rs.getInt("price")));
+                salesDetails.add(new SalesDetailDTO(rs.getString("idSale"), rs.getString("idProduct"), rs.getString("idLocation"), rs.getInt("quantity"), rs.getInt("price"), rs.getInt("subtotal")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return salesDetails;
+    }
+
+    public List<SalesDetailDTO> getSalesDetailsBySaleId(String idSale) {
+        List<SalesDetailDTO> salesDetails = new ArrayList<>();
+        String query = "SELECT * FROM salesDetail WHERE idSale = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, idSale);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                salesDetails.add(new SalesDetailDTO(rs.getString("idSale"), rs.getString("idProduct"), rs.getString("idLocation"), rs.getInt("quantity"), rs.getInt("price"), rs.getInt("subtotal")));
             }
         } catch (SQLException e) {
             e.printStackTrace();

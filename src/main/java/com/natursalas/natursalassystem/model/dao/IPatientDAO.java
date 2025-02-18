@@ -15,4 +15,6 @@ public interface IPatientDAO {
     PatientDTO getPatient(String DNI);
 
     List<PatientDTO> getAllPatients();
+
+    List<PatientDTO> getPatientsByLocation(String idLocation);
 }

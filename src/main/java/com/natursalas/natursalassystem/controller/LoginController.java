@@ -15,11 +15,13 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.util.ResourceBundle;
 
 public class LoginController implements Initializable {
+
     @FXML
     private Button bttnIngresar;
 
@@ -40,23 +42,23 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        configurarBaseDatos();
+        txtMostrarContrasena.setVisible(false);
+    }
+
+    private void configurarBaseDatos() {
         Connection connection = DatabaseConnection.getConnection();
         if (connection != null) {
             userDAO = new UserDAO(connection);
         } else {
             alerta.mensajeError("No se pudo establecer la conexión con la base de datos.");
-            return;
         }
-
-        txtMostrarContrasena.setVisible(false);
     }
 
-    // LoginController.java
-
     @FXML
-    public void ingresar() {
-        String userName = txtNombreUsuario.getText();
-        String password = txtContrasenaUsuario.isVisible() ? txtContrasenaUsuario.getText() : txtMostrarContrasena.getText();
+    private void ingresar() {
+        String userName = txtNombreUsuario.getText().trim();
+        String password = obtenerPassword();
 
         if (userName.isEmpty() || password.isEmpty()) {
             alerta.mensajeError("Todos los campos deben estar llenos.");
@@ -68,70 +70,67 @@ public class LoginController implements Initializable {
             return;
         }
 
+        autenticarUsuario(userName, password);
+    }
+
+    private String obtenerPassword() {
+        return txtContrasenaUsuario.isVisible() ? txtContrasenaUsuario.getText() : txtMostrarContrasena.getText();
+    }
+
+    private void autenticarUsuario(String userName, String password) {
         try {
             UserDTO user = userDAO.getUserDetails(userName);
             if (user != null && user.getPassword().equals(password)) {
                 alerta.mensajeConfirmacion("Inicio de sesión exitoso.");
-                if ("admin".equals(user.getRole())) {
-                    openAdmin();
-                } else if ("user".equals(user.getRole())) {
-                    openUser();
-                } else {
-                    alerta.mensajeError("Rol de usuario no reconocido.");
-                }
+                abrirPanelSegunRol(user.getRole());
             } else {
                 alerta.mensajeError("Nombre de usuario o contraseña incorrectos.");
             }
         } catch (Exception e) {
-            e.printStackTrace();
             alerta.mensajeError("Error al procesar el inicio de sesión.");
+            e.printStackTrace();
         }
     }
 
-    private void openAdmin() {
+    private void abrirPanelSegunRol(String role) {
+        switch (role) {
+            case "admin":
+                abrirVentana("Admin", "/com/natursalas/natursalassystem/view/fxml/Admin.fxml");
+                break;
+            case "user":
+                abrirVentana("User", "/com/natursalas/natursalassystem/view/fxml/User.fxml");
+                break;
+            default:
+                alerta.mensajeError("Rol de usuario no reconocido.");
+        }
+    }
+
+    private void abrirVentana(String titulo, String fxmlPath) {
         try {
             Stage stage = (Stage) bttnIngresar.getScene().getWindow();
             stage.close();
 
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/natursalas/natursalassystem/view/fxml/Admin.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent root = fxmlLoader.load();
-            Stage adminStage = new Stage();
-            adminStage.setTitle("Admin Panel");
-            adminStage.setScene(new Scene(root));
-            adminStage.show();
-        } catch (Exception e) {
+            Stage nuevaVentana = new Stage();
+            nuevaVentana.setTitle(titulo);
+            nuevaVentana.setScene(new Scene(root));
+            nuevaVentana.show();
+        } catch (IOException e) {
+            alerta.mensajeError("Error al abrir la ventana de " + titulo + ".");
             e.printStackTrace();
-            alerta.mensajeError("Error al abrir la ventana de Admin.");
-        }
-    }
-
-    private void openUser() {
-        try {
-            Stage stage = (Stage) bttnIngresar.getScene().getWindow();
-            stage.close();
-
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/natursalas/natursalassystem/view/fxml/User.fxml"));
-            Parent root = fxmlLoader.load();
-            Stage userStage = new Stage();
-            userStage.setTitle("User Panel");
-            userStage.setScene(new Scene(root));
-            userStage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-            alerta.mensajeError("Error al abrir la ventana de User.");
         }
     }
 
     @FXML
-    public void mostrarContrasena() {
-        if (checkBoxMostrarContrasena.isSelected()) {
+    private void mostrarContrasena() {
+        boolean mostrar = checkBoxMostrarContrasena.isSelected();
+        txtMostrarContrasena.setVisible(mostrar);
+        txtContrasenaUsuario.setVisible(!mostrar);
+        if (mostrar) {
             txtMostrarContrasena.setText(txtContrasenaUsuario.getText());
-            txtMostrarContrasena.setVisible(true);
-            txtContrasenaUsuario.setVisible(false);
         } else {
             txtContrasenaUsuario.setText(txtMostrarContrasena.getText());
-            txtContrasenaUsuario.setVisible(true);
-            txtMostrarContrasena.setVisible(false);
         }
     }
 }
