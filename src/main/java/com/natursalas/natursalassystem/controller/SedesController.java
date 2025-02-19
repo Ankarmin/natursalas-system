@@ -1,6 +1,7 @@
 package com.natursalas.natursalassystem.controller;
 
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -11,7 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ResourceBundle;
 
-public class SedeController implements Initializable {
+public class SedesController implements Initializable {
 
     @FXML
     private Button bttnCerrarSesion;
@@ -223,33 +224,31 @@ public class SedeController implements Initializable {
     @FXML
     private TableView<?> ventas_tableViewVentas;
 
-    // PA PONER LA FECHA Y HORA EN TIEMPO REAL
-    public void runTime() {
-
-        new Thread() {
-
-            public void run() {
-                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a");
-                while (true) {
-                    try {
-
-                        Thread.sleep(1000); // 1000 ms = 1s
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    Platform.runLater(() -> {
-                        lblFecha.setText(format.format(new Date()));
-                    });
-                }
-            }
-        }.start();
-
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        runTime();
+        iniciarReloj();
+    }
+
+    private void iniciarReloj() {
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a");
+        new Thread(() -> {
+            while (true) {
+                try {
+                    Thread.sleep(1000);
+                    Platform.runLater(() -> lblFecha.setText(format.format(new Date())));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+
+    public void switchForm(ActionEvent event) {
+        panelInformacion.setVisible(event.getSource() == bttnInformacion);
+        panelPacientes.setVisible(event.getSource() == bttnPacientes);
+        panelVentas.setVisible(event.getSource() == bttnVentas);
+        panelProductos.setVisible(event.getSource() == bttnProductos);
     }
 }

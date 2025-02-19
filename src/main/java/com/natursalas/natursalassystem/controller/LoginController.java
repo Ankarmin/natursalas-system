@@ -94,7 +94,7 @@ public class LoginController implements Initializable {
                 abrirVentana("Admin", "/com/natursalas/natursalassystem/view/fxml/Admin.fxml");
                 break;
             case "user":
-                abrirVentana("User", "/com/natursalas/natursalassystem/view/fxml/User.fxml");
+                abrirVentana("Sede", "/com/natursalas/natursalassystem/view/fxml/Sedes.fxml");
                 break;
             default:
                 alerta.mensajeError("Rol de usuario no reconocido.");
