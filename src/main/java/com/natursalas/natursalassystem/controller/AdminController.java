@@ -1,24 +1,27 @@
 package com.natursalas.natursalassystem.controller;
 
-import com.natursalas.natursalassystem.model.dao.PatientDAO;
-import com.natursalas.natursalassystem.model.dao.SaleDAO;
-import com.natursalas.natursalassystem.model.dao.SalesDetailDAO;
+import com.natursalas.natursalassystem.model.dto.HistoryDTO;
 import com.natursalas.natursalassystem.model.dto.PatientDTO;
 import com.natursalas.natursalassystem.model.dto.SaleDTO;
-import com.natursalas.natursalassystem.model.dto.SaleDetailView;
-import com.natursalas.natursalassystem.model.dto.SalesDetailDTO;
-import com.natursalas.natursalassystem.service.DatabaseConnection;
+import com.natursalas.natursalassystem.model.dto.SaleDetailDTO;
+import com.natursalas.natursalassystem.service.*;
 import com.natursalas.natursalassystem.util.AlertMessages;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.Timestamp;
@@ -192,16 +195,16 @@ public class AdminController implements Initializable {
     private TextField pacientes_editar_txtFieldUbicacion;
 
     @FXML
-    private TableColumn<SaleDetailView, String> pacientes_historial_columna_diagnostico;
+    private TableColumn<HistoryDTO, String> pacientes_historial_columna_diagnostico;
 
     @FXML
-    private TableColumn<SaleDetailView, Timestamp> pacientes_historial_columna_fecha;
+    private TableColumn<HistoryDTO, Timestamp> pacientes_historial_columna_fecha;
 
     @FXML
-    private TableColumn<SaleDetailView, Integer> pacientes_historial_columna_precioTotal;
+    private TableColumn<HistoryDTO, Integer> pacientes_historial_columna_precioTotal;
 
     @FXML
-    private TableColumn<SaleDetailView, String> pacientes_historial_columna_sede;
+    private TableColumn<HistoryDTO, String> pacientes_historial_columna_sede;
 
     @FXML
     private Label pacientes_historial_dni;
@@ -216,7 +219,7 @@ public class AdminController implements Initializable {
     private Label pacientes_historial_name;
 
     @FXML
-    private TableView<SaleDetailView> pacientes_historial_tableViewMovimientos;
+    private TableView<HistoryDTO> pacientes_historial_tableViewMovimientos;
 
     @FXML
     private Label pacientes_historial_telefono;
@@ -279,14 +282,17 @@ public class AdminController implements Initializable {
     private ComboBox<?> ventas_filtrar_sede;
 
     @FXML
-    private TableView<SaleDetailView> ventas_tableViewVentas;
+    private TableView<HistoryDTO> ventas_tableViewVentas;
 
     private final AlertMessages alerta = new AlertMessages();
-    private PatientDAO patientDAO;
-    private SaleDAO saleDAO;
-    private SalesDetailDAO salesDetailDAO;
+
+    private PatientService patientService;
+    private ProductService productService;
+    private SaleDetailService saleDetailService;
+    private SaleService saleService;
+
     private final ObservableList<PatientDTO> pacientesList = FXCollections.observableArrayList();
-    private final ObservableList<SaleDetailView> saleDetailViewsList = FXCollections.observableArrayList();
+    private final ObservableList<HistoryDTO> HistoryList = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -296,6 +302,7 @@ public class AdminController implements Initializable {
         cargarPacientes();
         iniciarReloj();
         agregarEventoDobleClickPacientes();
+        agregarEventoDobleClickHistorial();
     }
 
     public void switchForm(ActionEvent event) {
@@ -361,21 +368,23 @@ public class AdminController implements Initializable {
     }
 
     private void cargarHistorialVentas(String dni) {
-        saleDetailViewsList.clear();
-        List<SaleDTO> sales = saleDAO.getSalesByDNI(dni);
+        HistoryList.clear();
+        List<SaleDTO> sales = saleService.getSalesByDNI(dni);
         for (SaleDTO sale : sales) {
-            List<SalesDetailDTO> salesDetails = salesDetailDAO.getSalesDetailsBySaleId(sale.getIdSale());
-            for (SalesDetailDTO salesDetail : salesDetails) {
-                saleDetailViewsList.add(new SaleDetailView(sale.getSaleDate(), sale.getIdLocation(), sale.getDiagnosis(), salesDetail.getSubtotal()));
+            List<SaleDetailDTO> salesDetails = saleDetailService.getSalesDetailsBySaleId(sale.getIdSale());
+            int totalSubtotal = 0;
+            for (SaleDetailDTO salesDetail : salesDetails) {
+                totalSubtotal += salesDetail.getSubtotal();
             }
+            HistoryList.add(new HistoryDTO(sale.getIdSale(), sale.getSaleDate(), sale.getIdLocation(), sale.getDiagnosis(), totalSubtotal));
         }
-        pacientes_historial_tableViewMovimientos.setItems(saleDetailViewsList);
+        pacientes_historial_tableViewMovimientos.setItems(HistoryList);
         pacientes_historial_tableViewMovimientos.refresh();
     }
 
     private void cargarPacientes() {
         pacientesList.clear();
-        List<PatientDTO> pacientes = patientDAO.getAllPatients();
+        List<PatientDTO> pacientes = patientService.getAllPatients();
         if (pacientes != null && !pacientes.isEmpty()) {
             pacientesList.addAll(pacientes);
         }
@@ -383,15 +392,28 @@ public class AdminController implements Initializable {
         pacientes_tableViewPacientes.refresh();
     }
 
+    @FXML
+    private void cargarPaciente() {
+        pacientesList.clear();
+        String dni = pacientes_txtFieldBuscarDNI.getText();
+        if (dni.isEmpty()) {
+            cargarPacientes();
+        } else {
+            PatientDTO paciente = patientService.getPatient(dni);
+            if (paciente != null) {
+                pacientesList.add(paciente);
+            }
+        }
+        pacientes_tableViewPacientes.setItems(pacientesList);
+        pacientes_tableViewPacientes.refresh();
+    }
+
     private void configurarBaseDatos() {
         Connection connection = DatabaseConnection.getConnection();
-        if (connection != null) {
-            patientDAO = new PatientDAO(connection);
-            saleDAO = new SaleDAO(connection);
-            salesDetailDAO = new SalesDetailDAO(connection);
-        } else {
-            alerta.mensajeError("No se pudo establecer la conexión con la base de datos.");
-        }
+        patientService = new PatientService(connection);
+        saleService = new SaleService(connection);
+        saleDetailService = new SaleDetailService(connection);
+        productService = new ProductService(connection);
     }
 
     private void agregarEventoDobleClickPacientes() {
@@ -410,5 +432,38 @@ public class AdminController implements Initializable {
             });
             return row;
         });
+    }
+
+    private void agregarEventoDobleClickHistorial() {
+        pacientes_historial_tableViewMovimientos.setRowFactory(tv -> {
+            TableRow<HistoryDTO> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (!row.isEmpty())) {
+                    HistoryDTO rowData = row.getItem();
+                    abrirVentanaSaleDetail(rowData);
+                }
+            });
+            return row;
+        });
+    }
+
+    private void abrirVentanaSaleDetail(HistoryDTO history) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/natursalas/natursalassystem/view/fxml/SaleDetails.fxml"));
+            Parent root = fxmlLoader.load();
+
+            SaleDetailsController controller = fxmlLoader.getController();
+            controller.cargarDetallesVenta(history.getIdSale());
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Detalles de la Venta");
+
+            stage.initModality(Modality.APPLICATION_MODAL);
+
+            stage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

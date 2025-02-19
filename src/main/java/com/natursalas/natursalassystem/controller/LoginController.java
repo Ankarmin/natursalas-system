@@ -48,11 +48,7 @@ public class LoginController implements Initializable {
 
     private void configurarBaseDatos() {
         Connection connection = DatabaseConnection.getConnection();
-        if (connection != null) {
-            userDAO = new UserDAO(connection);
-        } else {
-            alerta.mensajeError("No se pudo establecer la conexión con la base de datos.");
-        }
+        userDAO = new UserDAO(connection);
     }
 
     @FXML

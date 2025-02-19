@@ -72,7 +72,7 @@ public class PatientDAO implements IPatientDAO {
             stmt.setString(1, DNI);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return new PatientDTO(rs.getString("DNI"), rs.getString("firstName"), rs.getString("lastName"), rs.getInt("age"), rs.getString("phoneNumber"), rs.getDate("dateOfConsultation"), rs.getDate("dateOfBirth"), rs.getString("district"), rs.getString("idLocation"));
+                return new PatientDTO(rs.getString("DNI"), rs.getString("firstName"), rs.getString("lastName"), rs.getInt("age"), rs.getString("phoneNumber"), rs.getDate("dateOfEntry"), rs.getDate("dateOfBirth"), rs.getString("district"), rs.getString("idLocation"));
             }
         } catch (SQLException e) {
             e.printStackTrace();

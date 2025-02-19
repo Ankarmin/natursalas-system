@@ -365,9 +365,10 @@
                                                    AnchorPane.leftAnchor="163.20000000000005"
                                                    AnchorPane.rightAnchor="550.6"/>
                                         <Button fx:id="pacientes_bttnBuscar" layoutX="439.0" layoutY="39.0"
-                                                mnemonicParsing="false" prefHeight="34.0" prefWidth="89.0"
-                                                styleClass="button-general" stylesheets="@../css/AdminDesign.css"
-                                                text="Buscar" AnchorPane.rightAnchor="442.6"/>
+                                                mnemonicParsing="false" onAction="#cargarPaciente" prefHeight="34.0"
+                                                prefWidth="89.0" styleClass="button-general"
+                                                stylesheets="@../css/AdminDesign.css" text="Buscar"
+                                                AnchorPane.rightAnchor="442.6"/>
                                         <AnchorPane layoutX="27.0" layoutY="396.0" prefHeight="244.0" prefWidth="926.0"
                                                     stylesheets="@../css/AdminDesign.css"
                                                     AnchorPane.bottomAnchor="20.799999999999955"

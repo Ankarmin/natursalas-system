@@ -1,20 +1,20 @@
 package com.natursalas.natursalassystem.model.dao;
 
-import com.natursalas.natursalassystem.model.dto.SalesDetailDTO;
+import com.natursalas.natursalassystem.model.dto.SaleDetailDTO;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SalesDetailDAO implements ISalesDetailDAO {
+public class SaleDetailDAO implements ISalesDetailDAO {
     private final Connection connection;
 
-    public SalesDetailDAO(Connection connection) {
+    public SaleDetailDAO(Connection connection) {
         this.connection = connection;
     }
 
     @Override
-    public boolean addSalesDetail(SalesDetailDTO newSalesDetail) {
+    public boolean addSalesDetail(SaleDetailDTO newSalesDetail) {
         String query = "INSERT INTO salesDetail (idSale, idProduct, idLocation, quantity, price) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, newSalesDetail.getIdSale());
@@ -30,7 +30,7 @@ public class SalesDetailDAO implements ISalesDetailDAO {
     }
 
     @Override
-    public boolean updateSalesDetail(SalesDetailDTO updatedSalesDetail) {
+    public boolean updateSalesDetail(SaleDetailDTO updatedSalesDetail) {
         String query = "UPDATE salesDetail SET quantity = ?, price = ? WHERE idSale = ? AND idProduct = ? AND idLocation = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, updatedSalesDetail.getQuantity());
@@ -60,7 +60,7 @@ public class SalesDetailDAO implements ISalesDetailDAO {
     }
 
     @Override
-    public SalesDetailDTO getSalesDetail(Integer idSale, String idProduct, String idLocation) {
+    public SaleDetailDTO getSalesDetail(Integer idSale, String idProduct, String idLocation) {
         String query = "SELECT * FROM salesDetail WHERE idSale = ? AND idProduct = ? AND idLocation = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, idSale);
@@ -68,7 +68,7 @@ public class SalesDetailDAO implements ISalesDetailDAO {
             stmt.setString(3, idLocation);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return new SalesDetailDTO(rs.getString("idSale"), rs.getString("idProduct"), rs.getString("idLocation"), rs.getInt("quantity"), rs.getInt("price"), rs.getInt("subtotal"));
+                return new SaleDetailDTO(rs.getString("idSale"), rs.getString("idProduct"), rs.getString("idLocation"), rs.getInt("quantity"), rs.getInt("price"), rs.getInt("subtotal"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -77,13 +77,13 @@ public class SalesDetailDAO implements ISalesDetailDAO {
     }
 
     @Override
-    public List<SalesDetailDTO> getAllSalesDetails() {
-        List<SalesDetailDTO> salesDetails = new ArrayList<>();
+    public List<SaleDetailDTO> getAllSalesDetails() {
+        List<SaleDetailDTO> salesDetails = new ArrayList<>();
         String query = "SELECT * FROM salesDetail";
         try (Statement stmt = connection.createStatement()) {
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
-                salesDetails.add(new SalesDetailDTO(rs.getString("idSale"), rs.getString("idProduct"), rs.getString("idLocation"), rs.getInt("quantity"), rs.getInt("price"), rs.getInt("subtotal")));
+                salesDetails.add(new SaleDetailDTO(rs.getString("idSale"), rs.getString("idProduct"), rs.getString("idLocation"), rs.getInt("quantity"), rs.getInt("price"), rs.getInt("subtotal")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -91,14 +91,14 @@ public class SalesDetailDAO implements ISalesDetailDAO {
         return salesDetails;
     }
 
-    public List<SalesDetailDTO> getSalesDetailsBySaleId(String idSale) {
-        List<SalesDetailDTO> salesDetails = new ArrayList<>();
+    public List<SaleDetailDTO> getSalesDetailsBySaleId(String idSale) {
+        List<SaleDetailDTO> salesDetails = new ArrayList<>();
         String query = "SELECT * FROM salesDetail WHERE idSale = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, idSale);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                salesDetails.add(new SalesDetailDTO(rs.getString("idSale"), rs.getString("idProduct"), rs.getString("idLocation"), rs.getInt("quantity"), rs.getInt("price"), rs.getInt("subtotal")));
+                salesDetails.add(new SaleDetailDTO(rs.getString("idSale"), rs.getString("idProduct"), rs.getString("idLocation"), rs.getInt("quantity"), rs.getInt("price"), rs.getInt("subtotal")));
             }
         } catch (SQLException e) {
             e.printStackTrace();

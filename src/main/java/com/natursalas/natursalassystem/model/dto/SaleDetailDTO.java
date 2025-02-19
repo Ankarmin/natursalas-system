@@ -1,6 +1,6 @@
 package com.natursalas.natursalassystem.model.dto;
 
-public class SalesDetailDTO {
+public class SaleDetailDTO {
     private String idSale;
     private String idProduct;
     private String idLocation;
@@ -8,10 +8,10 @@ public class SalesDetailDTO {
     private int price;
     private int subtotal;
 
-    public SalesDetailDTO() {
+    public SaleDetailDTO() {
     }
 
-    public SalesDetailDTO(String idSale, String idProduct, String idLocation, int quantity, int price, int subtotal) {
+    public SaleDetailDTO(String idSale, String idProduct, String idLocation, int quantity, int price, int subtotal) {
         this.idSale = idSale;
         this.idProduct = idProduct;
         this.idLocation = idLocation;
