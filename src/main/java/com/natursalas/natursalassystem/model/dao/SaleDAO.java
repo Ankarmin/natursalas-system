@@ -15,7 +15,7 @@ public class SaleDAO implements ISaleDAO {
 
     @Override
     public boolean addSale(SaleDTO newSale) {
-        String query = "INSERT INTO sale (idSale, DNI, diagnosis, category, saleDate, idLocation, email) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO sale (idSale, DNI, diagnosis, category, saleDate, idLocation) VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, newSale.getIdSale());
             stmt.setString(2, newSale.getDNI());
@@ -23,7 +23,6 @@ public class SaleDAO implements ISaleDAO {
             stmt.setString(4, newSale.getCategory());
             stmt.setTimestamp(5, newSale.getSaleDate());
             stmt.setString(6, newSale.getIdLocation());
-            stmt.setString(7, newSale.getEmail());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -33,15 +32,14 @@ public class SaleDAO implements ISaleDAO {
 
     @Override
     public boolean updateSale(SaleDTO updatedSale) {
-        String query = "UPDATE sale SET DNI = ?, diagnosis = ?, category = ?, saleDate = ?, idLocation = ?, email = ? WHERE idSale = ?";
+        String query = "UPDATE sale SET DNI = ?, diagnosis = ?, category = ?, saleDate = ?, idLocation = ? WHERE idSale = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, updatedSale.getDNI());
             stmt.setString(2, updatedSale.getDiagnosis());
             stmt.setString(3, updatedSale.getCategory());
             stmt.setTimestamp(4, updatedSale.getSaleDate());
             stmt.setString(5, updatedSale.getIdLocation());
-            stmt.setString(6, updatedSale.getEmail());
-            stmt.setString(7, updatedSale.getIdSale());
+            stmt.setString(6, updatedSale.getIdSale());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -68,7 +66,7 @@ public class SaleDAO implements ISaleDAO {
             stmt.setString(1, idSale);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return new SaleDTO(rs.getString("idSale"), rs.getString("DNI"), rs.getString("diagnosis"), rs.getString("category"), rs.getTimestamp("saleDate"), rs.getString("idLocation"), rs.getString("email"));
+                return new SaleDTO(rs.getString("idSale"), rs.getString("DNI"), rs.getString("diagnosis"), rs.getString("category"), rs.getTimestamp("saleDate"), rs.getString("idLocation"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -83,7 +81,22 @@ public class SaleDAO implements ISaleDAO {
         try (Statement stmt = connection.createStatement()) {
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
-                sales.add(new SaleDTO(rs.getString("idSale"), rs.getString("DNI"), rs.getString("diagnosis"), rs.getString("category"), rs.getTimestamp("saleDate"), rs.getString("idLocation"), rs.getString("email")));
+                sales.add(new SaleDTO(rs.getString("idSale"), rs.getString("DNI"), rs.getString("diagnosis"), rs.getString("category"), rs.getTimestamp("saleDate"), rs.getString("idLocation")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return sales;
+    }
+
+    public List<SaleDTO> getSalesByDNI(String dni) {
+        List<SaleDTO> sales = new ArrayList<>();
+        String query = "SELECT * FROM sale WHERE DNI = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, dni);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                sales.add(new SaleDTO(rs.getString("idSale"), rs.getString("DNI"), rs.getString("diagnosis"), rs.getString("category"), rs.getTimestamp("saleDate"), rs.getString("idLocation")));
             }
         } catch (SQLException e) {
             e.printStackTrace();

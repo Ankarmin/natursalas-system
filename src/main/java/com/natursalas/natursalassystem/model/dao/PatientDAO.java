@@ -22,7 +22,7 @@ public class PatientDAO implements IPatientDAO {
             stmt.setString(3, newPatient.getLastName());
             stmt.setInt(4, newPatient.getAge());
             stmt.setString(5, newPatient.getPhoneNumber());
-            stmt.setDate(6, newPatient.getDateOfConsultation());
+            stmt.setDate(6, newPatient.getDateOfEntry());
             stmt.setDate(7, newPatient.getDateOfBirth());
             stmt.setString(8, newPatient.getDistrict());
             stmt.setString(9, newPatient.getIdLocation());
@@ -41,7 +41,7 @@ public class PatientDAO implements IPatientDAO {
             stmt.setString(2, updatedPatient.getLastName());
             stmt.setInt(3, updatedPatient.getAge());
             stmt.setString(4, updatedPatient.getPhoneNumber());
-            stmt.setDate(5, updatedPatient.getDateOfConsultation());
+            stmt.setDate(5, updatedPatient.getDateOfEntry());
             stmt.setDate(6, updatedPatient.getDateOfBirth());
             stmt.setString(7, updatedPatient.getDistrict());
             stmt.setString(8, updatedPatient.getIdLocation());
@@ -72,7 +72,7 @@ public class PatientDAO implements IPatientDAO {
             stmt.setString(1, DNI);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return new PatientDTO(rs.getString("DNI"), rs.getString("firstName"), rs.getString("lastName"), rs.getInt("age"), rs.getString("phoneNumber"), rs.getDate("dateOfConsultation"), rs.getDate("dateOfBirth"), rs.getString("district"), rs.getString("idLocation"));
+                return new PatientDTO(rs.getString("DNI"), rs.getString("firstName"), rs.getString("lastName"), rs.getInt("age"), rs.getString("phoneNumber"), rs.getDate("dateOfEntry"), rs.getDate("dateOfBirth"), rs.getString("district"), rs.getString("idLocation"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -86,6 +86,22 @@ public class PatientDAO implements IPatientDAO {
         String query = "SELECT * FROM patient";
         try (Statement stmt = connection.createStatement()) {
             ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                patients.add(new PatientDTO(rs.getString("DNI"), rs.getString("firstName"), rs.getString("lastName"), rs.getInt("age"), rs.getString("phoneNumber"), rs.getDate("dateOfEntry"), rs.getDate("dateOfBirth"), rs.getString("district"), rs.getString("idLocation")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return patients;
+    }
+
+    @Override
+    public List<PatientDTO> getPatientsByLocation(String idLocation) {
+        List<PatientDTO> patients = new ArrayList<>();
+        String query = "SELECT * FROM patient WHERE idLocation = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, idLocation);
+            ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 patients.add(new PatientDTO(rs.getString("DNI"), rs.getString("firstName"), rs.getString("lastName"), rs.getInt("age"), rs.getString("phoneNumber"), rs.getDate("dateOfConsultation"), rs.getDate("dateOfBirth"), rs.getString("district"), rs.getString("idLocation")));
             }

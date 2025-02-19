@@ -9,19 +9,17 @@ public class SaleDTO {
     private String category;
     private Timestamp saleDate;
     private String idLocation;
-    private String email;
 
     public SaleDTO() {
     }
 
-    public SaleDTO(String idSale, String DNI, String diagnosis, String category, Timestamp saleDate, String idLocation, String email) {
+    public SaleDTO(String idSale, String DNI, String diagnosis, String category, Timestamp saleDate, String idLocation) {
         this.idSale = idSale;
         this.DNI = DNI;
         this.diagnosis = diagnosis;
         this.category = category;
         this.saleDate = saleDate;
         this.idLocation = idLocation;
-        this.email = email;
     }
 
     public String getIdSale() {
@@ -70,13 +68,5 @@ public class SaleDTO {
 
     public void setIdLocation(String idLocation) {
         this.idLocation = idLocation;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 }
