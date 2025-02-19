@@ -2,27 +2,42 @@ package com.natursalas.natursalassystem.model.dto;
 
 import java.sql.Timestamp;
 
-public class HistoryDTO {
+public class SaleSpecialDTO {
     private String idSale;
-    private Timestamp saleDate;
     private String idLocation;
+    private Timestamp saleDate;
+    private String DNI;
+    private String firstName;
     private String diagnosis;
     private int subtotal;
 
-    public HistoryDTO(String idSale, Timestamp saleDate, String idLocation, String diagnosis, int subtotal) {
+    public SaleSpecialDTO() {
+    }
+
+    public SaleSpecialDTO(String idSale, String idLocation, Timestamp saleDate, String DNI, String firstName, String diagnosis, int subtotal) {
         this.idSale = idSale;
-        this.saleDate = saleDate;
         this.idLocation = idLocation;
+        this.saleDate = saleDate;
+        this.DNI = DNI;
+        this.firstName = firstName;
         this.diagnosis = diagnosis;
         this.subtotal = subtotal;
     }
-    
+
     public String getIdSale() {
         return idSale;
     }
 
     public void setIdSale(String idSale) {
         this.idSale = idSale;
+    }
+
+    public String getIdLocation() {
+        return idLocation;
+    }
+
+    public void setIdLocation(String idLocation) {
+        this.idLocation = idLocation;
     }
 
     public Timestamp getSaleDate() {
@@ -33,12 +48,20 @@ public class HistoryDTO {
         this.saleDate = saleDate;
     }
 
-    public String getIdLocation() {
-        return idLocation;
+    public String getDNI() {
+        return DNI;
     }
 
-    public void setIdLocation(String idLocation) {
-        this.idLocation = idLocation;
+    public void setDNI(String DNI) {
+        this.DNI = DNI;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getDiagnosis() {
@@ -56,5 +79,4 @@ public class HistoryDTO {
     public void setSubtotal(int subtotal) {
         this.subtotal = subtotal;
     }
-
 }

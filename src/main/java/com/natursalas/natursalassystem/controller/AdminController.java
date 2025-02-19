@@ -1,9 +1,6 @@
 package com.natursalas.natursalassystem.controller;
 
-import com.natursalas.natursalassystem.model.dto.HistoryDTO;
-import com.natursalas.natursalassystem.model.dto.PatientDTO;
-import com.natursalas.natursalassystem.model.dto.SaleDTO;
-import com.natursalas.natursalassystem.model.dto.SaleDetailDTO;
+import com.natursalas.natursalassystem.model.dto.*;
 import com.natursalas.natursalassystem.service.*;
 import com.natursalas.natursalassystem.util.AlertMessages;
 import javafx.application.Platform;
@@ -282,7 +279,7 @@ public class AdminController implements Initializable {
     private ComboBox<?> ventas_filtrar_sede;
 
     @FXML
-    private TableView<HistoryDTO> ventas_tableViewVentas;
+    private TableView<SaleSpecialDTO> ventas_tableViewVentas;
 
     private final AlertMessages alerta = new AlertMessages();
 
@@ -297,12 +294,18 @@ public class AdminController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         configurarBaseDatos();
+        iniciarReloj();
+
         configurarColumnasPacientes();
         configurarColumnasHistorial();
+        configurarColumnasVentas();
+
         cargarPacientes();
-        iniciarReloj();
+        cargarVentas();
+
         agregarEventoDobleClickPacientes();
         agregarEventoDobleClickHistorial();
+        agregarEventoDobleClickVentas();
     }
 
     public void switchForm(ActionEvent event) {
@@ -367,6 +370,15 @@ public class AdminController implements Initializable {
         pacientes_historial_columna_sede.setCellValueFactory(new PropertyValueFactory<>("idLocation"));
     }
 
+    private void configurarColumnasVentas() {
+        ventas_columna_sede.setCellValueFactory(new PropertyValueFactory<>("idLocation"));
+        ventas_columna_fechaVenta.setCellValueFactory(new PropertyValueFactory<>("saleDate"));
+        ventas_columna_dniPaciente.setCellValueFactory(new PropertyValueFactory<>("DNI"));
+        ventas_columna_paciente.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+        ventas_columna_diagnostico.setCellValueFactory(new PropertyValueFactory<>("diagnosis"));
+        ventas_columna_PrecioTotal.setCellValueFactory(new PropertyValueFactory<>("subtotal"));
+    }
+
     private void cargarHistorialVentas(String dni) {
         HistoryList.clear();
         List<SaleDTO> sales = saleService.getSalesByDNI(dni);
@@ -408,6 +420,22 @@ public class AdminController implements Initializable {
         pacientes_tableViewPacientes.refresh();
     }
 
+    private void cargarVentas() {
+        List<SaleDTO> sales = saleService.getAllSales();
+        ObservableList<SaleSpecialDTO> salesList = FXCollections.observableArrayList();
+        for (SaleDTO sale : sales) {
+            List<SaleDetailDTO> salesDetails = saleDetailService.getSalesDetailsBySaleId(sale.getIdSale());
+            int totalSubtotal = 0;
+            for (SaleDetailDTO salesDetail : salesDetails) {
+                totalSubtotal += salesDetail.getSubtotal();
+            }
+            String firstName = patientService.getPatient(sale.getDNI()).getFirstName();
+            salesList.add(new SaleSpecialDTO(sale.getIdSale(), sale.getIdLocation(), sale.getSaleDate(), sale.getDNI(), firstName, sale.getDiagnosis(), totalSubtotal));
+        }
+        ventas_tableViewVentas.setItems(salesList);
+        ventas_tableViewVentas.refresh();
+    }
+
     private void configurarBaseDatos() {
         Connection connection = DatabaseConnection.getConnection();
         patientService = new PatientService(connection);
@@ -447,6 +475,19 @@ public class AdminController implements Initializable {
         });
     }
 
+    private void agregarEventoDobleClickVentas() {
+        ventas_tableViewVentas.setRowFactory(tv -> {
+            TableRow<SaleSpecialDTO> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (!row.isEmpty())) {
+                    SaleSpecialDTO rowData = row.getItem();
+                    abrirVentanaSaleDetail(rowData);
+                }
+            });
+            return row;
+        });
+    }
+
     private void abrirVentanaSaleDetail(HistoryDTO history) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/natursalas/natursalassystem/view/fxml/SaleDetails.fxml"));
@@ -454,6 +495,26 @@ public class AdminController implements Initializable {
 
             SaleDetailsController controller = fxmlLoader.getController();
             controller.cargarDetallesVenta(history.getIdSale());
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Detalles de la Venta");
+
+            stage.initModality(Modality.APPLICATION_MODAL);
+
+            stage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void abrirVentanaSaleDetail(SaleSpecialDTO saleSpecial) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/natursalas/natursalassystem/view/fxml/SaleDetails.fxml"));
+            Parent root = fxmlLoader.load();
+
+            SaleDetailsController controller = fxmlLoader.getController();
+            controller.cargarDetallesVenta(saleSpecial.getIdSale());
 
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
