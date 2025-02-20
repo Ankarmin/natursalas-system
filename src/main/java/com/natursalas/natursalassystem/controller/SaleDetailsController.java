@@ -16,7 +16,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
 import java.sql.Connection;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -43,6 +42,8 @@ public class SaleDetailsController implements Initializable {
     private SaleDetailService saleDetailService;
     private ProductDAO productDAO;
 
+    private final ObservableList<SaleDetailSpecialDTO> observableList = FXCollections.observableArrayList();
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         configurarBaseDatos();
@@ -64,13 +65,12 @@ public class SaleDetailsController implements Initializable {
     }
 
     public void cargarDetallesVenta(String idSale) {
-        List<SaleDetailSpecialDTO> saleDetailSpecialList = new ArrayList<>();
         List<SaleDetailDTO> saleDetails = saleDetailService.getSalesDetailsBySaleId(idSale);
 
         for (SaleDetailDTO saleDetail : saleDetails) {
             ProductDTO product = productDAO.getProduct(saleDetail.getIdProduct(), saleDetail.getIdLocation());
             if (product != null) {
-                saleDetailSpecialList.add(new SaleDetailSpecialDTO(
+                observableList.add(new SaleDetailSpecialDTO(
                         saleDetail.getIdLocation(),
                         product.getProductName(),
                         saleDetail.getPrice(),
@@ -80,7 +80,6 @@ public class SaleDetailsController implements Initializable {
             }
         }
 
-        ObservableList<SaleDetailSpecialDTO> observableList = FXCollections.observableArrayList(saleDetailSpecialList);
         saleDetails_tableViewDetalles.setItems(observableList);
         saleDetails_tableViewDetalles.refresh();
     }

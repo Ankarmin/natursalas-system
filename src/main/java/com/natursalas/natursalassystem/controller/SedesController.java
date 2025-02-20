@@ -244,7 +244,6 @@ public class SedesController implements Initializable {
         }).start();
     }
 
-
     public void switchForm(ActionEvent event) {
         panelInformacion.setVisible(event.getSource() == bttnInformacion);
         panelPacientes.setVisible(event.getSource() == bttnPacientes);

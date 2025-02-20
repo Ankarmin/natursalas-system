@@ -7,8 +7,8 @@ import java.util.List;
 public interface IUserDAO {
 
     boolean addUser(UserDTO newUser);
-
-    boolean updateUser(UserDTO updatedUser);
+    
+    boolean updateUser(UserDTO updatedUser, String oldEmail);
 
     boolean deleteUser(String email);
 

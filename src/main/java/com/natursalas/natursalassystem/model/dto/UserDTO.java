@@ -16,6 +16,17 @@ public class UserDTO {
         this.idLocation = idLocation;
     }
 
+    public UserDTO(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
+    public UserDTO(String email, String password, String idLocation) {
+        this.email = email;
+        this.password = password;
+        this.idLocation = idLocation;
+    }
+
     public String getEmail() {
         return email;
     }

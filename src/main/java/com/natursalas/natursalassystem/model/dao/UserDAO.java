@@ -15,12 +15,11 @@ public class UserDAO implements IUserDAO {
 
     @Override
     public boolean addUser(UserDTO newUser) {
-        String query = "INSERT INTO user (email, password, role, idLocation) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO user (email, password, idLocation) VALUES (?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, newUser.getEmail());
             stmt.setString(2, newUser.getPassword());
-            stmt.setString(3, newUser.getRole());
-            stmt.setString(4, newUser.getIdLocation());
+            stmt.setString(3, newUser.getIdLocation());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -29,13 +28,12 @@ public class UserDAO implements IUserDAO {
     }
 
     @Override
-    public boolean updateUser(UserDTO updatedUser) {
-        String query = "UPDATE user SET password = ?, role = ?, idLocation = ? WHERE email = ?";
+    public boolean updateUser(UserDTO updatedUser, String oldEmail) {
+        String query = "UPDATE user SET email = ?, password = ? WHERE email = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setString(1, updatedUser.getPassword());
-            stmt.setString(2, updatedUser.getRole());
-            stmt.setString(3, updatedUser.getIdLocation());
-            stmt.setString(4, updatedUser.getEmail());
+            stmt.setString(1, updatedUser.getEmail());
+            stmt.setString(2, updatedUser.getPassword());
+            stmt.setString(3, oldEmail);
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();

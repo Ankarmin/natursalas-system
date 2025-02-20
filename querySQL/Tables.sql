@@ -20,7 +20,7 @@ CREATE TABLE patient (
     lastName VARCHAR(50) NOT NULL,
     age INT NOT NULL CHECK (age > 0),
     phoneNumber VARCHAR(9) NOT NULL CHECK (phoneNumber REGEXP '^[0-9]{9}$'),
-    dateOfConsultation DATE NOT NULL,
+    dateOfEntry TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     dateOfBirth DATE NOT NULL,
     district VARCHAR(50) NOT NULL,
     idLocation VARCHAR(50) NOT NULL,
@@ -43,7 +43,7 @@ CREATE TABLE product (
 CREATE TABLE productsIncrease (
     idProductIncrease INT AUTO_INCREMENT PRIMARY KEY,
     idProduct VARCHAR(20) NOT NULL,
-    dateOfEntry DATE NOT NULL,
+    dateOfEntry TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     quantity INT NOT NULL CHECK (quantity > 0),
     idLocation VARCHAR(50) NOT NULL,
     FOREIGN KEY (idProduct, idLocation) REFERENCES product(idProduct, idLocation)
@@ -124,37 +124,77 @@ BEGIN
 END$$
 DELIMITER ;
 
--- Trigger para validar que la fecha de nacimiento sea anterior a la fecha actual
-DELIMITER $$
-CREATE TRIGGER beforeInsertPatients
-BEFORE INSERT ON patient
-FOR EACH ROW
-BEGIN
-    IF NEW.dateOfBirth >= CURRENT_DATE THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'dateOfBirth debe ser anterior a la fecha actual';
-    END IF;
-END$$
-DELIMITER ;
-
-DELIMITER $$
-CREATE TRIGGER beforeUpdatePatients
-BEFORE UPDATE ON patient
-FOR EACH ROW
-BEGIN
-    IF NEW.dateOfBirth >= CURRENT_DATE THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'dateOfBirth debe ser anterior a la fecha actual';
-    END IF;
-END$$
-DELIMITER ;
-
--- Trigger para calcular automáticamente la edad al insertar un paciente
+-- Trigger para calcular la edad al insertar un paciente
 DELIMITER $$
 CREATE TRIGGER beforeInsertPatient
 BEFORE INSERT ON patient
 FOR EACH ROW
 BEGIN
     SET NEW.age = TIMESTAMPDIFF(YEAR, NEW.dateOfBirth, CURDATE());
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER beforeUpdatePatient
+BEFORE UPDATE ON patient
+FOR EACH ROW
+BEGIN
+    -- Verifica si la fecha de nacimiento ha sido modificada
+    IF NEW.dateOfBirth <> OLD.dateOfBirth THEN
+        SET NEW.age = TIMESTAMPDIFF(YEAR, NEW.dateOfBirth, CURDATE());
+    END IF;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER afterUpdateLocation
+AFTER UPDATE ON location
+FOR EACH ROW
+BEGIN
+    -- Actualizar en la tabla user
+    UPDATE user
+    SET idLocation = NEW.idLocation
+    WHERE idLocation = OLD.idLocation;
+
+    -- Actualizar en la tabla patient
+    UPDATE patient
+    SET idLocation = NEW.idLocation
+    WHERE idLocation = OLD.idLocation;
+
+    -- Actualizar en la tabla product
+    UPDATE product
+    SET idLocation = NEW.idLocation
+    WHERE idLocation = OLD.idLocation;
+
+    -- Actualizar en la tabla productsIncrease
+    UPDATE productsIncrease
+    SET idLocation = NEW.idLocation
+    WHERE idLocation = OLD.idLocation;
+
+    -- Actualizar en la tabla sale
+    UPDATE sale
+    SET idLocation = NEW.idLocation
+    WHERE idLocation = OLD.idLocation;
+
+    -- Actualizar en la tabla salesDetail
+    UPDATE salesDetail
+    SET idLocation = NEW.idLocation
+    WHERE idLocation = OLD.idLocation;
+
+END$$
+DELIMITER ;
+
+-- Habilitar el programador de eventos si no está activado
+SET GLOBAL event_scheduler = ON;
+
+-- Crear evento para actualizar la edad diariamente
+DELIMITER $$
+CREATE EVENT update_patient_age_daily
+ON SCHEDULE EVERY 1 DAY
+STARTS CURRENT_TIMESTAMP
+DO
+BEGIN
+    UPDATE patient
+    SET age = TIMESTAMPDIFF(YEAR, dateOfBirth, CURDATE());
 END$$
 DELIMITER ;

@@ -9,3 +9,6 @@ DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS location;
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+DROP EVENT IF EXISTS update_patient_age_daily;
+SHOW EVENTS;

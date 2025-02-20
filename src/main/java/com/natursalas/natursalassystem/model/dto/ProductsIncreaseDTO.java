@@ -1,18 +1,18 @@
 package com.natursalas.natursalassystem.model.dto;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 public class ProductsIncreaseDTO {
     private int idProductIncrease;
     private String idProduct;
-    private Date dateOfEntry;
+    private Timestamp dateOfEntry;
     private int quantity;
     private String idLocation;
 
     public ProductsIncreaseDTO() {
     }
 
-    public ProductsIncreaseDTO(int idProductIncrease, String idProduct, Date dateOfEntry, int quantity, String idLocation) {
+    public ProductsIncreaseDTO(int idProductIncrease, String idProduct, Timestamp dateOfEntry, int quantity, String idLocation) {
         this.idProductIncrease = idProductIncrease;
         this.idProduct = idProduct;
         this.dateOfEntry = dateOfEntry;
@@ -36,11 +36,11 @@ public class ProductsIncreaseDTO {
         this.idProduct = idProduct;
     }
 
-    public Date getDateOfEntry() {
+    public Timestamp getDateOfEntry() {
         return dateOfEntry;
     }
 
-    public void setDateOfEntry(Date dateOfEntry) {
+    public void setDateOfEntry(Timestamp dateOfEntry) {
         this.dateOfEntry = dateOfEntry;
     }
 

@@ -18,7 +18,7 @@ public class ProductsIncreaseDAO implements IProductsIncreaseDAO {
         String query = "INSERT INTO productsIncrease (idProduct, dateOfEntry, quantity, idLocation) VALUES (?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, newProductsIncrease.getIdProduct());
-            stmt.setDate(2, newProductsIncrease.getDateOfEntry());
+            stmt.setTimestamp(2, newProductsIncrease.getDateOfEntry());
             stmt.setInt(3, newProductsIncrease.getQuantity());
             stmt.setString(4, newProductsIncrease.getIdLocation());
             int affectedRows = stmt.executeUpdate();
@@ -41,7 +41,7 @@ public class ProductsIncreaseDAO implements IProductsIncreaseDAO {
         String query = "UPDATE productsIncrease SET idProduct = ?, dateOfEntry = ?, quantity = ?, idLocation = ? WHERE idProductIncrease = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, updatedProductsIncrease.getIdProduct());
-            stmt.setDate(2, updatedProductsIncrease.getDateOfEntry());
+            stmt.setTimestamp(2, updatedProductsIncrease.getDateOfEntry());
             stmt.setInt(3, updatedProductsIncrease.getQuantity());
             stmt.setString(4, updatedProductsIncrease.getIdLocation());
             stmt.setInt(5, updatedProductsIncrease.getIdProductIncrease());
@@ -71,7 +71,7 @@ public class ProductsIncreaseDAO implements IProductsIncreaseDAO {
             stmt.setInt(1, idProductIncrease);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return new ProductsIncreaseDTO(rs.getInt("idProductIncrease"), rs.getString("idProduct"), rs.getDate("dateOfEntry"), rs.getInt("quantity"), rs.getString("idLocation"));
+                return new ProductsIncreaseDTO(rs.getInt("idProductIncrease"), rs.getString("idProduct"), rs.getTimestamp("dateOfEntry"), rs.getInt("quantity"), rs.getString("idLocation"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -86,7 +86,7 @@ public class ProductsIncreaseDAO implements IProductsIncreaseDAO {
         try (Statement stmt = connection.createStatement()) {
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
-                productsIncreases.add(new ProductsIncreaseDTO(rs.getInt("idProductIncrease"), rs.getString("idProduct"), rs.getDate("dateOfEntry"), rs.getInt("quantity"), rs.getString("idLocation")));
+                productsIncreases.add(new ProductsIncreaseDTO(rs.getInt("idProductIncrease"), rs.getString("idProduct"), rs.getTimestamp("dateOfEntry"), rs.getInt("quantity"), rs.getString("idLocation")));
             }
         } catch (SQLException e) {
             e.printStackTrace();

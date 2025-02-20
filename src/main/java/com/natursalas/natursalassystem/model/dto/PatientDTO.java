@@ -1,6 +1,7 @@
 package com.natursalas.natursalassystem.model.dto;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 public class PatientDTO {
     private String DNI;
@@ -8,7 +9,7 @@ public class PatientDTO {
     private String lastName;
     private int age;
     private String phoneNumber;
-    private Date dateOfEntry;
+    private Timestamp dateOfEntry;
     private Date dateOfBirth;
     private String district;
     private String idLocation;
@@ -16,7 +17,7 @@ public class PatientDTO {
     public PatientDTO() {
     }
 
-    public PatientDTO(String DNI, String firstName, String lastName, int age, String phoneNumber, Date dateOfEntry, Date dateOfBirth, String district, String idLocation) {
+    public PatientDTO(String DNI, String firstName, String lastName, int age, String phoneNumber, Timestamp dateOfEntry, Date dateOfBirth, String district, String idLocation) {
         this.DNI = DNI;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -68,11 +69,11 @@ public class PatientDTO {
         this.phoneNumber = phoneNumber;
     }
 
-    public Date getDateOfEntry() {
+    public Timestamp getDateOfEntry() {
         return dateOfEntry;
     }
 
-    public void setDateOfEntry(Date dateOfEntry) {
+    public void setDateOfEntry(Timestamp dateOfEntry) {
         this.dateOfEntry = dateOfEntry;
     }
 

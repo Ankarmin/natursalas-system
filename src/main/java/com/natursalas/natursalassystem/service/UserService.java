@@ -17,8 +17,8 @@ public class UserService {
         return userDAO.addUser(newUser);
     }
 
-    public boolean updateUser(UserDTO updatedUser) {
-        return userDAO.updateUser(updatedUser);
+    public boolean updateUser(UserDTO updatedUser, String oldEmail) {
+        return userDAO.updateUser(updatedUser, oldEmail);
     }
 
     public boolean deleteUser(String email) {

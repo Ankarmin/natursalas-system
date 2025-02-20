@@ -48,16 +48,16 @@ public class AdminController implements Initializable {
     private Button bttnVentas;
 
     @FXML
-    private TableColumn<?, ?> cuentas_columna_correo;
+    private TableColumn<AccountDTO, String> cuentas_columna_correo;
 
     @FXML
-    private TableColumn<?, ?> cuentas_columna_sede;
+    private TableColumn<AccountDTO, String> cuentas_columna_sede;
 
     @FXML
-    private TableColumn<?, ?> cuentas_columna_ubicacion;
+    private TableColumn<AccountDTO, String> cuentas_columna_ubicacion;
 
     @FXML
-    private TableView<?> cuentas_tableViewCuentas;
+    private TableView<AccountDTO> cuentas_tableViewCuentas;
 
     @FXML
     private Label informacion_blPacientesNuevos;
@@ -90,25 +90,25 @@ public class AdminController implements Initializable {
     private TableView<?> informacion_tableViewVentasPorSede;
 
     @FXML
-    private TableColumn<?, ?> inventarios_columna_cantidadAumentada;
+    private TableColumn<InventaryDTO, Integer> inventarios_columna_cantidadAumentada;
 
     @FXML
-    private TableColumn<?, ?> inventarios_columna_categoriaProducto;
+    private TableColumn<InventaryDTO, String> inventarios_columna_categoriaProducto;
 
     @FXML
-    private TableColumn<?, ?> inventarios_columna_fecha;
+    private TableColumn<InventaryDTO, Timestamp> inventarios_columna_fecha;
 
     @FXML
-    private TableColumn<?, ?> inventarios_columna_idProducto;
+    private TableColumn<InventaryDTO, String> inventarios_columna_idProducto;
 
     @FXML
-    private TableColumn<?, ?> inventarios_columna_nombreProducto;
+    private TableColumn<InventaryDTO, String> inventarios_columna_nombreProducto;
 
     @FXML
-    private TableColumn<?, ?> inventarios_columna_sede;
+    private TableColumn<InventaryDTO, String> inventarios_columna_sede;
 
     @FXML
-    private TableView<?> inventarios_tableView;
+    private TableView<InventaryDTO> inventarios_tableView;
 
     @FXML
     private Label lblFecha;
@@ -147,49 +147,49 @@ public class AdminController implements Initializable {
     private TableColumn<PatientDTO, String> pacientes_columna_telefono;
 
     @FXML
-    private Button pacientes_crear_bttnCrear;
+    private Button cuentas_crear_bttnCrear;
 
     @FXML
-    private CheckBox pacientes_crear_mostrarContrasena;
+    private CheckBox cuentas_crear_mostrarContrasena;
 
     @FXML
-    private PasswordField pacientes_crear_pswFieldContrasena;
+    private PasswordField cuentas_crear_pswFieldContrasena;
 
     @FXML
-    private TextField pacientes_crear_txtFieldContrasena;
+    private TextField cuentas_crear_txtFieldContrasena;
 
     @FXML
-    private TextField pacientes_crear_txtFieldCorreo;
+    private TextField cuentas_crear_txtFieldCorreo;
 
     @FXML
-    private TextField pacientes_crear_txtFieldSede;
+    private TextField cuentas_crear_txtFieldSede;
 
     @FXML
-    private TextField pacientes_crear_txtFieldUbicacion;
+    private TextField cuentas_crear_txtFieldUbicacion;
 
     @FXML
-    private Button pacientes_editar_bttnEditar;
+    private Button cuentas_editar_bttnEditar;
 
     @FXML
-    private Button pacientes_editar_bttnEliminar;
+    private Button cuentas_editar_bttnEliminar;
 
     @FXML
-    private CheckBox pacientes_editar_mostrarContrasena;
+    private CheckBox cuentas_editar_mostrarContrasena;
 
     @FXML
-    private PasswordField pacientes_editar_pswFieldContrasena;
+    private PasswordField cuentas_editar_pswFieldContrasena;
 
     @FXML
-    private TextField pacientes_editar_txtFieldContraseña;
+    private TextField cuentas_editar_txtFieldContrasena;
 
     @FXML
-    private TextField pacientes_editar_txtFieldCorreo;
+    private TextField cuentas_editar_txtFieldCorreo;
 
     @FXML
-    private TextField pacientes_editar_txtFieldSede_;
+    private TextField cuentas_editar_txtFieldSede_;
 
     @FXML
-    private TextField pacientes_editar_txtFieldUbicacion;
+    private TextField cuentas_editar_txtFieldUbicacion;
 
     @FXML
     private TableColumn<HistoryDTO, String> pacientes_historial_columna_diagnostico;
@@ -246,22 +246,22 @@ public class AdminController implements Initializable {
     private Button ventas_bttnFiltrar;
 
     @FXML
-    private TableColumn<?, ?> ventas_columna_PrecioTotal;
+    private TableColumn<SaleSpecialDTO, Integer> ventas_columna_PrecioTotal;
 
     @FXML
-    private TableColumn<?, ?> ventas_columna_diagnostico;
+    private TableColumn<SaleSpecialDTO, String> ventas_columna_diagnostico;
 
     @FXML
-    private TableColumn<?, ?> ventas_columna_dniPaciente;
+    private TableColumn<SaleSpecialDTO, String> ventas_columna_dniPaciente;
 
     @FXML
-    private TableColumn<?, ?> ventas_columna_fechaVenta;
+    private TableColumn<SaleSpecialDTO, Timestamp> ventas_columna_fechaVenta;
 
     @FXML
-    private TableColumn<?, ?> ventas_columna_paciente;
+    private TableColumn<SaleSpecialDTO, String> ventas_columna_paciente;
 
     @FXML
-    private TableColumn<?, ?> ventas_columna_sede;
+    private TableColumn<SaleSpecialDTO, String> ventas_columna_sede;
 
     @FXML
     private DatePicker ventas_filtrar_desdeDate;
@@ -284,12 +284,18 @@ public class AdminController implements Initializable {
     private final AlertMessages alerta = new AlertMessages();
 
     private PatientService patientService;
-    private ProductService productService;
     private SaleDetailService saleDetailService;
     private SaleService saleService;
+    private ProductService productService;
+    private ProductIncreaseService productIncreaseService;
+    private LocationService locationService;
+    private UserService userService;
 
-    private final ObservableList<PatientDTO> pacientesList = FXCollections.observableArrayList();
-    private final ObservableList<HistoryDTO> HistoryList = FXCollections.observableArrayList();
+    private final ObservableList<PatientDTO> patientsList = FXCollections.observableArrayList();
+    private final ObservableList<HistoryDTO> historyList = FXCollections.observableArrayList();
+    private final ObservableList<SaleSpecialDTO> salesList = FXCollections.observableArrayList();
+    private final ObservableList<InventaryDTO> inventaryList = FXCollections.observableArrayList();
+    private final ObservableList<AccountDTO> accountList = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -299,13 +305,18 @@ public class AdminController implements Initializable {
         configurarColumnasPacientes();
         configurarColumnasHistorial();
         configurarColumnasVentas();
+        configurarColumnasInventario();
+        configurarColumnasCuentas();
 
         cargarPacientes();
         cargarVentas();
+        cargarInventario();
+        cargarCuentas();
 
         agregarEventoDobleClickPacientes();
         agregarEventoDobleClickHistorial();
         agregarEventoDobleClickVentas();
+        agregarEventoDobleClickCuentas();
     }
 
     public void switchForm(ActionEvent event) {
@@ -332,24 +343,24 @@ public class AdminController implements Initializable {
 
     @FXML
     public void mostrarContrasena() {
-        if (pacientes_editar_mostrarContrasena.isSelected()) {
-            pacientes_editar_txtFieldContraseña.setText(pacientes_editar_pswFieldContrasena.getText());
-            pacientes_editar_txtFieldContraseña.setVisible(true);
-            pacientes_editar_pswFieldContrasena.setVisible(false);
+        if (cuentas_editar_mostrarContrasena.isSelected()) {
+            cuentas_editar_txtFieldContrasena.setText(cuentas_editar_pswFieldContrasena.getText());
+            cuentas_editar_txtFieldContrasena.setVisible(true);
+            cuentas_editar_pswFieldContrasena.setVisible(false);
         } else {
-            pacientes_editar_pswFieldContrasena.setText(pacientes_editar_txtFieldContraseña.getText());
-            pacientes_editar_pswFieldContrasena.setVisible(true);
-            pacientes_editar_txtFieldContraseña.setVisible(false);
+            cuentas_editar_pswFieldContrasena.setText(cuentas_editar_txtFieldContrasena.getText());
+            cuentas_editar_pswFieldContrasena.setVisible(true);
+            cuentas_editar_txtFieldContrasena.setVisible(false);
         }
 
-        if (pacientes_crear_mostrarContrasena.isSelected()) {
-            pacientes_crear_txtFieldContrasena.setText(pacientes_crear_pswFieldContrasena.getText());
-            pacientes_crear_txtFieldContrasena.setVisible(true);
-            pacientes_crear_pswFieldContrasena.setVisible(false);
+        if (cuentas_crear_mostrarContrasena.isSelected()) {
+            cuentas_crear_txtFieldContrasena.setText(cuentas_crear_pswFieldContrasena.getText());
+            cuentas_crear_txtFieldContrasena.setVisible(true);
+            cuentas_crear_pswFieldContrasena.setVisible(false);
         } else {
-            pacientes_crear_pswFieldContrasena.setText(pacientes_crear_txtFieldContrasena.getText());
-            pacientes_crear_pswFieldContrasena.setVisible(true);
-            pacientes_crear_txtFieldContrasena.setVisible(false);
+            cuentas_crear_pswFieldContrasena.setText(cuentas_crear_txtFieldContrasena.getText());
+            cuentas_crear_pswFieldContrasena.setVisible(true);
+            cuentas_crear_txtFieldContrasena.setVisible(false);
         }
     }
 
@@ -379,8 +390,23 @@ public class AdminController implements Initializable {
         ventas_columna_PrecioTotal.setCellValueFactory(new PropertyValueFactory<>("subtotal"));
     }
 
+    private void configurarColumnasInventario() {
+        inventarios_columna_fecha.setCellValueFactory(new PropertyValueFactory<>("dateOfEntry"));
+        inventarios_columna_sede.setCellValueFactory(new PropertyValueFactory<>("idLocation"));
+        inventarios_columna_idProducto.setCellValueFactory(new PropertyValueFactory<>("idProduct"));
+        inventarios_columna_nombreProducto.setCellValueFactory(new PropertyValueFactory<>("productName"));
+        inventarios_columna_categoriaProducto.setCellValueFactory(new PropertyValueFactory<>("category"));
+        inventarios_columna_cantidadAumentada.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+    }
+
+    private void configurarColumnasCuentas() {
+        cuentas_columna_sede.setCellValueFactory(new PropertyValueFactory<>("idLocation"));
+        cuentas_columna_ubicacion.setCellValueFactory(new PropertyValueFactory<>("address"));
+        cuentas_columna_correo.setCellValueFactory(new PropertyValueFactory<>("email"));
+    }
+
     private void cargarHistorialVentas(String dni) {
-        HistoryList.clear();
+        historyList.clear();
         List<SaleDTO> sales = saleService.getSalesByDNI(dni);
         for (SaleDTO sale : sales) {
             List<SaleDetailDTO> salesDetails = saleDetailService.getSalesDetailsBySaleId(sale.getIdSale());
@@ -388,41 +414,41 @@ public class AdminController implements Initializable {
             for (SaleDetailDTO salesDetail : salesDetails) {
                 totalSubtotal += salesDetail.getSubtotal();
             }
-            HistoryList.add(new HistoryDTO(sale.getIdSale(), sale.getSaleDate(), sale.getIdLocation(), sale.getDiagnosis(), totalSubtotal));
+            historyList.add(new HistoryDTO(sale.getIdSale(), sale.getSaleDate(), sale.getIdLocation(), sale.getDiagnosis(), totalSubtotal));
         }
-        pacientes_historial_tableViewMovimientos.setItems(HistoryList);
+        pacientes_historial_tableViewMovimientos.setItems(historyList);
         pacientes_historial_tableViewMovimientos.refresh();
     }
 
     private void cargarPacientes() {
-        pacientesList.clear();
+        patientsList.clear();
         List<PatientDTO> pacientes = patientService.getAllPatients();
         if (pacientes != null && !pacientes.isEmpty()) {
-            pacientesList.addAll(pacientes);
+            patientsList.addAll(pacientes);
         }
-        pacientes_tableViewPacientes.setItems(pacientesList);
+        pacientes_tableViewPacientes.setItems(patientsList);
         pacientes_tableViewPacientes.refresh();
     }
 
     @FXML
     private void cargarPaciente() {
-        pacientesList.clear();
+        patientsList.clear();
         String dni = pacientes_txtFieldBuscarDNI.getText();
         if (dni.isEmpty()) {
             cargarPacientes();
         } else {
             PatientDTO paciente = patientService.getPatient(dni);
             if (paciente != null) {
-                pacientesList.add(paciente);
+                patientsList.add(paciente);
             }
         }
-        pacientes_tableViewPacientes.setItems(pacientesList);
+        pacientes_tableViewPacientes.setItems(patientsList);
         pacientes_tableViewPacientes.refresh();
     }
 
     private void cargarVentas() {
+        salesList.clear();
         List<SaleDTO> sales = saleService.getAllSales();
-        ObservableList<SaleSpecialDTO> salesList = FXCollections.observableArrayList();
         for (SaleDTO sale : sales) {
             List<SaleDetailDTO> salesDetails = saleDetailService.getSalesDetailsBySaleId(sale.getIdSale());
             int totalSubtotal = 0;
@@ -436,12 +462,43 @@ public class AdminController implements Initializable {
         ventas_tableViewVentas.refresh();
     }
 
+    private void cargarInventario() {
+        inventaryList.clear();
+        List<ProductsIncreaseDTO> productsIncrease = productIncreaseService.getAllProductsIncreases();
+
+        for (ProductsIncreaseDTO productIncrease : productsIncrease) {
+            ProductDTO product = productService.getProduct(productIncrease.getIdProduct(), productIncrease.getIdLocation());
+            if (product != null) {
+                inventaryList.add(new InventaryDTO(productIncrease.getDateOfEntry(), productIncrease.getIdLocation(), productIncrease.getIdProduct(), product.getProductName(), product.getCategory(), productIncrease.getQuantity()));
+            }
+        }
+        inventarios_tableView.setItems(inventaryList);
+        inventarios_tableView.refresh();
+    }
+
+    private void cargarCuentas() {
+        accountList.clear();
+        List<UserDTO> users = userService.getAllUsers();
+
+        for (UserDTO user : users) {
+            LocationDTO location = locationService.getLocation(user.getIdLocation());
+            if (location != null) {
+                accountList.add(new AccountDTO(user.getIdLocation(), location.getAddress(), user.getEmail(), user.getPassword()));
+            }
+        }
+        cuentas_tableViewCuentas.setItems(accountList);
+        cuentas_tableViewCuentas.refresh();
+    }
+
     private void configurarBaseDatos() {
         Connection connection = DatabaseConnection.getConnection();
         patientService = new PatientService(connection);
         saleService = new SaleService(connection);
         saleDetailService = new SaleDetailService(connection);
+        productIncreaseService = new ProductIncreaseService(connection);
         productService = new ProductService(connection);
+        locationService = new LocationService(connection);
+        userService = new UserService(connection);
     }
 
     private void agregarEventoDobleClickPacientes() {
@@ -488,6 +545,23 @@ public class AdminController implements Initializable {
         });
     }
 
+    private void agregarEventoDobleClickCuentas() {
+        cuentas_tableViewCuentas.setRowFactory(tv -> {
+            TableRow<AccountDTO> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (!row.isEmpty())) {
+                    AccountDTO rowData = row.getItem();
+                    cuentas_editar_pswFieldContrasena.setText(rowData.getPassword());
+                    cuentas_editar_txtFieldContrasena.setText(rowData.getPassword());
+                    cuentas_editar_txtFieldCorreo.setText(rowData.getEmail());
+                    cuentas_editar_txtFieldSede_.setText(rowData.getIdLocation());
+                    cuentas_editar_txtFieldUbicacion.setText(rowData.getAddress());
+                }
+            });
+            return row;
+        });
+    }
+
     private void abrirVentanaSaleDetail(HistoryDTO history) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/natursalas/natursalassystem/view/fxml/SaleDetails.fxml"));
@@ -526,5 +600,111 @@ public class AdminController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void crearCuenta() {
+        String email = cuentas_crear_txtFieldCorreo.getText();
+        String password = cuentas_crear_txtFieldContrasena.getText();
+        String location = cuentas_crear_txtFieldSede.getText();
+        String address = cuentas_crear_txtFieldUbicacion.getText();
+
+        if (email.isEmpty() || password.isEmpty() || location.isEmpty() || address.isEmpty()) {
+            alerta.mensajeError("Todos los campos deben estar rellenados.");
+            return;
+        }
+
+        LocationDTO locationDTO = locationService.getLocation(location);
+        if (locationDTO == null) {
+            locationDTO = new LocationDTO(location, address);
+            if (!locationService.addLocation(locationDTO)) {
+                alerta.mensajeError("Error al crear la ubicación.");
+                return;
+            }
+        }
+
+        UserDTO userDTO = new UserDTO(email, password, locationDTO.getIdLocation());
+        if (userService.addUser(userDTO)) {
+            alerta.mensajeConfirmacion("Cuenta creada correctamente.");
+            cargarCuentas();
+        } else {
+            alerta.mensajeError("Error al crear la cuenta.");
+        }
+
+        limpiarCamposCrear();
+        cargarCuentas();
+    }
+
+    @FXML
+    private void editarCuenta() {
+        String email = cuentas_editar_txtFieldCorreo.getText();
+        String password = cuentas_editar_txtFieldContrasena.getText();
+        String location = cuentas_editar_txtFieldSede_.getText();
+        String address = cuentas_editar_txtFieldUbicacion.getText();
+
+        AccountDTO selectedAccount = cuentas_tableViewCuentas.getSelectionModel().getSelectedItem();
+        if (selectedAccount == null) {
+            alerta.mensajeError("No se ha seleccionado ninguna cuenta.");
+            return;
+        }
+        String oldEmail = selectedAccount.getEmail();
+        String oldLocation = selectedAccount.getIdLocation();
+
+        if (email.isEmpty() || password.isEmpty() || location.isEmpty() || address.isEmpty()) {
+            alerta.mensajeError("Todos los campos deben estar rellenados.");
+            return;
+        }
+
+        LocationDTO locationDTO = new LocationDTO(location, address);
+        UserDTO userDTO = new UserDTO(email, password);
+
+        if (userService.updateUser(userDTO, oldEmail) && locationService.updateLocation(locationDTO)) {
+            alerta.mensajeConfirmacion("Cuenta actualizada correctamente.");
+            cargarCuentas();
+        } else {
+            alerta.mensajeError("Error al actualizar la cuenta.");
+        }
+
+        limpiarCamposEditar();
+        cargarCuentas();
+    }
+
+    @FXML
+    private void eliminarCuenta() {
+        String email = cuentas_editar_txtFieldCorreo.getText();
+        String password = cuentas_editar_txtFieldContrasena.getText();
+        String location = cuentas_editar_txtFieldSede_.getText();
+        String address = cuentas_editar_txtFieldUbicacion.getText();
+
+        if (email.isEmpty() || password.isEmpty() || location.isEmpty() || address.isEmpty()) {
+            alerta.mensajeError("Todos los campos deben estar rellenados.");
+            return;
+        }
+
+        if (userService.deleteUser(email)) {
+            alerta.mensajeConfirmacion("Cuenta eliminada correctamente.");
+            cargarCuentas();
+        } else {
+            alerta.mensajeError("Error al eliminar la cuenta.");
+        }
+
+        limpiarCamposEditar();
+        cargarCuentas();
+    }
+
+    private void limpiarCamposEditar() {
+        cuentas_editar_pswFieldContrasena.clear();
+        cuentas_editar_txtFieldCorreo.clear();
+        cuentas_editar_txtFieldContrasena.clear();
+        cuentas_editar_txtFieldSede_.clear();
+        cuentas_editar_txtFieldUbicacion.clear();
+    }
+
+    private void limpiarCamposCrear() {
+        cuentas_crear_pswFieldContrasena.clear();
+        cuentas_crear_txtFieldCorreo.clear();
+        cuentas_crear_txtFieldContrasena.clear();
+        cuentas_crear_txtFieldSede.clear();
+        cuentas_crear_txtFieldUbicacion.clear();
     }
 }

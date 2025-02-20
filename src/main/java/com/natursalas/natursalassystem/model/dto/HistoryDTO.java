@@ -16,7 +16,7 @@ public class HistoryDTO {
         this.diagnosis = diagnosis;
         this.subtotal = subtotal;
     }
-    
+
     public String getIdSale() {
         return idSale;
     }
