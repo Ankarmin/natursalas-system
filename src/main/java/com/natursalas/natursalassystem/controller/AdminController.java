@@ -707,4 +707,28 @@ public class AdminController implements Initializable {
         cuentas_crear_txtFieldSede.clear();
         cuentas_crear_txtFieldUbicacion.clear();
     }
+
+    @FXML
+    private void cerrarSesion() {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/natursalas/natursalassystem/view/fxml/Login.fxml"));
+            Parent root = fxmlLoader.load();
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Inicio de Sesión");
+
+            Stage currentStage = (Stage) bttnCerrarSesion.getScene().getWindow();
+            currentStage.close();
+
+            stage.setOnCloseRequest(event -> {
+                Platform.exit();
+                System.exit(0);
+            });
+
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

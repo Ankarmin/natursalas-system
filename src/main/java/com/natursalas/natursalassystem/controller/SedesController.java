@@ -3,10 +3,15 @@ package com.natursalas.natursalassystem.controller;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -249,5 +254,29 @@ public class SedesController implements Initializable {
         panelPacientes.setVisible(event.getSource() == bttnPacientes);
         panelVentas.setVisible(event.getSource() == bttnVentas);
         panelProductos.setVisible(event.getSource() == bttnProductos);
+    }
+
+    @FXML
+    private void cerrarSesion() {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/natursalas/natursalassystem/view/fxml/Login.fxml"));
+            Parent root = fxmlLoader.load();
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Inicio de Sesión");
+
+            Stage currentStage = (Stage) bttnCerrarSesion.getScene().getWindow();
+            currentStage.close();
+
+            stage.setOnCloseRequest(event -> {
+                Platform.exit();
+                System.exit(0);
+            });
+
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

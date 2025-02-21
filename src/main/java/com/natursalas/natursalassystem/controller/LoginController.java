@@ -4,6 +4,7 @@ import com.natursalas.natursalassystem.model.dao.UserDAO;
 import com.natursalas.natursalassystem.model.dto.UserDTO;
 import com.natursalas.natursalassystem.service.DatabaseConnection;
 import com.natursalas.natursalassystem.util.AlertMessages;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -13,6 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -43,6 +45,7 @@ public class LoginController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         configurarBaseDatos();
+        configurarEventosTeclado();
         txtMostrarContrasena.setVisible(false);
     }
 
@@ -111,6 +114,12 @@ public class LoginController implements Initializable {
             Stage nuevaVentana = new Stage();
             nuevaVentana.setTitle(titulo);
             nuevaVentana.setScene(new Scene(root));
+
+            nuevaVentana.setOnCloseRequest(event -> {
+                Platform.exit();
+                System.exit(0);
+            });
+
             nuevaVentana.show();
         } catch (IOException e) {
             alerta.mensajeError("Error al abrir la ventana de " + titulo + ".");
@@ -128,5 +137,25 @@ public class LoginController implements Initializable {
         } else {
             txtContrasenaUsuario.setText(txtMostrarContrasena.getText());
         }
+    }
+
+    private void configurarEventosTeclado() {
+        txtNombreUsuario.setOnKeyPressed(event -> {
+            if (event.getCode().equals(KeyCode.ENTER)) {
+                ingresar();
+            }
+        });
+
+        txtContrasenaUsuario.setOnKeyPressed(event -> {
+            if (event.getCode().equals(KeyCode.ENTER)) {
+                ingresar();
+            }
+        });
+
+        txtMostrarContrasena.setOnKeyPressed(event -> {
+            if (event.getCode().equals(KeyCode.ENTER)) {
+                ingresar();
+            }
+        });
     }
 }
