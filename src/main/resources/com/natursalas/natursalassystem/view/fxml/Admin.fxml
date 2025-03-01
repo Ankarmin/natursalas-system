@@ -11,8 +11,6 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.StackPane?>
@@ -29,7 +27,7 @@
                             <children>
                                 <AnchorPane layoutX="58.0" layoutY="-83.0" prefHeight="34.0" prefWidth="242.0" stylesheets="@../css/AdminDesign.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <children>
-                                        <Label layoutX="60.0" layoutY="11.0" text="NaturSalas">
+                                        <Label layoutX="60.0" layoutY="10.0" styleClass="titulo" stylesheets="@../css/AdminDesign.css" text="NaturSalas" textFill="WHITE">
                                             <font>
                                                 <Font name="System Bold" size="24.0" />
                                             </font>
@@ -60,22 +58,17 @@
                     <left>
                         <AnchorPane prefHeight="640.0" prefWidth="242.0" stylesheets="@../css/AdminDesign.css" BorderPane.alignment="CENTER">
                             <children>
-                                <ImageView fitHeight="105.0" fitWidth="110.0" layoutX="68.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true">
-                                    <image>
-                                        <Image url="@../assets/fontUserGreen.png" />
-                                    </image>
-                                </ImageView>
-                                <Label fx:id="lblNombreCuenta" layoutX="107.0" layoutY="145.0" stylesheets="@../css/AdminDesign.css" text="Administrador">
+                                <Label fx:id="lblNombreCuenta" layoutX="107.0" layoutY="145.0" stylesheets="@../css/AdminDesign.css" text="Administrador" textFill="WHITE">
                                     <font>
                                         <Font size="18.0" />
                                     </font>
                                 </Label>
-                                <Label layoutX="38.0" layoutY="145.0" text="Cuenta:">
+                                <Label layoutX="38.0" layoutY="145.0" text="Cuenta:" textFill="WHITE">
                                     <font>
                                         <Font size="18.0" />
                                     </font>
                                 </Label>
-                                <Line endX="100.0" layoutX="120.0" layoutY="201.0" startX="-100.0" styleClass="shadow" />
+                                <Line endX="100.0" layoutX="120.0" layoutY="201.0" startX="-100.0" stroke="WHITE" styleClass="shadow" />
                                 <Button fx:id="bttnInformacion" layoutX="21.0" layoutY="235.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="200.0" styleClass="button-1" stylesheets="@../css/AdminDesign.css" text="Información" />
                                 <Button fx:id="bttnPacientes" layoutX="21.0" layoutY="295.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="200.0" styleClass="button-1" stylesheets="@../css/AdminDesign.css" text="Pacientes" />
                                 <Button fx:id="bttnVentas" layoutX="21.0" layoutY="358.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="200.0" styleClass="button-1" stylesheets="@../css/AdminDesign.css" text="Ventas" />
@@ -112,17 +105,12 @@
                                                                         <String fx:value="shadow" />
                                                                     </styleClass>
                                                                     <children>
-                                                                        <ImageView fitHeight="95.0" fitWidth="110.0" layoutX="14.0" layoutY="69.0" pickOnBounds="true" preserveRatio="true">
-                                                                            <image>
-                                                                                <Image url="@../assets/ubication.jpg" />
-                                                                            </image>
-                                                                        </ImageView>
-                                                                        <Label layoutX="29.0" layoutY="22.0" text="Sede con más ventas hoy">
+                                                                        <Label layoutX="29.0" layoutY="22.0" text="Sede con más ventas hoy" textFill="WHITE">
                                                                             <font>
                                                                                 <Font size="18.0" />
                                                                             </font>
                                                                         </Label>
-                                                                        <Label fx:id="informacion_lblSedeMasVentas" layoutX="149.0" layoutY="96.0" text="Sin ventas">
+                                                                        <Label fx:id="informacion_lblSedeMasVentas" layoutX="149.0" layoutY="96.0" text="Sin ventas" textFill="WHITE">
                                                                             <font>
                                                                                 <Font size="18.0" />
                                                                             </font>
@@ -136,17 +124,12 @@
                                                                         <String fx:value="shadow" />
                                                                     </styleClass>
                                                                     <children>
-                                                                        <ImageView fitHeight="101.0" fitWidth="138.0" layoutX="34.0" layoutY="54.0" pickOnBounds="true" preserveRatio="true">
-                                                                            <image>
-                                                                                <Image url="@../assets/product.jpg" />
-                                                                            </image>
-                                                                        </ImageView>
-                                                                        <Label layoutX="34.0" layoutY="25.0" text="Productos vendidos hoy">
+                                                                        <Label layoutX="34.0" layoutY="25.0" text="Productos vendidos hoy" textFill="WHITE">
                                                                             <font>
                                                                                 <Font size="18.0" />
                                                                             </font>
                                                                         </Label>
-                                                                        <Label fx:id="informacion_lblProductosVendidos" layoutX="181.0" layoutY="104.0" text="0">
+                                                                        <Label fx:id="informacion_lblProductosVendidos" layoutX="181.0" layoutY="104.0" text="0" textFill="WHITE">
                                                                             <font>
                                                                                 <Font size="18.0" />
                                                                             </font>
@@ -160,17 +143,12 @@
                                                                         <String fx:value="shadow" />
                                                                     </styleClass>
                                                                     <children>
-                                                                        <ImageView fitHeight="96.0" fitWidth="73.0" layoutX="43.0" layoutY="68.0" pickOnBounds="true" preserveRatio="true">
-                                                                            <image>
-                                                                                <Image url="@../assets/person.jpg" />
-                                                                            </image>
-                                                                        </ImageView>
-                                                                        <Label layoutX="33.0" layoutY="24.0" text="Pacientes atendidos hoy">
+                                                                        <Label layoutX="33.0" layoutY="24.0" text="Pacientes atendidos hoy" textFill="WHITE">
                                                                             <font>
                                                                                 <Font size="18.0" />
                                                                             </font>
                                                                         </Label>
-                                                                        <Label fx:id="informacion_lblPacientesAtendidos" layoutX="183.0" layoutY="102.0" text="0">
+                                                                        <Label fx:id="informacion_lblPacientesAtendidos" layoutX="183.0" layoutY="102.0" text="0" textFill="WHITE">
                                                                             <font>
                                                                                 <Font size="18.0" />
                                                                             </font>
@@ -184,17 +162,12 @@
                                                                         <String fx:value="shadow" />
                                                                     </styleClass>
                                                                     <children>
-                                                                        <ImageView fitHeight="108.0" fitWidth="132.0" layoutX="14.0" layoutY="67.0" pickOnBounds="true" preserveRatio="true">
-                                                                            <image>
-                                                                                <Image url="@../assets/newPacients.jpg" />
-                                                                            </image>
-                                                                        </ImageView>
-                                                                        <Label layoutX="44.0" layoutY="25.0" text="Pacientes nuevos hoy">
+                                                                        <Label layoutX="44.0" layoutY="25.0" text="Pacientes nuevos hoy" textFill="WHITE">
                                                                             <font>
                                                                                 <Font size="18.0" />
                                                                             </font>
                                                                         </Label>
-                                                                        <Label fx:id="informacion_blPacientesNuevos" layoutX="186.0" layoutY="101.0" text="0">
+                                                                        <Label fx:id="informacion_blPacientesNuevos" layoutX="186.0" layoutY="101.0" text="0" textFill="WHITE">
                                                                             <font>
                                                                                 <Font size="18.0" />
                                                                             </font>
@@ -375,17 +348,17 @@
                                                 </TableView>
                                             </children>
                                         </AnchorPane>
-                                        <Label layoutX="24.0" layoutY="254.0" text="Total de ventas">
+                                        <Label layoutX="24.0" layoutY="254.0" styleClass="text" stylesheets="@../css/AdminDesign.css" text="Total de ventas">
                                             <font>
                                                 <Font size="18.0" />
                                             </font>
                                         </Label>
-                                        <Label layoutX="24.0" layoutY="24.0" text="Filtrar resultados">
+                                        <Label layoutX="24.0" layoutY="24.0" styleClass="text" stylesheets="@../css/AdminDesign.css" text="Filtrar resultados">
                                             <font>
                                                 <Font size="18.0" />
                                             </font>
                                         </Label>
-                                        <AnchorPane layoutX="24.0" layoutY="74.0" prefHeight="158.0" prefWidth="927.0" stylesheets="@../css/AdminDesign.css" AnchorPane.leftAnchor="24.0" AnchorPane.topAnchor="74.0">
+                                        <AnchorPane layoutX="24.0" layoutY="75.2" prefHeight="159.0" prefWidth="793.0" stylesheets="@../css/AdminDesign.css" AnchorPane.leftAnchor="24.0" AnchorPane.topAnchor="75.0">
                                             <styleClass>
                                                 <String fx:value="white-bg" />
                                                 <String fx:value="shadow" />
@@ -402,27 +375,21 @@
                                                         <Font size="18.0" />
                                                     </font>
                                                 </Label>
-                                                <Label layoutX="326.0" layoutY="24.0" text="Paciente:" AnchorPane.bottomAnchor="107.2" AnchorPane.topAnchor="24.0">
-                                                    <font>
-                                                        <Font size="18.0" />
-                                                    </font>
-                                                </Label>
                                                 <Label layoutX="323.0" layoutY="79.0" text="Producto:" AnchorPane.bottomAnchor="52.79999999999998" AnchorPane.topAnchor="79.0">
                                                     <font>
                                                         <Font size="18.0" />
                                                     </font>
                                                 </Label>
-                                                <Label layoutX="663.0" layoutY="24.0" text="Sede:" AnchorPane.bottomAnchor="108.0" AnchorPane.topAnchor="24.0">
+                                                <Label layoutX="323.0" layoutY="24.0" text="Sede:" AnchorPane.bottomAnchor="108.0" AnchorPane.topAnchor="24.0">
                                                     <font>
                                                         <Font size="18.0" />
                                                     </font>
                                                 </Label>
-                                                <Button fx:id="ventas_bttnFiltrar" layoutX="707.0" layoutY="89.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="101.0" styleClass="button-general" stylesheets="@../css/AdminDesign.css" text="Filtrar" AnchorPane.bottomAnchor="35.20000000000001" AnchorPane.rightAnchor="118.4" AnchorPane.topAnchor="89.0" />
+                                                <Button fx:id="ventas_bttnFiltrar" layoutX="646.0" layoutY="51.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="101.0" styleClass="button-general" stylesheets="@../css/AdminDesign.css" text="Filtrar" AnchorPane.bottomAnchor="73.0" AnchorPane.rightAnchor="46.0" AnchorPane.topAnchor="51.0" />
                                                 <DatePicker fx:id="ventas_filtrar_desdeDate" layoutX="82.0" layoutY="20.0" prefHeight="34.0" prefWidth="183.0" AnchorPane.bottomAnchor="104.0" AnchorPane.topAnchor="20.000000000000007" />
                                                 <DatePicker fx:id="ventas_filtrar_hastaDate" layoutX="81.0" layoutY="75.0" prefHeight="34.0" prefWidth="183.0" AnchorPane.bottomAnchor="49.0" AnchorPane.topAnchor="75.0" />
-                                                <ComboBox fx:id="ventas_filtrar_sede" layoutX="721.0" layoutY="22.0" prefHeight="32.0" prefWidth="175.0" AnchorPane.bottomAnchor="104.4" AnchorPane.topAnchor="22.0" />
+                                                <ComboBox fx:id="ventas_filtrar_sede" layoutX="420.0" layoutY="22.0" prefHeight="32.0" prefWidth="175.0" AnchorPane.bottomAnchor="105.2" AnchorPane.topAnchor="22.0" />
                                                 <ComboBox fx:id="ventas_filtrar_productos" layoutX="420.0" layoutY="76.0" prefHeight="32.0" prefWidth="175.0" AnchorPane.bottomAnchor="50.400000000000006" AnchorPane.topAnchor="76.0" />
-                                                <ComboBox fx:id="ventas_filtrar_pacientes" layoutX="420.0" layoutY="22.0" prefHeight="32.0" prefWidth="175.0" AnchorPane.bottomAnchor="105.2" AnchorPane.topAnchor="22.0" />
                                             </children>
                                         </AnchorPane>
                                     </children>
@@ -517,7 +484,7 @@
                                                 <TextField fx:id="cuentas_editar_txtFieldUbicacion" layoutX="126.0" layoutY="68.0" prefHeight="36.0" prefWidth="274.0" styleClass="text-field-1" stylesheets="@../css/AdminDesign.css" />
                                                 <TextField fx:id="cuentas_editar_txtFieldCorreo" layoutX="126.0" layoutY="113.0" prefHeight="36.0" prefWidth="274.0" styleClass="text-field-1" stylesheets="@../css/AdminDesign.css" />
                                                 <TextField fx:id="cuentas_editar_txtFieldContrasena" layoutX="126.0" layoutY="155.0" prefHeight="36.0" prefWidth="274.0" styleClass="text-field-1" stylesheets="@../css/AdminDesign.css" />
-                                                <CheckBox fx:id="cuentas_editar_mostrarContrasena" layoutX="21.0" layoutY="199.0" mnemonicParsing="false" onAction="#mostrarContrasena" text="Mostrar contraseña">
+                                                <CheckBox fx:id="cuentas_editar_mostrarContrasena" layoutX="126.0" layoutY="199.0" mnemonicParsing="false" onAction="#mostrarContrasena" stylesheets="@../css/AdminDesign.css" text="Mostrar contraseña">
                                                     <font>
                                                         <Font size="14.0" />
                                                     </font>
@@ -557,7 +524,7 @@
                                                 <TextField fx:id="cuentas_crear_txtFieldCorreo" layoutX="128.0" layoutY="113.0" prefHeight="36.0" prefWidth="274.0" styleClass="text-field-1" stylesheets="@../css/AdminDesign.css" AnchorPane.leftAnchor="128.0" AnchorPane.rightAnchor="44.80000000000001" />
                                                 <TextField fx:id="cuentas_crear_txtFieldContrasena" layoutX="128.0" layoutY="155.0" prefHeight="36.0" prefWidth="274.0" styleClass="text-field-1" stylesheets="@../css/AdminDesign.css" AnchorPane.leftAnchor="128.0" AnchorPane.rightAnchor="44.80000000000001" />
                                                 <Button fx:id="cuentas_crear_bttnCrear" layoutX="181.0" layoutY="235.0" mnemonicParsing="false" onAction="#crearCuenta" prefHeight="34.0" prefWidth="85.0" styleClass="button-general" stylesheets="@../css/AdminDesign.css" text="Crear" AnchorPane.leftAnchor="181.0" AnchorPane.rightAnchor="180.60000000000002" />
-                                                <CheckBox fx:id="cuentas_crear_mostrarContrasena" layoutX="25.0" layoutY="204.0" mnemonicParsing="false" onAction="#mostrarContrasena" text="Mostrar contraseña">
+                                                <CheckBox fx:id="cuentas_crear_mostrarContrasena" layoutX="128.0" layoutY="201.0" mnemonicParsing="false" onAction="#mostrarContrasena" stylesheets="@../css/AdminDesign.css" text="Mostrar contraseña">
                                                     <font>
                                                         <Font size="14.0" />
                                                     </font>

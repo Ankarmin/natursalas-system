@@ -19,7 +19,7 @@ import java.sql.Connection;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class SaleDetailsController implements Initializable {
+public class SaleDetailsAdminController implements Initializable {
 
     @FXML
     private TableColumn<SaleDetailSpecialDTO, String> saleDetails_columna_sede;

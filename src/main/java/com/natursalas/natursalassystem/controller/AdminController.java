@@ -564,10 +564,10 @@ public class AdminController implements Initializable {
 
     private void abrirVentanaSaleDetail(HistoryDTO history) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/natursalas/natursalassystem/view/fxml/SaleDetails.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/natursalas/natursalassystem/view/fxml/SaleDetailsAdmin.fxml"));
             Parent root = fxmlLoader.load();
 
-            SaleDetailsController controller = fxmlLoader.getController();
+            SaleDetailsAdminController controller = fxmlLoader.getController();
             controller.cargarDetallesVenta(history.getIdSale());
 
             Stage stage = new Stage();
@@ -584,10 +584,10 @@ public class AdminController implements Initializable {
 
     private void abrirVentanaSaleDetail(SaleSpecialDTO saleSpecial) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/natursalas/natursalassystem/view/fxml/SaleDetails.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/natursalas/natursalassystem/view/fxml/SaleDetailsAdmin.fxml"));
             Parent root = fxmlLoader.load();
 
-            SaleDetailsController controller = fxmlLoader.getController();
+            SaleDetailsAdminController controller = fxmlLoader.getController();
             controller.cargarDetallesVenta(saleSpecial.getIdSale());
 
             Stage stage = new Stage();
