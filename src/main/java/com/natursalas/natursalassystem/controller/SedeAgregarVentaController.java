@@ -19,10 +19,7 @@ public class SedeAgregarVentaController implements Initializable {
     private Button agregarVenta_bttnCancelar;
 
     @FXML
-    private Button agregarVenta_bttnConfirmarPaciente;
-
-    @FXML
-    private Button agregarVenta_bttnConfirmarProducto;
+    private Button agregarVenta_bttnInsertarSeleccion;
 
     @FXML
     private TextField agregarVenta_cantidadProducto;
@@ -56,6 +53,9 @@ public class SedeAgregarVentaController implements Initializable {
 
     @FXML
     private TableView<?> agregarVenta_tableViewProductosSeleccionados;
+
+    @FXML
+    private TextArea agregarVenta_textArea_diagnostico;
 
     @FXML
     private TextField agregarVenta_txtFieldDniPaciente;
