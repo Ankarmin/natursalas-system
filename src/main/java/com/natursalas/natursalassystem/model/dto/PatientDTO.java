@@ -101,18 +101,7 @@ public class PatientDTO {
         this.idLocation = idLocation;
     }
 
-    @Override
-    public String toString() {
-        return "PatientDTO{" +
-                "DNI='" + DNI + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", age=" + age +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", dateOfConsultation=" + dateOfEntry +
-                ", dateOfBirth=" + dateOfBirth +
-                ", district='" + district + '\'' +
-                ", idLocation='" + idLocation + '\'' +
-                '}';
+    public String getFullName() {
+        return firstName + " " + lastName;
     }
 }

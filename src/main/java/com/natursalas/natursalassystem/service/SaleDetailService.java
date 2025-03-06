@@ -17,23 +17,23 @@ public class SaleDetailService {
         return saleDetailDAO.addSalesDetail(newSalesDetail);
     }
 
+    public boolean addMultipleSalesDetails(List<SaleDetailDTO> salesDetails) {
+        return saleDetailDAO.addMultipleSalesDetails(salesDetails);
+    }
+
     public boolean updateSalesDetail(SaleDetailDTO updatedSalesDetail) {
         return saleDetailDAO.updateSalesDetail(updatedSalesDetail);
     }
 
-    public boolean deleteSalesDetail(Integer idSale, String idProduct, String idLocation) {
+    public boolean deleteSalesDetail(String idSale, String idProduct, String idLocation) {
         return saleDetailDAO.deleteSalesDetail(idSale, idProduct, idLocation);
-    }
-
-    public SaleDetailDTO getSalesDetail(Integer idSale, String idProduct, String idLocation) {
-        return saleDetailDAO.getSalesDetail(idSale, idProduct, idLocation);
-    }
-
-    public List<SaleDetailDTO> getAllSalesDetails() {
-        return saleDetailDAO.getAllSalesDetails();
     }
 
     public List<SaleDetailDTO> getSalesDetailsBySaleId(String idSale) {
         return saleDetailDAO.getSalesDetailsBySaleId(idSale);
+    }
+
+    public boolean existsSaleDetail(String idSale, String idProduct, String idLocation) {
+        return saleDetailDAO.existsSaleDetail(idSale, idProduct, idLocation);
     }
 }

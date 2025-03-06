@@ -1,209 +1,194 @@
--- Insertar productos para cada local
-INSERT INTO product (idProduct, category, productName, stock, price, idLocation) VALUES
--- Productos para Los Olivos
-('P001', 'Suplemento', 'Vitamina C 500mg', 50, 25, 'Los Olivos'),
-('P002', 'Suplemento', 'Omega 3', 30, 40, 'Los Olivos'),
-('P003', 'Medicina Natural', 'Jarabe de Eucalipto', 20, 35, 'Los Olivos'),
-('P004', 'Medicina Natural', 'Té de Manzanilla', 40, 15, 'Los Olivos'),
-('P005', 'Suplemento', 'Colágeno Hidrolizado', 25, 55, 'Los Olivos'),
-
--- Productos para Huánuco
-('P006', 'Suplemento', 'Vitamina D3', 60, 30, 'Huanuco'),
-('P007', 'Suplemento', 'Magnesio', 45, 28, 'Huanuco'),
-('P008', 'Medicina Natural', 'Té de Hierba Luisa', 35, 20, 'Huanuco'),
-('P009', 'Medicina Natural', 'Extracto de Uña de Gato', 25, 50, 'Huanuco'),
-('P010', 'Suplemento', 'Probióticos', 40, 45, 'Huanuco'),
-
--- Productos para Juliaca
-('P011', 'Suplemento', 'Calcio + Vitamina D', 55, 38, 'Juliaca'),
-('P012', 'Suplemento', 'Hierro', 35, 22, 'Juliaca'),
-('P013', 'Medicina Natural', 'Maca en Polvo', 40, 60, 'Juliaca'),
-('P014', 'Medicina Natural', 'Jarabe de Propóleo', 30, 45, 'Juliaca'),
-('P015', 'Suplemento', 'Multivitamínico', 20, 50, 'Juliaca'),
-
--- Productos para Carabayllo
-('P016', 'Suplemento', 'Vitamina B12', 70, 32, 'Carabayllo'),
-('P017', 'Suplemento', 'Zinc', 50, 27, 'Carabayllo'),
-('P018', 'Medicina Natural', 'Extracto de Matico', 45, 35, 'Carabayllo'),
-('P019', 'Medicina Natural', 'Té de Boldo', 35, 18, 'Carabayllo'),
-('P020', 'Suplemento', 'Omega 3 y 6', 30, 42, 'Carabayllo');
-
-
-
-
-
-
-
--- Insertar pacientes para cada local sin el campo de edad
-INSERT INTO patient (DNI, firstName, lastName, phoneNumber, dateOfBirth, district, idLocation) VALUES
+-- Insertar 40 pacientes (10 por cada sede)
+INSERT INTO patient (DNI, firstName, lastName, age, phoneNumber, dateOfEntry, dateOfBirth, district, idLocation) VALUES
 -- Pacientes en Los Olivos
-('10000001', 'Carlos', 'Ramírez', '987654321', '1994-06-10', 'Los Olivos', 'Los Olivos'),
-('10000002', 'María', 'Gómez', '987123456', '1999-08-23', 'Los Olivos', 'Los Olivos'),
-('10000003', 'Javier', 'Pérez', '986543210', '1984-04-12', 'Los Olivos', 'Los Olivos'),
-('10000004', 'Lucía', 'Fernández', '985678901', '1989-11-30', 'Los Olivos', 'Los Olivos'),
-('10000005', 'José', 'Martínez', '984567890', '1996-03-15', 'Los Olivos', 'Los Olivos'),
+('10000001', 'Juan', 'Pérez', 30, '912345678', NOW(), '1994-05-15', 'Los Olivos', 'Los Olivos'),
+('10000002', 'María', 'Gómez', 25, '923456789', NOW(), '1999-08-22', 'Los Olivos', 'Los Olivos'),
+('10000003', 'Carlos', 'Fernández', 40, '934567890', NOW(), '1984-11-10', 'Los Olivos', 'Los Olivos'),
+('10000004', 'Ana', 'Rodríguez', 35, '945678901', NOW(), '1989-07-05', 'Los Olivos', 'Los Olivos'),
+('10000005', 'Luis', 'García', 28, '956789012', NOW(), '1996-02-20', 'Los Olivos', 'Los Olivos'),
+('10000006', 'Elena', 'Martínez', 45, '967890123', NOW(), '1979-06-30', 'Los Olivos', 'Los Olivos'),
+('10000007', 'Miguel', 'Díaz', 50, '978901234', NOW(), '1974-09-12', 'Los Olivos', 'Los Olivos'),
+('10000008', 'Carmen', 'Hernández', 22, '989012345', NOW(), '2002-12-18', 'Los Olivos', 'Los Olivos'),
+('10000009', 'Ricardo', 'Castro', 33, '990123456', NOW(), '1991-04-07', 'Los Olivos', 'Los Olivos'),
+('10000010', 'Paula', 'Vega', 27, '901234567', NOW(), '1997-03-29', 'Los Olivos', 'Los Olivos'),
 
 -- Pacientes en Huánuco
-('10000006', 'Ana', 'Torres', '983456789', '1992-07-25', 'Huanuco', 'Huanuco'),
-('10000007', 'Ricardo', 'Castro', '982345678', '1997-02-05', 'Huanuco', 'Huanuco'),
-('10000008', 'Elena', 'Sánchez', '981234567', '1974-09-10', 'Huanuco', 'Huanuco'),
-('10000009', 'Miguel', 'Flores', '980123456', '1986-05-20', 'Huanuco', 'Huanuco'),
-('10000010', 'Gabriela', 'Vargas', '979123456', '1995-12-08', 'Huanuco', 'Huanuco'),
+('10000011', 'Andrés', 'Ríos', 31, '912345679', NOW(), '1993-08-11', 'Huánuco', 'Huanuco'),
+('10000012', 'Lucía', 'Mendoza', 26, '923456780', NOW(), '1998-05-25', 'Huánuco', 'Huanuco'),
+('10000013', 'Javier', 'Flores', 41, '934567891', NOW(), '1983-07-14', 'Huánuco', 'Huanuco'),
+('10000014', 'Sofía', 'Torres', 37, '945678902', NOW(), '1987-10-19', 'Huánuco', 'Huanuco'),
+('10000015', 'Eduardo', 'Jiménez', 29, '956789013', NOW(), '1995-06-09', 'Huánuco', 'Huanuco'),
+('10000016', 'Natalia', 'Ruiz', 24, '967890124', NOW(), '2000-01-30', 'Huánuco', 'Huanuco'),
+('10000017', 'Roberto', 'Ortega', 48, '978901235', NOW(), '1976-11-22', 'Huánuco', 'Huanuco'),
+('10000018', 'Valeria', 'Luna', 32, '989012346', NOW(), '1992-09-04', 'Huánuco', 'Huanuco'),
+('10000019', 'Gabriel', 'Peralta', 39, '990123457', NOW(), '1985-12-28', 'Huánuco', 'Huanuco'),
+('10000020', 'Diana', 'Salazar', 36, '901234568', NOW(), '1988-07-15', 'Huánuco', 'Huanuco'),
 
 -- Pacientes en Juliaca
-('10000011', 'Hugo', 'Reyes', '978234567', '1979-10-18', 'Juliaca', 'Juliaca'),
-('10000012', 'Rosa', 'Navarro', '977345678', '1991-06-22', 'Juliaca', 'Juliaca'),
-('10000013', 'Fernando', 'López', '976456789', '1988-03-14', 'Juliaca', 'Juliaca'),
-('10000014', 'Beatriz', 'Mendoza', '975567890', '1998-09-29', 'Juliaca', 'Juliaca'),
-('10000015', 'Daniel', 'Herrera', '974678901', '1993-11-17', 'Juliaca', 'Juliaca'),
+('10000021', 'Francisco', 'Cárdenas', 34, '912345680', NOW(), '1990-05-10', 'Juliaca', 'Juliaca'),
+('10000022', 'Carolina', 'Navarro', 23, '923456781', NOW(), '2001-02-14', 'Juliaca', 'Juliaca'),
+('10000023', 'Hugo', 'Santos', 42, '934567892', NOW(), '1982-10-03', 'Juliaca', 'Juliaca'),
+('10000024', 'Estefanía', 'Silva', 38, '945678903', NOW(), '1986-04-21', 'Juliaca', 'Juliaca'),
+('10000025', 'Martín', 'Acosta', 44, '956789014', NOW(), '1980-09-07', 'Juliaca', 'Juliaca'),
+('10000026', 'Isabela', 'Morales', 21, '967890125', NOW(), '2003-08-25', 'Juliaca', 'Juliaca'),
+('10000027', 'Fernando', 'Pacheco', 47, '978901236', NOW(), '1977-05-19', 'Juliaca', 'Juliaca'),
+('10000028', 'Victoria', 'Campos', 30, '989012347', NOW(), '1994-06-10', 'Juliaca', 'Juliaca'),
+('10000029', 'Cristian', 'Fuentes', 33, '990123458', NOW(), '1991-01-08', 'Juliaca', 'Juliaca'),
+('10000030', 'Beatriz', 'Mejía', 26, '901234569', NOW(), '1998-03-12', 'Juliaca', 'Juliaca'),
 
 -- Pacientes en Carabayllo
-('10000016', 'Natalia', 'Ortega', '973789012', '2002-01-25', 'Carabayllo', 'Carabayllo'),
-('10000017', 'Pedro', 'Cruz', '972890123', '1976-07-13', 'Carabayllo', 'Carabayllo'),
-('10000018', 'Carmen', 'Jiménez', '971901234', '1985-12-05', 'Carabayllo', 'Carabayllo'),
-('10000019', 'Andrés', 'Silva', '970012345', '1996-04-28', 'Carabayllo', 'Carabayllo'),
-('10000020', 'Verónica', 'Delgado', '969123456', '1989-08-30', 'Carabayllo', 'Carabayllo');
+('10000031', 'José', 'Ramírez', 29, '912345681', NOW(), '1995-04-15', 'Carabayllo', 'Carabayllo'),
+('10000032', 'Teresa', 'Guzmán', 37, '923456782', NOW(), '1987-07-22', 'Carabayllo', 'Carabayllo'),
+('10000033', 'Emilio', 'Vásquez', 45, '934567893', NOW(), '1979-12-10', 'Carabayllo', 'Carabayllo'),
+('10000034', 'Raquel', 'Núñez', 32, '945678904', NOW(), '1992-03-05', 'Carabayllo', 'Carabayllo'),
+('10000035', 'David', 'Salas', 27, '956789015', NOW(), '1997-08-20', 'Carabayllo', 'Carabayllo'),
+('10000036', 'Patricia', 'Maldonado', 46, '967890126', NOW(), '1978-05-30', 'Carabayllo', 'Carabayllo'),
+('10000037', 'Manuel', 'Herrera', 51, '978901237', NOW(), '1973-09-12', 'Carabayllo', 'Carabayllo'),
+('10000038', 'Flor', 'Mendoza', 22, '989012348', NOW(), '2002-01-18', 'Carabayllo', 'Carabayllo'),
+('10000039', 'Joaquín', 'Aguilar', 33, '990123459', NOW(), '1991-06-07', 'Carabayllo', 'Carabayllo'),
+('10000040', 'Ximena', 'Ortega', 28, '901234570', NOW(), '1996-02-25', 'Carabayllo', 'Carabayllo');
 
+INSERT INTO product (idProduct, category, productName, price) VALUES
+('P001', 'Medicamento', 'Paracetamol 500mg', 5),
+('P002', 'Medicamento', 'Ibuprofeno 400mg', 7),
+('P003', 'Medicamento', 'Omeprazol 20mg', 10),
+('P004', 'Medicamento', 'Amoxicilina 500mg', 15),
+('P005', 'Medicamento', 'Loratadina 10mg', 8),
+('P006', 'Equipo Médico', 'Termómetro Digital', 25),
+('P007', 'Equipo Médico', 'Tensiómetro', 50),
+('P008', 'Equipo Médico', 'Oxímetro de Pulso', 35),
+('P009', 'Equipo Médico', 'Glucómetro', 40),
+('P010', 'Equipo Médico', 'Estetoscopio', 55),
+('P011', 'Higiene', 'Jabón Antibacterial', 3),
+('P012', 'Higiene', 'Gel Desinfectante 500ml', 12),
+('P013', 'Higiene', 'Toallitas Desinfectantes', 10),
+('P014', 'Higiene', 'Papel Higiénico (4 rollos)', 7),
+('P015', 'Higiene', 'Shampoo Anticaspa', 15),
+('P016', 'Suplemento', 'Vitamina C 500mg', 18),
+('P017', 'Suplemento', 'Omega 3', 25),
+('P018', 'Suplemento', 'Colágeno Hidrolizado', 30),
+('P019', 'Suplemento', 'Proteína en Polvo', 45),
+('P020', 'Suplemento', 'Magnesio en Cápsulas', 22),
+('P021', 'Bebida', 'Agua Mineral 1L', 2),
+('P022', 'Bebida', 'Bebida Energética', 8),
+('P023', 'Bebida', 'Té Verde en Botella', 5),
+('P024', 'Bebida', 'Jugo Natural 500ml', 6),
+('P025', 'Bebida', 'Leche Deslactosada 1L', 10),
+('P026', 'Snack', 'Barra de Granola', 4),
+('P027', 'Snack', 'Chocolate Negro 70%', 9),
+('P028', 'Snack', 'Galletas Integrales', 7),
+('P029', 'Snack', 'Nueces Mixtas 250g', 20),
+('P030', 'Snack', 'Chips de Plátano', 6);
 
+INSERT INTO productsIncrease (idProduct, dateOfEntry, quantity, idLocation) VALUES
+-- Incrementos en Los Olivos
+('P001', NOW(), 50, 'Los Olivos'),
+('P001', NOW(), 30, 'Los Olivos'),
+('P002', NOW(), 40, 'Los Olivos'),
+('P002', NOW(), 20, 'Los Olivos'),
+('P003', NOW(), 60, 'Los Olivos'),
+('P003', NOW(), 25, 'Los Olivos'),
+('P004', NOW(), 35, 'Los Olivos'),
+('P004', NOW(), 15, 'Los Olivos'),
+('P005', NOW(), 45, 'Los Olivos'),
+('P005', NOW(), 20, 'Los Olivos'),
 
+-- Incrementos en Huánuco
+('P006', NOW(), 20, 'Huanuco'),
+('P006', NOW(), 10, 'Huanuco'),
+('P007', NOW(), 15, 'Huanuco'),
+('P007', NOW(), 5, 'Huanuco'),
+('P008', NOW(), 25, 'Huanuco'),
+('P008', NOW(), 10, 'Huanuco'),
+('P009', NOW(), 30, 'Huanuco'),
+('P009', NOW(), 10, 'Huanuco'),
+('P010', NOW(), 15, 'Huanuco'),
+('P010', NOW(), 10, 'Huanuco'),
 
+-- Incrementos en Juliaca
+('P011', NOW(), 100, 'Juliaca'),
+('P011', NOW(), 50, 'Juliaca'),
+('P012', NOW(), 80, 'Juliaca'),
+('P012', NOW(), 40, 'Juliaca'),
+('P013', NOW(), 70, 'Juliaca'),
+('P013', NOW(), 30, 'Juliaca'),
+('P014', NOW(), 50, 'Juliaca'),
+('P014', NOW(), 25, 'Juliaca'),
+('P015', NOW(), 60, 'Juliaca'),
+('P015', NOW(), 30, 'Juliaca'),
 
+-- Incrementos en Carabayllo
+('P016', NOW(), 45, 'Carabayllo'),
+('P016', NOW(), 25, 'Carabayllo'),
+('P017', NOW(), 30, 'Carabayllo'),
+('P017', NOW(), 15, 'Carabayllo'),
+('P018', NOW(), 25, 'Carabayllo'),
+('P018', NOW(), 10, 'Carabayllo'),
+('P019', NOW(), 50, 'Carabayllo'),
+('P019', NOW(), 20, 'Carabayllo'),
+('P020', NOW(), 40, 'Carabayllo'),
+('P020', NOW(), 20, 'Carabayllo'),
 
+-- Más incrementos en distintas sedes
+('P021', NOW(), 200, 'Los Olivos'),
+('P021', NOW(), 150, 'Huanuco'),
+('P022', NOW(), 100, 'Juliaca'),
+('P022', NOW(), 80, 'Carabayllo'),
+('P023', NOW(), 75, 'Los Olivos'),
+('P023', NOW(), 50, 'Huanuco'),
+('P024', NOW(), 90, 'Juliaca'),
+('P024', NOW(), 40, 'Carabayllo'),
+('P025', NOW(), 60, 'Los Olivos'),
+('P025', NOW(), 30, 'Huanuco'),
+
+-- Snacks
+('P026', NOW(), 80, 'Juliaca'),
+('P026', NOW(), 50, 'Carabayllo'),
+('P027', NOW(), 70, 'Los Olivos'),
+('P027', NOW(), 40, 'Huanuco'),
+('P028', NOW(), 60, 'Juliaca'),
+('P028', NOW(), 35, 'Carabayllo'),
+('P029', NOW(), 50, 'Los Olivos'),
+('P029', NOW(), 20, 'Huanuco'),
+('P030', NOW(), 40, 'Juliaca'),
+('P030', NOW(), 25, 'Carabayllo');
 
 -- ============================
--- 📌 Ventas y Detalles para Los Olivos
+-- 📌 Generar UUIDs para las ventas en cada sede
 -- ============================
-SET @sale1 = UUID();
-SET @sale2 = UUID();
-SET @sale3 = UUID();
-SET @sale4 = UUID();
-SET @sale5 = UUID();
+SET @sale1 = UUID(); SET @sale2 = UUID(); SET @sale3 = UUID(); SET @sale4 = UUID(); SET @sale5 = UUID();
+SET @sale6 = UUID(); SET @sale7 = UUID(); SET @sale8 = UUID(); SET @sale9 = UUID(); SET @sale10 = UUID();
+SET @sale11 = UUID(); SET @sale12 = UUID(); SET @sale13 = UUID(); SET @sale14 = UUID(); SET @sale15 = UUID();
+SET @sale16 = UUID(); SET @sale17 = UUID(); SET @sale18 = UUID(); SET @sale19 = UUID(); SET @sale20 = UUID();
 
-INSERT INTO sale (idSale, DNI, diagnosis, category, idLocation) VALUES
-(@sale1, '10000001', 'Resfriado común', 'Medicina Natural', 'Los Olivos'),
-(@sale2, '10000002', 'Deficiencia vitamínica', 'Suplemento', 'Los Olivos'),
-(@sale3, '10000003', 'Dolor muscular', 'Medicina Natural', 'Los Olivos'),
-(@sale4, '10000004', 'Refuerzo inmunológico', 'Suplemento', 'Los Olivos'),
-(@sale5, '10000005', 'Falta de energía', 'Suplemento', 'Los Olivos');
-
+-- ============================
+-- 📌 Detalles de ventas (se insertan antes que las ventas)
+-- ============================
 INSERT INTO salesDetail (idSale, idProduct, idLocation, quantity, price) VALUES
-(@sale1, 'P001', 'Los Olivos', 2, 25), (@sale1, 'P003', 'Los Olivos', 1, 35),
-(@sale2, 'P002', 'Los Olivos', 1, 40), (@sale2, 'P005', 'Los Olivos', 2, 55),
-(@sale3, 'P004', 'Los Olivos', 3, 15), (@sale3, 'P003', 'Los Olivos', 2, 35),
-(@sale4, 'P005', 'Los Olivos', 1, 55), (@sale4, 'P001', 'Los Olivos', 1, 25),
-(@sale5, 'P002', 'Los Olivos', 2, 40), (@sale5, 'P004', 'Los Olivos', 2, 15);
+-- 📌 Los Olivos
+(@sale1, 'P001', 'Los Olivos', 3, 5), (@sale1, 'P002', 'Los Olivos', 2, 7),
+(@sale2, 'P003', 'Los Olivos', 1, 10), (@sale2, 'P005', 'Los Olivos', 4, 8),
+(@sale3, 'P004', 'Los Olivos', 2, 15), (@sale3, 'P003', 'Los Olivos', 3, 10),
+(@sale4, 'P005', 'Los Olivos', 2, 8), (@sale4, 'P001', 'Los Olivos', 1, 5),
+(@sale5, 'P021', 'Los Olivos', 5, 2), (@sale5, 'P023', 'Los Olivos', 3, 5),
 
--- ============================
--- 📌 Ventas y Detalles para Huánuco
--- ============================
-SET @sale6 = UUID();
-SET @sale7 = UUID();
-SET @sale8 = UUID();
-SET @sale9 = UUID();
-SET @sale10 = UUID();
+-- 📌 Huánuco
+(@sale6, 'P021', 'Huanuco', 4, 2), (@sale6, 'P023', 'Huanuco', 3, 5),
+(@sale7, 'P025', 'Huanuco', 2, 10), (@sale7, 'P027', 'Huanuco', 1, 9),
+(@sale8, 'P006', 'Huanuco', 3, 25), (@sale8, 'P007', 'Huanuco', 1, 50),
+(@sale9, 'P008', 'Huanuco', 1, 35), (@sale9, 'P009', 'Huanuco', 2, 40),
+(@sale10, 'P010', 'Huanuco', 1, 55), (@sale10, 'P009', 'Huanuco', 1, 40),
 
-INSERT INTO sale (idSale, DNI, diagnosis, category, idLocation) VALUES
-(@sale6, '10000006', 'Falta de calcio', 'Suplemento', 'Huanuco'),
-(@sale7, '10000007', 'Sistema digestivo débil', 'Suplemento', 'Huanuco'),
-(@sale8, '10000008', 'Resfriado frecuente', 'Medicina Natural', 'Huanuco'),
-(@sale9, '10000009', 'Fatiga', 'Suplemento', 'Huanuco'),
-(@sale10, '10000010', 'Deficiencia de minerales', 'Suplemento', 'Huanuco');
+-- 📌 Juliaca
+(@sale11, 'P011', 'Juliaca', 2, 3), (@sale11, 'P013', 'Juliaca', 1, 10),
+(@sale12, 'P012', 'Juliaca', 1, 12), (@sale12, 'P014', 'Juliaca', 2, 7),
+(@sale13, 'P015', 'Juliaca', 2, 15), (@sale13, 'P011', 'Juliaca', 3, 3),
+(@sale14, 'P012', 'Juliaca', 1, 12), (@sale14, 'P015', 'Juliaca', 2, 15),
+(@sale15, 'P014', 'Juliaca', 1, 7), (@sale15, 'P013', 'Juliaca', 2, 10),
 
-INSERT INTO salesDetail (idSale, idProduct, idLocation, quantity, price) VALUES
-(@sale6, 'P006', 'Huanuco', 2, 30), (@sale6, 'P007', 'Huanuco', 1, 28),
-(@sale7, 'P010', 'Huanuco', 1, 45), (@sale7, 'P009', 'Huanuco', 1, 50),
-(@sale8, 'P008', 'Huanuco', 3, 20), (@sale8, 'P009', 'Huanuco', 1, 50),
-(@sale9, 'P007', 'Huanuco', 1, 28), (@sale9, 'P006', 'Huanuco', 2, 30),
-(@sale10, 'P010', 'Huanuco', 2, 45), (@sale10, 'P008', 'Huanuco', 2, 20);
-
--- ============================
--- 📌 Ventas y Detalles para Juliaca
--- ============================
-SET @sale11 = UUID();
-SET @sale12 = UUID();
-SET @sale13 = UUID();
-SET @sale14 = UUID();
-SET @sale15 = UUID();
-
-INSERT INTO sale (idSale, DNI, diagnosis, category, idLocation) VALUES
-(@sale11, '10000011', 'Osteoporosis', 'Suplemento', 'Juliaca'),
-(@sale12, '10000012', 'Anemia', 'Suplemento', 'Juliaca'),
-(@sale13, '10000013', 'Sistema inmune débil', 'Medicina Natural', 'Juliaca'),
-(@sale14, '10000014', 'Dolores articulares', 'Medicina Natural', 'Juliaca'),
-(@sale15, '10000015', 'Cansancio extremo', 'Suplemento', 'Juliaca');
-
-INSERT INTO salesDetail (idSale, idProduct, idLocation, quantity, price) VALUES
-(@sale11, 'P011', 'Juliaca', 1, 38), (@sale11, 'P013', 'Juliaca', 1, 60),
-(@sale12, 'P012', 'Juliaca', 2, 22), (@sale12, 'P015', 'Juliaca', 1, 50),
-(@sale13, 'P014', 'Juliaca', 2, 45), (@sale13, 'P011', 'Juliaca', 1, 38),
-(@sale14, 'P013', 'Juliaca', 1, 60), (@sale14, 'P012', 'Juliaca', 1, 22),
-(@sale15, 'P015', 'Juliaca', 2, 50), (@sale15, 'P014', 'Juliaca', 1, 45);
-
--- ============================
--- 📌 Ventas y Detalles para Carabayllo
--- ============================
-SET @sale16 = UUID();
-SET @sale17 = UUID();
-SET @sale18 = UUID();
-SET @sale19 = UUID();
-SET @sale20 = UUID();
-
-INSERT INTO sale (idSale, DNI, diagnosis, category, idLocation) VALUES
-(@sale16, '10000016', 'Déficit de vitamina B12', 'Suplemento', 'Carabayllo'),
-(@sale17, '10000017', 'Sistema inmunológico debilitado', 'Medicina Natural', 'Carabayllo'),
-(@sale18, '10000018', 'Deficiencia de Zinc', 'Suplemento', 'Carabayllo'),
-(@sale19, '10000019', 'Problemas gástricos', 'Medicina Natural', 'Carabayllo'),
-(@sale20, '10000020', 'Refuerzo del sistema nervioso', 'Suplemento', 'Carabayllo');
-
-INSERT INTO salesDetail (idSale, idProduct, idLocation, quantity, price) VALUES
-(@sale16, 'P016', 'Carabayllo', 1, 32), (@sale16, 'P017', 'Carabayllo', 1, 27),
-(@sale17, 'P018', 'Carabayllo', 1, 35), (@sale17, 'P019', 'Carabayllo', 2, 18),
-(@sale18, 'P017', 'Carabayllo', 2, 27), (@sale18, 'P016', 'Carabayllo', 1, 32),
-(@sale19, 'P019', 'Carabayllo', 2, 18), (@sale19, 'P018', 'Carabayllo', 1, 35),
-(@sale20, 'P020', 'Carabayllo', 1, 42), (@sale20, 'P016', 'Carabayllo', 1, 32);
-
-
-
-
-
-
-
--- ============================
--- 📌 Incrementos para Los Olivos
--- ============================
-INSERT INTO productsIncrease (idProduct, quantity, idLocation) VALUES
-('P001', 10, 'Los Olivos'), ('P001', 5, 'Los Olivos'),
-('P002', 8, 'Los Olivos'), ('P002', 7, 'Los Olivos'),
-('P003', 12, 'Los Olivos'), ('P003', 10, 'Los Olivos'),
-('P004', 15, 'Los Olivos'), ('P004', 5, 'Los Olivos'),
-('P005', 6, 'Los Olivos'), ('P005', 4, 'Los Olivos');
-
--- ============================
--- 📌 Incrementos para Huánuco
--- ============================
-INSERT INTO productsIncrease (idProduct, quantity, idLocation) VALUES
-('P006', 9, 'Huanuco'), ('P006', 5, 'Huanuco'),
-('P007', 11, 'Huanuco'), ('P007', 7, 'Huanuco'),
-('P008', 13, 'Huanuco'), ('P008', 6, 'Huanuco'),
-('P009', 7, 'Huanuco'), ('P009', 9, 'Huanuco'),
-('P010', 10, 'Huanuco'), ('P010', 8, 'Huanuco');
-
--- ============================
--- 📌 Incrementos para Juliaca
--- ============================
-INSERT INTO productsIncrease (idProduct, quantity, idLocation) VALUES
-('P011', 14, 'Juliaca'), ('P011', 6, 'Juliaca'),
-('P012', 8, 'Juliaca'), ('P012', 7, 'Juliaca'),
-('P013', 11, 'Juliaca'), ('P013', 9, 'Juliaca'),
-('P014', 10, 'Juliaca'), ('P014', 5, 'Juliaca'),
-('P015', 9, 'Juliaca'), ('P015', 4, 'Juliaca');
-
--- ============================
--- 📌 Incrementos para Carabayllo
--- ============================
-INSERT INTO productsIncrease (idProduct, quantity, idLocation) VALUES
-('P016', 10, 'Carabayllo'), ('P016', 7, 'Carabayllo'),
-('P017', 12, 'Carabayllo'), ('P017', 6, 'Carabayllo'),
-('P018', 9, 'Carabayllo'), ('P018', 8, 'Carabayllo'),
-('P019', 11, 'Carabayllo'), ('P019', 5, 'Carabayllo'),
-('P020', 8, 'Carabayllo'), ('P020', 6, 'Carabayllo');
+-- 📌 Carabayllo
+(@sale16, 'P016', 'Carabayllo', 2, 18), (@sale16, 'P017', 'Carabayllo', 1, 25),
+(@sale17, 'P018', 'Carabayllo', 1, 30), (@sale17, 'P019', 'Carabayllo', 1, 45),
+(@sale18, 'P020', 'Carabayllo', 2, 22), (@sale18, 'P019', 'Carabayllo', 1, 45),
+(@sale19, 'P022', 'Carabayllo', 1, 8), (@sale19, 'P024', 'Carabayllo', 2, 6),
+(@sale20, 'P026', 'Carabayllo', 1, 4), (@sale20, 'P028', 'Carabayllo', 2, 7);

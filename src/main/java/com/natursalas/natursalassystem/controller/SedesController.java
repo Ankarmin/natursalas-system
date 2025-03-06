@@ -16,8 +16,12 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class SedesController implements Initializable {
+
+    private static final Logger LOGGER = Logger.getLogger(SedesController.class.getName());
 
     @FXML
     private Button bttnCerrarSesion;
@@ -229,7 +233,6 @@ public class SedesController implements Initializable {
     @FXML
     private TableView<?> ventas_tableViewVentas;
 
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         iniciarReloj();
@@ -249,7 +252,8 @@ public class SedesController implements Initializable {
         }).start();
     }
 
-    public void switchForm(ActionEvent event) {
+    @FXML
+    private void switchForm(ActionEvent event) {
         panelInformacion.setVisible(event.getSource() == bttnInformacion);
         panelPacientes.setVisible(event.getSource() == bttnPacientes);
         panelVentas.setVisible(event.getSource() == bttnVentas);
@@ -261,11 +265,9 @@ public class SedesController implements Initializable {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/natursalas/natursalassystem/view/fxml/Login.fxml"));
             Parent root = fxmlLoader.load();
-
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.setTitle("Inicio de Sesión");
-
             Stage currentStage = (Stage) bttnCerrarSesion.getScene().getWindow();
             currentStage.close();
 
@@ -276,7 +278,7 @@ public class SedesController implements Initializable {
 
             stage.show();
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error al cerrar sesión", e);
         }
     }
 }

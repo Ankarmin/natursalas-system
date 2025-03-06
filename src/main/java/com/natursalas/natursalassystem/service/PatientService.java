@@ -33,7 +33,7 @@ public class PatientService {
         return patientDAO.getAllPatients();
     }
 
-    public List<PatientDTO> getPatientsByLocation(String idLocation) {
-        return patientDAO.getPatientsByLocation(idLocation);
+    public boolean existsPatient(String DNI) {
+        return patientDAO.existsPatient(DNI);
     }
 }

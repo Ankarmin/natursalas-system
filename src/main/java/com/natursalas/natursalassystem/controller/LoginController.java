@@ -1,8 +1,8 @@
 package com.natursalas.natursalassystem.controller;
 
-import com.natursalas.natursalassystem.model.dao.UserDAO;
 import com.natursalas.natursalassystem.model.dto.UserDTO;
 import com.natursalas.natursalassystem.service.DatabaseConnection;
+import com.natursalas.natursalassystem.service.UserService;
 import com.natursalas.natursalassystem.util.AlertMessages;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -24,23 +24,18 @@ import java.util.ResourceBundle;
 
 public class LoginController implements Initializable {
 
+    private final AlertMessages alerta = new AlertMessages();
     @FXML
     private Button bttnIngresar;
-
     @FXML
     private CheckBox checkBoxMostrarContrasena;
-
     @FXML
     private PasswordField txtContrasenaUsuario;
-
     @FXML
     private TextField txtMostrarContrasena;
-
     @FXML
     private TextField txtNombreUsuario;
-
-    private final AlertMessages alerta = new AlertMessages();
-    private UserDAO userDAO;
+    private UserService userService;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -51,7 +46,7 @@ public class LoginController implements Initializable {
 
     private void configurarBaseDatos() {
         Connection connection = DatabaseConnection.getConnection();
-        userDAO = new UserDAO(connection);
+        userService = new UserService(connection);
     }
 
     @FXML
@@ -64,7 +59,7 @@ public class LoginController implements Initializable {
             return;
         }
 
-        if (userDAO == null) {
+        if (userService == null) {
             alerta.mensajeError("No se puede iniciar sesión sin conexión a la base de datos.");
             return;
         }
@@ -78,7 +73,7 @@ public class LoginController implements Initializable {
 
     private void autenticarUsuario(String userName, String password) {
         try {
-            UserDTO user = userDAO.getUserDetails(userName);
+            UserDTO user = userService.getUser(userName);
             if (user != null && user.getPassword().equals(password)) {
                 alerta.mensajeConfirmacion("Inicio de sesión exitoso.");
                 abrirPanelSegunRol(user.getRole());

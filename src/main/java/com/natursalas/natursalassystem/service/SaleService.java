@@ -2,6 +2,7 @@ package com.natursalas.natursalassystem.service;
 
 import com.natursalas.natursalassystem.model.dao.SaleDAO;
 import com.natursalas.natursalassystem.model.dto.SaleDTO;
+import com.natursalas.natursalassystem.model.dto.SaleDetailDTO;
 
 import java.sql.Connection;
 import java.util.List;
@@ -17,6 +18,10 @@ public class SaleService {
         return saleDAO.addSale(newSale);
     }
 
+    public boolean addSaleWithDetails(SaleDTO sale, List<SaleDetailDTO> details) {
+        return saleDAO.addSaleWithDetails(sale, details);
+    }
+
     public boolean updateSale(SaleDTO updatedSale) {
         return saleDAO.updateSale(updatedSale);
     }
@@ -25,15 +30,19 @@ public class SaleService {
         return saleDAO.deleteSale(idSale);
     }
 
-    public SaleDTO getSale(String idSale) {
-        return saleDAO.getSale(idSale);
-    }
-
     public List<SaleDTO> getAllSales() {
         return saleDAO.getAllSales();
     }
 
+    public boolean updateSaleInfo(String idSale, String dni, String diagnosis, String category) {
+        return saleDAO.updateSaleInfo(idSale, dni, diagnosis, category);
+    }
+
     public List<SaleDTO> getSalesByDNI(String dni) {
         return saleDAO.getSalesByDNI(dni);
+    }
+
+    public boolean existsSale(String idSale) {
+        return saleDAO.existsSale(idSale);
     }
 }

@@ -21,15 +21,23 @@ public class ProductIncreaseService {
         return productsIncreaseDAO.updateProductsIncrease(updatedProductsIncrease);
     }
 
-    public boolean deleteProductsIncrease(Integer idProductIncrease) {
+    public boolean deleteProductsIncrease(int idProductIncrease) {
         return productsIncreaseDAO.deleteProductsIncrease(idProductIncrease);
     }
 
-    public ProductsIncreaseDTO getProductsIncrease(Integer idProductIncrease) {
+    public ProductsIncreaseDTO getProductsIncrease(int idProductIncrease) {
         return productsIncreaseDAO.getProductsIncrease(idProductIncrease);
     }
 
     public List<ProductsIncreaseDTO> getAllProductsIncreases() {
         return productsIncreaseDAO.getAllProductsIncreases();
+    }
+
+    public boolean existsProductIncrease(int idProductIncrease) {
+        return productsIncreaseDAO.existsProductIncrease(idProductIncrease);
+    }
+
+    public List<ProductsIncreaseDTO> getProductIncreasesByProductId(String idProduct) {
+        return productsIncreaseDAO.getProductIncreasesByProductId(idProduct);
     }
 }

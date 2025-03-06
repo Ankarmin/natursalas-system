@@ -1,19 +1,23 @@
 package com.natursalas.natursalassystem.model.dto;
 
-public class ProductDTO {
+public class ProductsForLocationDTO {
     private String idProduct;
     private String category;
     private String productName;
     private int price;
+    private String idLocation;
+    private int stock;
 
-    public ProductDTO() {
+    public ProductsForLocationDTO() {
     }
 
-    public ProductDTO(String idProduct, String category, String productName, int price) {
+    public ProductsForLocationDTO(String idProduct, String category, String productName, int price, String idLocation, int stock) {
         this.idProduct = idProduct;
         this.category = category;
         this.productName = productName;
         this.price = price;
+        this.idLocation = idLocation;
+        this.stock = stock;
     }
 
     public String getIdProduct() {
@@ -46,5 +50,21 @@ public class ProductDTO {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public String getIdLocation() {
+        return idLocation;
+    }
+
+    public void setIdLocation(String idLocation) {
+        this.idLocation = idLocation;
+    }
+
+    public int getStock() {
+        return stock;
+    }
+
+    public void setStock(int stock) {
+        this.stock = stock;
     }
 }

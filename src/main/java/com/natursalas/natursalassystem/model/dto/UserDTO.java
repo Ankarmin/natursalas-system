@@ -17,14 +17,11 @@ public class UserDTO {
     }
 
     public UserDTO(String email, String password) {
-        this.email = email;
-        this.password = password;
+        this(email, password, "user", null);
     }
 
     public UserDTO(String email, String password, String idLocation) {
-        this.email = email;
-        this.password = password;
-        this.idLocation = idLocation;
+        this(email, password, "user", idLocation);
     }
 
     public String getEmail() {

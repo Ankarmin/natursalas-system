@@ -7,20 +7,20 @@ public class SaleSpecialDTO {
     private String idLocation;
     private Timestamp saleDate;
     private String DNI;
-    private String firstName;
-    private String diagnosis;
+    private String fullName;
+    private String productName;
     private int subtotal;
 
     public SaleSpecialDTO() {
     }
 
-    public SaleSpecialDTO(String idSale, String idLocation, Timestamp saleDate, String DNI, String firstName, String diagnosis, int subtotal) {
+    public SaleSpecialDTO(String idSale, String idLocation, Timestamp saleDate, String DNI, String fullName, String productName, int subtotal) {
         this.idSale = idSale;
         this.idLocation = idLocation;
         this.saleDate = saleDate;
         this.DNI = DNI;
-        this.firstName = firstName;
-        this.diagnosis = diagnosis;
+        this.fullName = fullName;
+        this.productName = productName;
         this.subtotal = subtotal;
     }
 
@@ -56,20 +56,20 @@ public class SaleSpecialDTO {
         this.DNI = DNI;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
-    public String getDiagnosis() {
-        return diagnosis;
+    public String getProductName() {
+        return productName;
     }
 
-    public void setDiagnosis(String diagnosis) {
-        this.diagnosis = diagnosis;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     public int getSubtotal() {

@@ -32,4 +32,8 @@ public class LocationService {
     public List<LocationDTO> getAllLocations() {
         return locationDAO.getAllLocations();
     }
+
+    public boolean locationExists(String locationId) {
+        return locationDAO.exists(locationId);
+    }
 }

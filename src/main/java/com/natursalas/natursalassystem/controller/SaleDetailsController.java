@@ -1,10 +1,10 @@
 package com.natursalas.natursalassystem.controller;
 
-import com.natursalas.natursalassystem.model.dao.ProductDAO;
-import com.natursalas.natursalassystem.model.dto.ProductDTO;
+import com.natursalas.natursalassystem.model.dto.ProductsForLocationDTO;
 import com.natursalas.natursalassystem.model.dto.SaleDetailDTO;
 import com.natursalas.natursalassystem.model.dto.SaleDetailSpecialDTO;
 import com.natursalas.natursalassystem.service.DatabaseConnection;
+import com.natursalas.natursalassystem.service.ProductsForLocationService;
 import com.natursalas.natursalassystem.service.SaleDetailService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,28 +21,21 @@ import java.util.ResourceBundle;
 
 public class SaleDetailsController implements Initializable {
 
+    private final ObservableList<SaleDetailSpecialDTO> observableList = FXCollections.observableArrayList();
     @FXML
     private TableColumn<SaleDetailSpecialDTO, String> saleDetails_columna_sede;
-
     @FXML
     private TableColumn<SaleDetailSpecialDTO, String> saleDetails_columna_producto;
-
     @FXML
     private TableColumn<SaleDetailSpecialDTO, Integer> saleDetails_columna_precioUnitario;
-
     @FXML
     private TableColumn<SaleDetailSpecialDTO, Integer> saleDetails_columna_cantidadVendida;
-
     @FXML
     private TableColumn<SaleDetailSpecialDTO, Integer> saleDetails_columna_precioTotal;
-
     @FXML
     private TableView<SaleDetailSpecialDTO> saleDetails_tableViewDetalles;
-
     private SaleDetailService saleDetailService;
-    private ProductDAO productDAO;
-
-    private final ObservableList<SaleDetailSpecialDTO> observableList = FXCollections.observableArrayList();
+    private ProductsForLocationService productsForLocationService;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -53,7 +46,7 @@ public class SaleDetailsController implements Initializable {
     private void configurarBaseDatos() {
         Connection connection = DatabaseConnection.getConnection();
         saleDetailService = new SaleDetailService(connection);
-        productDAO = new ProductDAO(connection);
+        productsForLocationService = new ProductsForLocationService(connection);
     }
 
     private void configurarColumnas() {
@@ -68,15 +61,9 @@ public class SaleDetailsController implements Initializable {
         List<SaleDetailDTO> saleDetails = saleDetailService.getSalesDetailsBySaleId(idSale);
 
         for (SaleDetailDTO saleDetail : saleDetails) {
-            ProductDTO product = productDAO.getProduct(saleDetail.getIdProduct(), saleDetail.getIdLocation());
+            ProductsForLocationDTO product = productsForLocationService.getProductInLocation(saleDetail.getIdProduct(), saleDetail.getIdLocation());
             if (product != null) {
-                observableList.add(new SaleDetailSpecialDTO(
-                        saleDetail.getIdLocation(),
-                        product.getProductName(),
-                        saleDetail.getPrice(),
-                        saleDetail.getQuantity(),
-                        saleDetail.getSubtotal()
-                ));
+                observableList.add(new SaleDetailSpecialDTO(saleDetail.getIdLocation(), product.getProductName(), saleDetail.getPrice(), saleDetail.getQuantity(), saleDetail.getSubtotal()));
             }
         }
 

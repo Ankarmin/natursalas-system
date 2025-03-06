@@ -21,12 +21,12 @@ public class ProductService {
         return productDAO.updateProduct(updatedProduct);
     }
 
-    public boolean deleteProduct(String productId, String locationId) {
-        return productDAO.deleteProduct(productId, locationId);
+    public boolean deleteProduct(String productId) {
+        return productDAO.deleteProduct(productId);
     }
 
-    public ProductDTO getProduct(String productId, String locationId) {
-        return productDAO.getProduct(productId, locationId);
+    public ProductDTO getProduct(String productId) {
+        return productDAO.getProduct(productId);
     }
 
     public List<ProductDTO> getAllProducts() {

@@ -32,12 +32,4 @@ public class UserService {
     public List<UserDTO> getAllUsers() {
         return userDAO.getAllUsers();
     }
-
-    public boolean loginUser(String email, String password) {
-        return userDAO.loginUser(email, password);
-    }
-
-    public UserDTO getUserDetails(String email) {
-        return userDAO.getUserDetails(email);
-    }
 }

@@ -1,6 +1,7 @@
 package com.natursalas.natursalassystem.model.dto;
 
 import java.sql.Timestamp;
+import java.util.Objects;
 
 public class SaleDTO {
     private String idSale;
@@ -9,17 +10,19 @@ public class SaleDTO {
     private String category;
     private Timestamp saleDate;
     private String idLocation;
+    private int subtotal;
 
     public SaleDTO() {
     }
 
-    public SaleDTO(String idSale, String DNI, String diagnosis, String category, Timestamp saleDate, String idLocation) {
+    public SaleDTO(String idSale, String DNI, String diagnosis, String category, Timestamp saleDate, String idLocation, int subtotal) {
         this.idSale = idSale;
         this.DNI = DNI;
         this.diagnosis = diagnosis;
         this.category = category;
         this.saleDate = saleDate;
         this.idLocation = idLocation;
+        this.subtotal = subtotal;
     }
 
     public String getIdSale() {
@@ -68,5 +71,39 @@ public class SaleDTO {
 
     public void setIdLocation(String idLocation) {
         this.idLocation = idLocation;
+    }
+
+    public int getSubtotal() {
+        return subtotal;
+    }
+
+    public void setSubtotal(int subtotal) {
+        this.subtotal = subtotal;
+    }
+
+    @Override
+    public String toString() {
+        return "SaleDTO{" +
+                "idSale='" + idSale + '\'' +
+                ", DNI='" + DNI + '\'' +
+                ", diagnosis='" + diagnosis + '\'' +
+                ", category='" + category + '\'' +
+                ", saleDate=" + saleDate +
+                ", idLocation='" + idLocation + '\'' +
+                ", subtotal=" + subtotal +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SaleDTO saleDTO = (SaleDTO) o;
+        return subtotal == saleDTO.subtotal && Objects.equals(idSale, saleDTO.idSale) && Objects.equals(DNI, saleDTO.DNI) && Objects.equals(diagnosis, saleDTO.diagnosis) && Objects.equals(category, saleDTO.category) && Objects.equals(saleDate, saleDTO.saleDate) && Objects.equals(idLocation, saleDTO.idLocation);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(idSale, DNI, diagnosis, category, saleDate, idLocation, subtotal);
     }
 }

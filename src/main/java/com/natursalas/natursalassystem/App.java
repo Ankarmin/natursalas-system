@@ -8,6 +8,10 @@ import javafx.stage.Stage;
 
 public class App extends Application {
 
+    public static void main(String[] args) {
+        launch(args);
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/natursalas/natursalassystem/view/fxml/Login.fxml"));
@@ -15,9 +19,5 @@ public class App extends Application {
         primaryStage.setScene(new Scene(root));
         primaryStage.setTitle("NaturSalas System");
         primaryStage.show();
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }

@@ -10,9 +10,13 @@ public interface IProductsIncreaseDAO {
 
     boolean updateProductsIncrease(ProductsIncreaseDTO updatedProductsIncrease);
 
-    boolean deleteProductsIncrease(Integer idProductIncrease);
+    boolean deleteProductsIncrease(int idProductIncrease);
 
-    ProductsIncreaseDTO getProductsIncrease(Integer idProductIncrease);
+    ProductsIncreaseDTO getProductsIncrease(int idProductIncrease);
 
     List<ProductsIncreaseDTO> getAllProductsIncreases();
+
+    boolean existsProductIncrease(int idProductIncrease);
+
+    List<ProductsIncreaseDTO> getProductIncreasesByProductId(String idProduct);
 }

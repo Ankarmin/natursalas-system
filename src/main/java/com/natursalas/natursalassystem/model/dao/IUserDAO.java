@@ -15,4 +15,6 @@ public interface IUserDAO {
     UserDTO getUser(String email);
 
     List<UserDTO> getAllUsers();
+
+    boolean existsUser(String email);
 }

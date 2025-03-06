@@ -16,5 +16,5 @@ public interface IPatientDAO {
 
     List<PatientDTO> getAllPatients();
 
-    List<PatientDTO> getPatientsByLocation(String idLocation);
+    boolean existsPatient(String DNI);
 }
