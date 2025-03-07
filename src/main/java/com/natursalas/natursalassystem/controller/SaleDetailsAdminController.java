@@ -19,7 +19,7 @@ import java.sql.Connection;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class SaleDetailsController implements Initializable {
+public class SaleDetailsAdminController implements Initializable {
 
     private final ObservableList<SaleDetailSpecialDTO> observableList = FXCollections.observableArrayList();
     @FXML
