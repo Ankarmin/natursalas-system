@@ -32,7 +32,6 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class AdminController implements Initializable {
-
     private static final Logger LOGGER = Logger.getLogger(AdminController.class.getName());
     private final AlertMessages alerta = new AlertMessages();
     private final ObservableList<PatientDTO> patientsList = FXCollections.observableArrayList();
@@ -193,8 +192,6 @@ public class AdminController implements Initializable {
     @FXML
     private DatePicker ventas_filtrar_hastaDate;
     @FXML
-    private ComboBox<?> ventas_filtrar_pacientes;
-    @FXML
     private ComboBox<String> ventas_filtrar_productos;
     @FXML
     private ComboBox<String> ventas_filtrar_sede;
@@ -217,12 +214,12 @@ public class AdminController implements Initializable {
         configurarColumnasPacientes();
         configurarColumnasHistorial();
         configurarColumnasVentas();
-        configurarColumnasInventario();
+        configurarColumnasIncrementos();
         configurarColumnasCuentas();
 
         cargarPacientes();
         cargarVentas();
-        cargarInventario();
+        cargarIncrementos();
         cargarCuentas();
 
         agregarEventoDobleClickPacientes();
@@ -235,6 +232,18 @@ public class AdminController implements Initializable {
         inicializarEventosBorrarFiltro();
     }
 
+    private void configurarBaseDatos() {
+        Connection connection = DatabaseConnection.getConnection();
+        patientService = new PatientService(connection);
+        saleService = new SaleService(connection);
+        saleDetailService = new SaleDetailService(connection);
+        productIncreaseService = new ProductIncreaseService(connection);
+        productsForLocationService = new ProductsForLocationService(connection);
+        locationService = new LocationService(connection);
+        userService = new UserService(connection);
+        productService = new ProductService(connection);
+    }
+
     @FXML
     private void switchForm(ActionEvent event) {
         panelInformacion.setVisible(event.getSource() == bttnInformacion);
@@ -244,18 +253,47 @@ public class AdminController implements Initializable {
         pnlInventarios.setVisible(event.getSource() == bttnInventarios);
     }
 
+    @FXML
+    private void cerrarSesion() {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/natursalas/natursalassystem/view/fxml/Login.fxml"));
+            Parent root = fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Inicio de Sesión");
+            Stage currentStage = (Stage) bttnCerrarSesion.getScene().getWindow();
+            currentStage.close();
+
+            stage.setOnCloseRequest(event -> {
+                Platform.exit();
+                System.exit(0);
+            });
+
+            stage.show();
+        } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, "Error al cerrar sesión y cargar pantalla de login", e);
+        }
+    }
+
     private void iniciarReloj() {
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a");
-        new Thread(() -> {
-            while (true) {
+        Thread relojThread = new Thread(() -> {
+            while (!Thread.currentThread().isInterrupted()) {
                 try {
                     Thread.sleep(1000);
                     Platform.runLater(() -> lblFecha.setText(format.format(new Date())));
                 } catch (InterruptedException e) {
+                    LOGGER.log(Level.WARNING, "El hilo del reloj fue interrumpido", e);
+                    Thread.currentThread().interrupt();
+                    break;
+                } catch (Exception e) {
                     LOGGER.log(Level.SEVERE, "Error en el reloj", e);
                 }
             }
-        }).start();
+        });
+
+        relojThread.setDaemon(true);
+        relojThread.start();
     }
 
     @FXML
@@ -307,7 +345,7 @@ public class AdminController implements Initializable {
         ventas_columna_PrecioTotal.setCellValueFactory(new PropertyValueFactory<>("subtotal"));
     }
 
-    private void configurarColumnasInventario() {
+    private void configurarColumnasIncrementos() {
         inventarios_columna_fecha.setCellValueFactory(new PropertyValueFactory<>("dateOfEntry"));
         inventarios_columna_sede.setCellValueFactory(new PropertyValueFactory<>("idLocation"));
         inventarios_columna_idProducto.setCellValueFactory(new PropertyValueFactory<>("idProduct"));
@@ -320,18 +358,6 @@ public class AdminController implements Initializable {
         cuentas_columna_sede.setCellValueFactory(new PropertyValueFactory<>("idLocation"));
         cuentas_columna_ubicacion.setCellValueFactory(new PropertyValueFactory<>("address"));
         cuentas_columna_correo.setCellValueFactory(new PropertyValueFactory<>("email"));
-    }
-
-    private void cargarHistorialVentas(String dni) {
-        historyList.clear();
-        List<SaleDTO> sales = saleService.getSalesByDNI(dni);
-
-        for (SaleDTO sale : sales) {
-            historyList.add(new HistoryDTO(sale.getIdSale(), sale.getSaleDate(), sale.getIdLocation(), sale.getDiagnosis(), sale.getSubtotal()));
-        }
-
-        pacientes_historial_tableViewMovimientos.setItems(historyList);
-        pacientes_historial_tableViewMovimientos.refresh();
     }
 
     private void cargarPacientes() {
@@ -356,6 +382,18 @@ public class AdminController implements Initializable {
         }
 
         pacientes_tableViewPacientes.refresh();
+    }
+
+    private void cargarHistorialVentas(String dni) {
+        historyList.clear();
+        List<SaleDTO> sales = saleService.getSalesByDNI(dni);
+
+        for (SaleDTO sale : sales) {
+            historyList.add(new HistoryDTO(sale.getIdSale(), sale.getSaleDate(), sale.getIdLocation(), sale.getDiagnosis(), sale.getSubtotal()));
+        }
+
+        pacientes_historial_tableViewMovimientos.setItems(historyList);
+        pacientes_historial_tableViewMovimientos.refresh();
     }
 
     private void cargarVentas() {
@@ -404,7 +442,7 @@ public class AdminController implements Initializable {
         ventas_tableViewVentas.refresh();
     }
 
-    private void cargarInventario() {
+    private void cargarIncrementos() {
         inventaryList.clear();
         List<ProductsIncreaseDTO> productsIncrease = productIncreaseService.getAllProductsIncreases();
 
@@ -432,18 +470,6 @@ public class AdminController implements Initializable {
         cuentas_tableViewCuentas.refresh();
     }
 
-    private void configurarBaseDatos() {
-        Connection connection = DatabaseConnection.getConnection();
-        patientService = new PatientService(connection);
-        saleService = new SaleService(connection);
-        saleDetailService = new SaleDetailService(connection);
-        productIncreaseService = new ProductIncreaseService(connection);
-        productsForLocationService = new ProductsForLocationService(connection);
-        locationService = new LocationService(connection);
-        userService = new UserService(connection);
-        productService = new ProductService(connection);
-    }
-
     private void agregarEventoDobleClickPacientes() {
         pacientes_tableViewPacientes.setRowFactory(tv -> {
             TableRow<PatientDTO> row = new TableRow<>();
@@ -467,8 +493,7 @@ public class AdminController implements Initializable {
             TableRow<HistoryDTO> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2 && (!row.isEmpty())) {
-                    HistoryDTO rowData = row.getItem();
-                    abrirVentanaSaleDetail(rowData);
+                    abrirVentanaSaleDetail(row.getItem());
                 }
             });
             return row;
@@ -497,7 +522,7 @@ public class AdminController implements Initializable {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/natursalas/natursalassystem/view/fxml/SaleDetailsAdmin.fxml"));
             Parent root = fxmlLoader.load();
 
-            SaleDetailsController controller = fxmlLoader.getController();
+            SaleDetailsAdminController controller = fxmlLoader.getController();
             controller.cargarDetallesVenta(history.getIdSale());
 
             Stage stage = new Stage();
@@ -505,10 +530,9 @@ public class AdminController implements Initializable {
             stage.setTitle("Detalles de la Venta");
 
             stage.initModality(Modality.APPLICATION_MODAL);
-
             stage.showAndWait();
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error al abrir ventana de detalles de venta", e);
         }
     }
 
@@ -624,28 +648,6 @@ public class AdminController implements Initializable {
         cuentas_crear_txtFieldContrasena.clear();
         cuentas_crear_txtFieldSede.clear();
         cuentas_crear_txtFieldUbicacion.clear();
-    }
-
-    @FXML
-    private void cerrarSesion() {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/natursalas/natursalassystem/view/fxml/Login.fxml"));
-            Parent root = fxmlLoader.load();
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Inicio de Sesión");
-            Stage currentStage = (Stage) bttnCerrarSesion.getScene().getWindow();
-            currentStage.close();
-
-            stage.setOnCloseRequest(event -> {
-                Platform.exit();
-                System.exit(0);
-            });
-
-            stage.show();
-        } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, "Error al cerrar sesión", e);
-        }
     }
 
     private void cargarProductosComboBox() {

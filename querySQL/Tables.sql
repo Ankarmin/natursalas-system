@@ -93,7 +93,7 @@ CREATE TABLE sale (
 -- ==============================
 DELIMITER $$
 
--- Insertar productos en cada ubicación
+-- ✅ Insertar productos en cada ubicación al agregar un nuevo producto
 CREATE TRIGGER afterInsertProduct
 AFTER INSERT ON product
 FOR EACH ROW
@@ -102,7 +102,16 @@ BEGIN
     SELECT NEW.idProduct, NEW.category, NEW.productName, NEW.price, idLocation, 0 FROM location;
 END$$
 
--- Actualizar stock al incrementar productos
+-- ✅ Insertar productos en una nueva locación con stock = 0
+CREATE TRIGGER afterInsertLocation
+AFTER INSERT ON location
+FOR EACH ROW
+BEGIN
+    INSERT INTO productsForLocation (idProduct, category, productName, price, idLocation, stock)
+    SELECT idProduct, category, productName, price, NEW.idLocation, 0 FROM product;
+END$$
+
+-- ✅ Actualizar stock al incrementar productos
 CREATE TRIGGER afterProductsIncrease
 AFTER INSERT ON productsIncrease
 FOR EACH ROW
@@ -112,7 +121,7 @@ BEGIN
     WHERE idProduct = NEW.idProduct AND idLocation = NEW.idLocation;
 END$$
 
--- Validar stock antes de registrar ventas
+-- ✅ Validar stock antes de registrar ventas
 CREATE TRIGGER beforeSalesDetailsInsert
 BEFORE INSERT ON salesDetail
 FOR EACH ROW
@@ -120,12 +129,13 @@ BEGIN
     DECLARE currentStock INT;
     SELECT stock INTO currentStock FROM productsForLocation
     WHERE idProduct = NEW.idProduct AND idLocation = (SELECT idLocation FROM sale WHERE idSale = NEW.idSale);
+    
     IF currentStock < NEW.quantity THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Stock insuficiente para la venta';
     END IF;
 END$$
 
--- Crear `sale` automáticamente al agregar detalles de venta
+-- ✅ Crear `sale` automáticamente al agregar detalles de venta
 CREATE TRIGGER afterInsertSalesDetail
 AFTER INSERT ON salesDetail
 FOR EACH ROW
@@ -141,22 +151,23 @@ BEGIN
             0;
     END IF;
 
+    -- Actualizar subtotal de la venta
     UPDATE sale
     SET subtotal = (SELECT COALESCE(SUM(subtotal), 0) FROM salesDetail WHERE idSale = NEW.idSale)
     WHERE idSale = NEW.idSale;
 END$$
 
--- Actualizar subtotal en venta tras cambios en `salesDetail`
+-- ✅ Actualizar subtotal en venta tras cambios en `salesDetail`
 CREATE TRIGGER afterUpdateSalesDetail
 AFTER UPDATE ON salesDetail
 FOR EACH ROW
 BEGIN
     UPDATE sale
-    SET subtotal = (SELECT SUM(subtotal) FROM salesDetail WHERE idSale = NEW.idSale)
+    SET subtotal = (SELECT COALESCE(SUM(subtotal), 0) FROM salesDetail WHERE idSale = NEW.idSale)
     WHERE idSale = NEW.idSale;
 END$$
 
--- Evitar insertar ventas sin detalles
+-- ✅ Evitar insertar ventas sin detalles
 CREATE TRIGGER beforeInsertSale
 BEFORE INSERT ON sale
 FOR EACH ROW
@@ -164,6 +175,16 @@ BEGIN
     IF (SELECT COUNT(*) FROM salesDetail WHERE idSale = NEW.idSale) = 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'No se puede insertar una venta sin detalles.';
     END IF;
+END$$
+
+-- ✅ Disminuir stock en `productsForLocation` al registrar una venta
+CREATE TRIGGER afterInsertSalesDetail_UpdateStock
+AFTER INSERT ON salesDetail
+FOR EACH ROW
+BEGIN
+    UPDATE productsForLocation
+    SET stock = stock - NEW.quantity
+    WHERE idProduct = NEW.idProduct AND idLocation = NEW.idLocation;
 END$$
 
 -- ==============================

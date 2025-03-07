@@ -171,6 +171,32 @@ public class SaleDAO implements ISaleDAO {
         return salesList;
     }
 
+    @Override
+    public List<SaleDTO> getSalesByLocation(String idLocation) {
+        List<SaleDTO> salesList = new ArrayList<>();
+        String query = "SELECT * FROM sale WHERE idLocation = ? ORDER BY saleDate DESC";
+
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, idLocation);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    salesList.add(new SaleDTO(
+                            rs.getString("idSale"),
+                            rs.getString("DNI"),
+                            rs.getString("diagnosis"),
+                            rs.getString("category"),
+                            rs.getTimestamp("saleDate"),
+                            rs.getString("idLocation"),
+                            rs.getInt("subtotal")
+                    ));
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error retrieving sales by location: " + idLocation, e);
+        }
+        return salesList;
+    }
+
     public boolean existsSale(String idSale) {
         String query = "SELECT 1 FROM sale WHERE idSale = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {

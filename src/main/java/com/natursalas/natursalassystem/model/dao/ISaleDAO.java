@@ -21,5 +21,7 @@ public interface ISaleDAO {
 
     List<SaleDTO> getSalesByDNI(String dni);
 
+    List<SaleDTO> getSalesByLocation(String idLocation);
+
     boolean existsSale(String idSale);
 }

@@ -42,6 +42,10 @@ public class SaleService {
         return saleDAO.getSalesByDNI(dni);
     }
 
+    public List<SaleDTO> getSalesByLocation(String idLocation) {
+        return saleDAO.getSalesByLocation(idLocation);
+    }
+
     public boolean existsSale(String idSale) {
         return saleDAO.existsSale(idSale);
     }

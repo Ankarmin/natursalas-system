@@ -19,4 +19,6 @@ public interface IProductsIncreaseDAO {
     boolean existsProductIncrease(int idProductIncrease);
 
     List<ProductsIncreaseDTO> getProductIncreasesByProductId(String idProduct);
+
+    List<ProductsIncreaseDTO> getProductsIncreaseByLocation(String idLocation);
 }

@@ -109,19 +109,6 @@ public class ProductsIncreaseDAO implements IProductsIncreaseDAO {
         return productsIncreases;
     }
 
-    @Override
-    public boolean existsProductIncrease(int idProductIncrease) {
-        String query = "SELECT 1 FROM productsIncrease WHERE idProductIncrease = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setInt(1, idProductIncrease);
-            try (ResultSet rs = stmt.executeQuery()) {
-                return rs.next();
-            }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error checking if product increase exists", e);
-            return false;
-        }
-    }
 
     @Override
     public List<ProductsIncreaseDTO> getProductIncreasesByProductId(String idProduct) {
@@ -138,5 +125,38 @@ public class ProductsIncreaseDAO implements IProductsIncreaseDAO {
             LOGGER.log(Level.SEVERE, "Error retrieving product increases by product ID", e);
         }
         return productsIncreases;
+    }
+
+    @Override
+    public List<ProductsIncreaseDTO> getProductsIncreaseByLocation(String idLocation) {
+        List<ProductsIncreaseDTO> productsIncreases = new ArrayList<>();
+        String query = "SELECT * FROM productsIncrease WHERE idLocation = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, idLocation);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    productsIncreases.add(new ProductsIncreaseDTO(rs.getInt("idProductIncrease"), rs.getString("idProduct"), rs.getTimestamp("dateOfEntry"), rs.getInt("quantity"), rs.getString("idLocation")));
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error retrieving product increases for location {0}", idLocation);
+            LOGGER.log(Level.SEVERE, "Exception: ", e);
+        }
+        return productsIncreases;
+    }
+
+    @Override
+    public boolean existsProductIncrease(int idProductIncrease) {
+        String query = "SELECT 1 FROM productsIncrease WHERE idProductIncrease = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, idProductIncrease);
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next();
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error checking if product increase exists", e);
+            return false;
+        }
     }
 }

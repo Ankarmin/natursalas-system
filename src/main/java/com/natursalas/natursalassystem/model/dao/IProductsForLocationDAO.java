@@ -15,5 +15,7 @@ public interface IProductsForLocationDAO {
 
     List<ProductsForLocationDTO> listAllProductsByLocation();
 
+    List<ProductsForLocationDTO> getProductsForLocation(String idLocation);
+
     boolean existsProductInLocation(String idProduct, String idLocation);
 }

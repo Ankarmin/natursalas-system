@@ -101,6 +101,34 @@ public class PatientDAO implements IPatientDAO {
     }
 
     @Override
+    public List<PatientDTO> getPatientsByLocation(String idLocation) {
+        List<PatientDTO> patients = new ArrayList<>();
+        String query = "SELECT * FROM patient WHERE idLocation = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, idLocation);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    patients.add(new PatientDTO(
+                            rs.getString("DNI"),
+                            rs.getString("firstName"),
+                            rs.getString("lastName"),
+                            rs.getInt("age"),
+                            rs.getString("phoneNumber"),
+                            rs.getTimestamp("dateOfEntry"),
+                            rs.getDate("dateOfBirth"),
+                            rs.getString("district"),
+                            rs.getString("idLocation")
+                    ));
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error retrieving patients by location", e);
+        }
+        return patients;
+    }
+
+    @Override
     public boolean existsPatient(String DNI) {
         String query = "SELECT COUNT(1) FROM patient WHERE DNI = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {

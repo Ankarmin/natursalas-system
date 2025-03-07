@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <StackPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
            minWidth="-Infinity"
-           prefHeight="586.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1">
+           prefHeight="586.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1"
+           fx:controller="com.natursalas.natursalassystem.controller.SedeAumentarProductoController">
     <children>
         <AnchorPane prefHeight="200.0" prefWidth="200.0" stylesheets="@../css/SedeDesign.css">
             <children>
@@ -98,7 +98,8 @@
                 <Button fx:id="aumentarProducto_bttnAumentar" layoutX="156.0" layoutY="525.0" mnemonicParsing="false"
                         styleClass="button-general" stylesheets="@../css/SedeDesign.css" text="Aumentar"/>
                 <Button fx:id="aumentarProducto_bttnCancelar" layoutX="367.0" layoutY="525.0" mnemonicParsing="false"
-                        styleClass="button-general" stylesheets="@../css/SedeDesign.css" text="Cancelar"/>
+                        onAction="#botonCancelar" styleClass="button-general" stylesheets="@../css/SedeDesign.css"
+                        text="Cancelar"/>
             </children>
         </AnchorPane>
     </children>

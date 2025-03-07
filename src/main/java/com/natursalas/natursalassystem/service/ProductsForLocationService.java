@@ -29,6 +29,10 @@ public class ProductsForLocationService {
         return productsForLocationDAO.findProductInLocation(productId, locationId);
     }
 
+    public List<ProductsForLocationDTO> getProductsForLocation(String idLocation) {
+        return productsForLocationDAO.getProductsForLocation(idLocation);
+    }
+
     public List<ProductsForLocationDTO> getAllProductsByLocation() {
         return productsForLocationDAO.listAllProductsByLocation();
     }

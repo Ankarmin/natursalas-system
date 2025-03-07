@@ -108,6 +108,25 @@ public class ProductsForLocationDAO implements IProductsForLocationDAO {
     }
 
     @Override
+    public List<ProductsForLocationDTO> getProductsForLocation(String idLocation) {
+        List<ProductsForLocationDTO> products = new ArrayList<>();
+        String query = "SELECT * FROM productsForLocation WHERE idLocation = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, idLocation);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    products.add(new ProductsForLocationDTO(rs.getString("idProduct"), rs.getString("category"), rs.getString("productName"), rs.getInt("price"), rs.getString("idLocation"), rs.getInt("stock")));
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error retrieving products for location {0}", idLocation);
+            LOGGER.log(Level.SEVERE, "Exception: ", e);
+        }
+        return products;
+    }
+
+    @Override
     public boolean existsProductInLocation(String idProduct, String idLocation) {
         String query = "SELECT COUNT(1) FROM productsForLocation WHERE idProduct = ? AND idLocation = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {

@@ -21,9 +21,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.util.ResourceBundle;
+import java.util.logging.Logger;
 
 public class LoginController implements Initializable {
-
+    private static final Logger LOGGER = Logger.getLogger(LoginController.class.getName());
     private final AlertMessages alerta = new AlertMessages();
     @FXML
     private Button bttnIngresar;
@@ -40,7 +41,9 @@ public class LoginController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         configurarBaseDatos();
+
         configurarEventosTeclado();
+
         txtMostrarContrasena.setVisible(false);
     }
 
@@ -76,36 +79,42 @@ public class LoginController implements Initializable {
             UserDTO user = userService.getUser(userName);
             if (user != null && user.getPassword().equals(password)) {
                 alerta.mensajeConfirmacion("Inicio de sesión exitoso.");
-                abrirPanelSegunRol(user.getRole());
+                abrirPanelSegunRol(user.getRole(), user.getIdLocation());
             } else {
                 alerta.mensajeError("Nombre de usuario o contraseña incorrectos.");
             }
         } catch (Exception e) {
             alerta.mensajeError("Error al procesar el inicio de sesión.");
-            e.printStackTrace();
+            LOGGER.severe("Error en la autenticación del usuario " + userName + ": " + e.getMessage());
         }
     }
 
-    private void abrirPanelSegunRol(String role) {
+    private void abrirPanelSegunRol(String role, String idLocation) {
         switch (role) {
             case "admin":
-                abrirVentana("Admin", "/com/natursalas/natursalassystem/view/fxml/Admin.fxml");
+                abrirVentana("Admin", "/com/natursalas/natursalassystem/view/fxml/Admin.fxml", null);
                 break;
             case "user":
-                abrirVentana("Sede", "/com/natursalas/natursalassystem/view/fxml/Sedes.fxml");
+                abrirVentana("Sede", "/com/natursalas/natursalassystem/view/fxml/Sedes.fxml", idLocation);
                 break;
             default:
                 alerta.mensajeError("Rol de usuario no reconocido.");
         }
     }
 
-    private void abrirVentana(String titulo, String fxmlPath) {
+    private void abrirVentana(String titulo, String fxmlPath, String idLocation) {
         try {
             Stage stage = (Stage) bttnIngresar.getScene().getWindow();
             stage.close();
 
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent root = fxmlLoader.load();
+
+            if (idLocation != null) {
+                SedesController controller = fxmlLoader.getController();
+                controller.setIdLocation(idLocation);
+            }
+
             Stage nuevaVentana = new Stage();
             nuevaVentana.setTitle(titulo);
             nuevaVentana.setScene(new Scene(root));
@@ -118,7 +127,7 @@ public class LoginController implements Initializable {
             nuevaVentana.show();
         } catch (IOException e) {
             alerta.mensajeError("Error al abrir la ventana de " + titulo + ".");
-            e.printStackTrace();
+            LOGGER.severe("No se pudo abrir la ventana: " + titulo + " (" + fxmlPath + "). Error: " + e.getMessage());
         }
     }
 
