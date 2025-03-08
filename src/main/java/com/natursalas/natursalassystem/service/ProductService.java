@@ -32,4 +32,8 @@ public class ProductService {
     public List<ProductDTO> getAllProducts() {
         return productDAO.getAllProducts();
     }
+
+    public String getProductIdByProductName(String productName) {
+        return productDAO.getProductIdByProductName(productName);
+    }
 }

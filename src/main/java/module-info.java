@@ -11,4 +11,5 @@ module com.natursalas.natursalassystem {
 
     exports com.natursalas.natursalassystem.controller;
     exports com.natursalas.natursalassystem.util;
+    exports com.natursalas.natursalassystem.model.dto;
 }

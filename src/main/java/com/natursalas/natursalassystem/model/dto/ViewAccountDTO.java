@@ -1,15 +1,12 @@
 package com.natursalas.natursalassystem.model.dto;
 
-public class AccountDTO {
+public class ViewAccountDTO {
     private String idLocation;
     private String address;
     private String email;
     private String password;
 
-    public AccountDTO() {
-    }
-
-    public AccountDTO(String idLocation, String address, String email, String password) {
+    public ViewAccountDTO(String idLocation, String address, String email, String password) {
         this.idLocation = idLocation;
         this.address = address;
         this.email = email;

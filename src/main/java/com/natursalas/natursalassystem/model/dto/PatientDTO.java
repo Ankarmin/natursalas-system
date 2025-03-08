@@ -73,8 +73,8 @@ public class PatientDTO {
         return dateOfEntry;
     }
 
-    public void setDateOfEntry(Timestamp dateOfEntry) {
-        this.dateOfEntry = dateOfEntry;
+    public void setDateOfEntry() {
+        this.dateOfEntry = new Timestamp(System.currentTimeMillis());
     }
 
     public Date getDateOfBirth() {

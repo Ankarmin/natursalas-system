@@ -2,7 +2,7 @@ package com.natursalas.natursalassystem.model.dto;
 
 import java.sql.Timestamp;
 
-public class InventaryDTO {
+public class ViewInventaryDTO {
 
     private Timestamp dateOfEntry;
     private String idLocation;
@@ -11,10 +11,10 @@ public class InventaryDTO {
     private String category;
     private int quantity;
 
-    public InventaryDTO() {
+    public ViewInventaryDTO() {
     }
 
-    public InventaryDTO(Timestamp dateOfEntry, String idLocation, String idProduct, String productName, String category, int quantity) {
+    public ViewInventaryDTO(Timestamp dateOfEntry, String idLocation, String idProduct, String productName, String category, int quantity) {
         this.dateOfEntry = dateOfEntry;
         this.idLocation = idLocation;
         this.idProduct = idProduct;

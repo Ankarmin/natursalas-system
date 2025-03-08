@@ -2,14 +2,14 @@ package com.natursalas.natursalassystem.model.dto;
 
 import java.sql.Timestamp;
 
-public class HistoryDTO {
+public class ViewHistoryDTO {
     private String idSale;
     private Timestamp saleDate;
     private String idLocation;
     private String diagnosis;
     private int subtotal;
 
-    public HistoryDTO(String idSale, Timestamp saleDate, String idLocation, String diagnosis, int subtotal) {
+    public ViewHistoryDTO(String idSale, Timestamp saleDate, String idLocation, String diagnosis, int subtotal) {
         this.idSale = idSale;
         this.saleDate = saleDate;
         this.idLocation = idLocation;

@@ -2,7 +2,7 @@ package com.natursalas.natursalassystem.model.dto;
 
 import java.sql.Timestamp;
 
-public class SaleSpecialDTO {
+public class ViewSaleSpecialDTO {
     private String idSale;
     private String idLocation;
     private Timestamp saleDate;
@@ -11,10 +11,10 @@ public class SaleSpecialDTO {
     private String productName;
     private int subtotal;
 
-    public SaleSpecialDTO() {
+    public ViewSaleSpecialDTO() {
     }
 
-    public SaleSpecialDTO(String idSale, String idLocation, Timestamp saleDate, String DNI, String fullName, String productName, int subtotal) {
+    public ViewSaleSpecialDTO(String idSale, String idLocation, Timestamp saleDate, String DNI, String fullName, String productName, int subtotal) {
         this.idSale = idSale;
         this.idLocation = idLocation;
         this.saleDate = saleDate;

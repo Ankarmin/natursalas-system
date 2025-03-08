@@ -10,10 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
@@ -25,7 +22,6 @@ import java.util.logging.Logger;
 
 public class LoginController implements Initializable {
     private static final Logger LOGGER = Logger.getLogger(LoginController.class.getName());
-    private final AlertMessages alerta = new AlertMessages();
     @FXML
     private Button bttnIngresar;
     @FXML
@@ -41,9 +37,7 @@ public class LoginController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         configurarBaseDatos();
-
         configurarEventosTeclado();
-
         txtMostrarContrasena.setVisible(false);
     }
 
@@ -58,12 +52,12 @@ public class LoginController implements Initializable {
         String password = obtenerPassword();
 
         if (userName.isEmpty() || password.isEmpty()) {
-            alerta.mensajeError("Todos los campos deben estar llenos.");
+            AlertMessages.mostrarAlerta("Todos los campos deben estar llenos.", Alert.AlertType.WARNING);
             return;
         }
 
         if (userService == null) {
-            alerta.mensajeError("No se puede iniciar sesión sin conexión a la base de datos.");
+            AlertMessages.mostrarAlerta("No se puede iniciar sesión sin conexión a la base de datos.", Alert.AlertType.ERROR);
             return;
         }
 
@@ -78,13 +72,13 @@ public class LoginController implements Initializable {
         try {
             UserDTO user = userService.getUser(userName);
             if (user != null && user.getPassword().equals(password)) {
-                alerta.mensajeConfirmacion("Inicio de sesión exitoso.");
+                AlertMessages.mostrarAlerta("Inicio de sesión exitoso.", Alert.AlertType.INFORMATION);
                 abrirPanelSegunRol(user.getRole(), user.getIdLocation());
             } else {
-                alerta.mensajeError("Nombre de usuario o contraseña incorrectos.");
+                AlertMessages.mostrarAlerta("Nombre de usuario o contraseña incorrectos.", Alert.AlertType.WARNING);
             }
         } catch (Exception e) {
-            alerta.mensajeError("Error al procesar el inicio de sesión.");
+            AlertMessages.mostrarAlerta("Error al procesar el inicio de sesión.", Alert.AlertType.ERROR);
             LOGGER.severe("Error en la autenticación del usuario " + userName + ": " + e.getMessage());
         }
     }
@@ -98,7 +92,7 @@ public class LoginController implements Initializable {
                 abrirVentana("Sede", "/com/natursalas/natursalassystem/view/fxml/Sedes.fxml", idLocation);
                 break;
             default:
-                alerta.mensajeError("Rol de usuario no reconocido.");
+                AlertMessages.mostrarAlerta("Rol de usuario no reconocido.", Alert.AlertType.ERROR);
         }
     }
 
@@ -126,7 +120,7 @@ public class LoginController implements Initializable {
 
             nuevaVentana.show();
         } catch (IOException e) {
-            alerta.mensajeError("Error al abrir la ventana de " + titulo + ".");
+            AlertMessages.mostrarAlerta("Error al abrir la ventana de " + titulo + ".", Alert.AlertType.ERROR);
             LOGGER.severe("No se pudo abrir la ventana: " + titulo + " (" + fxmlPath + "). Error: " + e.getMessage());
         }
     }

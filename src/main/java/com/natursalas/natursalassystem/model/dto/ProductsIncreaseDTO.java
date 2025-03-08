@@ -40,8 +40,8 @@ public class ProductsIncreaseDTO {
         return dateOfEntry;
     }
 
-    public void setDateOfEntry(Timestamp dateOfEntry) {
-        this.dateOfEntry = dateOfEntry;
+    public void setDateOfEntry() {
+        this.dateOfEntry = new Timestamp(System.currentTimeMillis());
     }
 
     public int getQuantity() {

@@ -33,12 +33,11 @@ import java.util.stream.Collectors;
 
 public class AdminController implements Initializable {
     private static final Logger LOGGER = Logger.getLogger(AdminController.class.getName());
-    private final AlertMessages alerta = new AlertMessages();
     private final ObservableList<PatientDTO> patientsList = FXCollections.observableArrayList();
-    private final ObservableList<HistoryDTO> historyList = FXCollections.observableArrayList();
-    private final ObservableList<SaleSpecialDTO> salesList = FXCollections.observableArrayList();
-    private final ObservableList<InventaryDTO> inventaryList = FXCollections.observableArrayList();
-    private final ObservableList<AccountDTO> accountList = FXCollections.observableArrayList();
+    private final ObservableList<ViewHistoryDTO> historyList = FXCollections.observableArrayList();
+    private final ObservableList<ViewSaleSpecialDTO> salesList = FXCollections.observableArrayList();
+    private final ObservableList<ViewInventaryDTO> inventaryList = FXCollections.observableArrayList();
+    private final ObservableList<ViewAccountDTO> accountList = FXCollections.observableArrayList();
     private final ObservableList<String> productosNombres = FXCollections.observableArrayList();
     private final ObservableList<String> sedesNombres = FXCollections.observableArrayList();
     @FXML
@@ -54,13 +53,13 @@ public class AdminController implements Initializable {
     @FXML
     private Button bttnVentas;
     @FXML
-    private TableColumn<AccountDTO, String> cuentas_columna_correo;
+    private TableColumn<ViewAccountDTO, String> cuentas_columna_correo;
     @FXML
-    private TableColumn<AccountDTO, String> cuentas_columna_sede;
+    private TableColumn<ViewAccountDTO, String> cuentas_columna_sede;
     @FXML
-    private TableColumn<AccountDTO, String> cuentas_columna_ubicacion;
+    private TableColumn<ViewAccountDTO, String> cuentas_columna_ubicacion;
     @FXML
-    private TableView<AccountDTO> cuentas_tableViewCuentas;
+    private TableView<ViewAccountDTO> cuentas_tableViewCuentas;
     @FXML
     private Label informacion_blPacientesNuevos;
     @FXML
@@ -82,19 +81,19 @@ public class AdminController implements Initializable {
     @FXML
     private TableView<?> informacion_tableViewVentasPorSede;
     @FXML
-    private TableColumn<InventaryDTO, Integer> inventarios_columna_cantidadAumentada;
+    private TableColumn<ViewInventaryDTO, Integer> inventarios_columna_cantidadAumentada;
     @FXML
-    private TableColumn<InventaryDTO, String> inventarios_columna_categoriaProducto;
+    private TableColumn<ViewInventaryDTO, String> inventarios_columna_categoriaProducto;
     @FXML
-    private TableColumn<InventaryDTO, Timestamp> inventarios_columna_fecha;
+    private TableColumn<ViewInventaryDTO, Timestamp> inventarios_columna_fecha;
     @FXML
-    private TableColumn<InventaryDTO, String> inventarios_columna_idProducto;
+    private TableColumn<ViewInventaryDTO, String> inventarios_columna_idProducto;
     @FXML
-    private TableColumn<InventaryDTO, String> inventarios_columna_nombreProducto;
+    private TableColumn<ViewInventaryDTO, String> inventarios_columna_nombreProducto;
     @FXML
-    private TableColumn<InventaryDTO, String> inventarios_columna_sede;
+    private TableColumn<ViewInventaryDTO, String> inventarios_columna_sede;
     @FXML
-    private TableView<InventaryDTO> inventarios_tableView;
+    private TableView<ViewInventaryDTO> inventarios_tableView;
     @FXML
     private Label lblFecha;
     @FXML
@@ -142,13 +141,13 @@ public class AdminController implements Initializable {
     @FXML
     private TextField cuentas_editar_txtFieldUbicacion;
     @FXML
-    private TableColumn<HistoryDTO, String> pacientes_historial_columna_diagnostico;
+    private TableColumn<ViewHistoryDTO, String> pacientes_historial_columna_diagnostico;
     @FXML
-    private TableColumn<HistoryDTO, Timestamp> pacientes_historial_columna_fecha;
+    private TableColumn<ViewHistoryDTO, Timestamp> pacientes_historial_columna_fecha;
     @FXML
-    private TableColumn<HistoryDTO, Integer> pacientes_historial_columna_precioTotal;
+    private TableColumn<ViewHistoryDTO, Integer> pacientes_historial_columna_precioTotal;
     @FXML
-    private TableColumn<HistoryDTO, String> pacientes_historial_columna_sede;
+    private TableColumn<ViewHistoryDTO, String> pacientes_historial_columna_sede;
     @FXML
     private Label pacientes_historial_dni;
     @FXML
@@ -158,7 +157,7 @@ public class AdminController implements Initializable {
     @FXML
     private Label pacientes_historial_name;
     @FXML
-    private TableView<HistoryDTO> pacientes_historial_tableViewMovimientos;
+    private TableView<ViewHistoryDTO> pacientes_historial_tableViewMovimientos;
     @FXML
     private Label pacientes_historial_telefono;
     @FXML
@@ -176,17 +175,17 @@ public class AdminController implements Initializable {
     @FXML
     private AnchorPane pnlInventarios;
     @FXML
-    private TableColumn<SaleSpecialDTO, Integer> ventas_columna_PrecioTotal;
+    private TableColumn<ViewSaleSpecialDTO, Integer> ventas_columna_PrecioTotal;
     @FXML
-    private TableColumn<SaleSpecialDTO, String> ventas_columna_producto;
+    private TableColumn<ViewSaleSpecialDTO, String> ventas_columna_producto;
     @FXML
-    private TableColumn<SaleSpecialDTO, String> ventas_columna_dniPaciente;
+    private TableColumn<ViewSaleSpecialDTO, String> ventas_columna_dniPaciente;
     @FXML
-    private TableColumn<SaleSpecialDTO, Timestamp> ventas_columna_fechaVenta;
+    private TableColumn<ViewSaleSpecialDTO, Timestamp> ventas_columna_fechaVenta;
     @FXML
-    private TableColumn<SaleSpecialDTO, String> ventas_columna_paciente;
+    private TableColumn<ViewSaleSpecialDTO, String> ventas_columna_paciente;
     @FXML
-    private TableColumn<SaleSpecialDTO, String> ventas_columna_sede;
+    private TableColumn<ViewSaleSpecialDTO, String> ventas_columna_sede;
     @FXML
     private DatePicker ventas_filtrar_desdeDate;
     @FXML
@@ -196,7 +195,7 @@ public class AdminController implements Initializable {
     @FXML
     private ComboBox<String> ventas_filtrar_sede;
     @FXML
-    private TableView<SaleSpecialDTO> ventas_tableViewVentas;
+    private TableView<ViewSaleSpecialDTO> ventas_tableViewVentas;
     private PatientService patientService;
     private SaleDetailService saleDetailService;
     private SaleService saleService;
@@ -389,7 +388,7 @@ public class AdminController implements Initializable {
         List<SaleDTO> sales = saleService.getSalesByDNI(dni);
 
         for (SaleDTO sale : sales) {
-            historyList.add(new HistoryDTO(sale.getIdSale(), sale.getSaleDate(), sale.getIdLocation(), sale.getDiagnosis(), sale.getSubtotal()));
+            historyList.add(new ViewHistoryDTO(sale.getIdSale(), sale.getSaleDate(), sale.getIdLocation(), sale.getDiagnosis(), sale.getSubtotal()));
         }
 
         pacientes_historial_tableViewMovimientos.setItems(historyList);
@@ -404,8 +403,7 @@ public class AdminController implements Initializable {
             List<SaleDetailDTO> saleDetails = saleDetailService.getSalesDetailsBySaleId(sale.getIdSale());
 
             for (SaleDetailDTO saleDetail : saleDetails) {
-                SaleSpecialDTO saleSpecial = new SaleSpecialDTO(sale.getIdSale(), sale.getIdLocation(), sale.getSaleDate(), sale.getDNI(), patientService.getPatient(sale.getDNI()).getFullName(), productService.getProduct(saleDetail.getIdProduct()).getProductName(), saleDetail.getSubtotal());
-                salesList.add(saleSpecial);
+                salesList.add(new ViewSaleSpecialDTO(sale.getIdSale(), sale.getIdLocation(), sale.getSaleDate(), sale.getDNI(), patientService.getPatient(sale.getDNI()).getFullName(), productService.getProduct(saleDetail.getIdProduct()).getProductName(), saleDetail.getSubtotal()));
             }
         }
 
@@ -415,7 +413,7 @@ public class AdminController implements Initializable {
 
     @FXML
     private void filtrarVentas() {
-        ObservableList<SaleSpecialDTO> filteredList = FXCollections.observableArrayList(salesList);
+        ObservableList<ViewSaleSpecialDTO> filteredList = FXCollections.observableArrayList(salesList);
 
         String product = ventas_filtrar_productos.getSelectionModel().getSelectedItem();
         String location = ventas_filtrar_sede.getSelectionModel().getSelectedItem();
@@ -449,7 +447,7 @@ public class AdminController implements Initializable {
         for (ProductsIncreaseDTO productIncrease : productsIncrease) {
             ProductsForLocationDTO product = productsForLocationService.getProductInLocation(productIncrease.getIdProduct(), productIncrease.getIdLocation());
             if (product != null) {
-                inventaryList.add(new InventaryDTO(productIncrease.getDateOfEntry(), productIncrease.getIdLocation(), productIncrease.getIdProduct(), product.getProductName(), product.getCategory(), productIncrease.getQuantity()));
+                inventaryList.add(new ViewInventaryDTO(productIncrease.getDateOfEntry(), productIncrease.getIdLocation(), productIncrease.getIdProduct(), product.getProductName(), product.getCategory(), productIncrease.getQuantity()));
             }
         }
         inventarios_tableView.setItems(inventaryList);
@@ -463,7 +461,7 @@ public class AdminController implements Initializable {
         for (UserDTO user : users) {
             LocationDTO location = locationService.getLocation(user.getIdLocation());
             if (location != null) {
-                accountList.add(new AccountDTO(user.getIdLocation(), location.getAddress(), user.getEmail(), user.getPassword()));
+                accountList.add(new ViewAccountDTO(user.getIdLocation(), location.getAddress(), user.getEmail(), user.getPassword()));
             }
         }
         cuentas_tableViewCuentas.setItems(accountList);
@@ -490,7 +488,7 @@ public class AdminController implements Initializable {
 
     private void agregarEventoDobleClickHistorial() {
         pacientes_historial_tableViewMovimientos.setRowFactory(tv -> {
-            TableRow<HistoryDTO> row = new TableRow<>();
+            TableRow<ViewHistoryDTO> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2 && (!row.isEmpty())) {
                     abrirVentanaSaleDetail(row.getItem());
@@ -502,10 +500,10 @@ public class AdminController implements Initializable {
 
     private void agregarEventoDobleClickCuentas() {
         cuentas_tableViewCuentas.setRowFactory(tv -> {
-            TableRow<AccountDTO> row = new TableRow<>();
+            TableRow<ViewAccountDTO> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2 && (!row.isEmpty())) {
-                    AccountDTO rowData = row.getItem();
+                    ViewAccountDTO rowData = row.getItem();
                     cuentas_editar_pswFieldContrasena.setText(rowData.getPassword());
                     cuentas_editar_txtFieldContrasena.setText(rowData.getPassword());
                     cuentas_editar_txtFieldCorreo.setText(rowData.getEmail());
@@ -517,7 +515,7 @@ public class AdminController implements Initializable {
         });
     }
 
-    private void abrirVentanaSaleDetail(HistoryDTO history) {
+    private void abrirVentanaSaleDetail(ViewHistoryDTO history) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/natursalas/natursalassystem/view/fxml/SaleDetailsAdmin.fxml"));
             Parent root = fxmlLoader.load();
@@ -544,7 +542,7 @@ public class AdminController implements Initializable {
         String address = cuentas_crear_txtFieldUbicacion.getText();
 
         if (email.isEmpty() || password.isEmpty() || location.isEmpty() || address.isEmpty()) {
-            alerta.mensajeError("Todos los campos deben estar rellenados.");
+            AlertMessages.mostrarAlerta("Todos los campos deben estar rellenados.", Alert.AlertType.WARNING);
             return;
         }
 
@@ -552,17 +550,17 @@ public class AdminController implements Initializable {
         if (locationDTO == null) {
             locationDTO = new LocationDTO(location, address);
             if (!locationService.addLocation(locationDTO)) {
-                alerta.mensajeError("Error al crear la ubicación.");
+                AlertMessages.mostrarAlerta("Error al crear la ubicación.", Alert.AlertType.ERROR);
                 return;
             }
         }
 
         UserDTO userDTO = new UserDTO(email, password, locationDTO.getIdLocation());
         if (userService.addUser(userDTO)) {
-            alerta.mensajeConfirmacion("Cuenta creada correctamente.");
+            AlertMessages.mostrarAlerta("Cuenta creada correctamente.", Alert.AlertType.INFORMATION);
             cargarCuentas();
         } else {
-            alerta.mensajeError("Error al crear la cuenta.");
+            AlertMessages.mostrarAlerta("Error al crear la cuenta.", Alert.AlertType.ERROR);
         }
 
         limpiarCamposCrear();
@@ -575,10 +573,10 @@ public class AdminController implements Initializable {
         String password = cuentas_editar_txtFieldContrasena.getText().trim();
         String address = cuentas_editar_txtFieldUbicacion.getText().trim();
 
-        AccountDTO selectedAccount = cuentas_tableViewCuentas.getSelectionModel().getSelectedItem();
+        ViewAccountDTO selectedAccount = cuentas_tableViewCuentas.getSelectionModel().getSelectedItem();
 
         if (selectedAccount == null) {
-            alerta.mensajeError("No se ha seleccionado ninguna cuenta.");
+            AlertMessages.mostrarAlerta("No se ha seleccionado ninguna cuenta.", Alert.AlertType.WARNING);
             return;
         }
 
@@ -586,7 +584,7 @@ public class AdminController implements Initializable {
         String idLocation = selectedAccount.getIdLocation();
 
         if (email.isEmpty() || password.isEmpty() || address.isEmpty()) {
-            alerta.mensajeError("Todos los campos deben estar rellenados.");
+            AlertMessages.mostrarAlerta("Todos los campos deben estar rellenados.", Alert.AlertType.WARNING);
             return;
         }
 
@@ -594,7 +592,7 @@ public class AdminController implements Initializable {
         boolean userUpdated = userService.updateUser(userDTO, oldEmail);
 
         if (!userUpdated) {
-            alerta.mensajeError("Error al actualizar la cuenta.");
+            AlertMessages.mostrarAlerta("Error al actualizar la cuenta.", Alert.AlertType.ERROR);
             return;
         }
 
@@ -602,11 +600,11 @@ public class AdminController implements Initializable {
         boolean locationUpdated = locationService.updateLocation(locationDTO);
 
         if (!locationUpdated) {
-            alerta.mensajeError("Error al actualizar la dirección de la sede.");
+            AlertMessages.mostrarAlerta("Error al actualizar la dirección de la sede.", Alert.AlertType.ERROR);
             return;
         }
 
-        alerta.mensajeConfirmacion("Cuenta actualizada correctamente.");
+        AlertMessages.mostrarAlerta("Cuenta actualizada correctamente.", Alert.AlertType.INFORMATION);
         cargarCuentas();
         limpiarCamposEditar();
     }
@@ -619,15 +617,19 @@ public class AdminController implements Initializable {
         String address = cuentas_editar_txtFieldUbicacion.getText();
 
         if (email.isEmpty() || password.isEmpty() || location.isEmpty() || address.isEmpty()) {
-            alerta.mensajeError("Todos los campos deben estar rellenados.");
+            AlertMessages.mostrarAlerta("Todos los campos deben estar rellenados.", Alert.AlertType.WARNING);
+            return;
+        }
+
+        if (!AlertMessages.mostrarConfirmacion("¿Está seguro de que desea eliminar esta cuenta?")) {
             return;
         }
 
         if (userService.deleteUser(email)) {
-            alerta.mensajeConfirmacion("Cuenta eliminada correctamente.");
+            AlertMessages.mostrarAlerta("Cuenta eliminada correctamente.", Alert.AlertType.INFORMATION);
             cargarCuentas();
         } else {
-            alerta.mensajeError("Error al eliminar la cuenta.");
+            AlertMessages.mostrarAlerta("Error al eliminar la cuenta.", Alert.AlertType.ERROR);
         }
 
         limpiarCamposEditar();

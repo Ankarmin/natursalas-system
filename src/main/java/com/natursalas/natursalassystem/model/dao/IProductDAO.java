@@ -15,5 +15,7 @@ public interface IProductDAO {
 
     List<ProductDTO> getAllProducts();
 
+    String getProductIdByProductName(String productName);
+
     boolean existsProduct(String idProduct);
 }

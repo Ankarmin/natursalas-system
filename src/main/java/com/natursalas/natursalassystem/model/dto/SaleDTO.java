@@ -61,8 +61,8 @@ public class SaleDTO {
         return saleDate;
     }
 
-    public void setSaleDate(Timestamp saleDate) {
-        this.saleDate = saleDate;
+    public void setSaleDate() {
+        this.saleDate = new Timestamp(System.currentTimeMillis());
     }
 
     public String getIdLocation() {

@@ -19,22 +19,12 @@ public class ProductsIncreaseDAO implements IProductsIncreaseDAO {
     @Override
     public boolean addProductsIncrease(ProductsIncreaseDTO newProductsIncrease) {
         String query = "INSERT INTO productsIncrease (idProduct, dateOfEntry, quantity, idLocation) VALUES (?, ?, ?, ?)";
-        try (PreparedStatement stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, newProductsIncrease.getIdProduct());
             stmt.setTimestamp(2, newProductsIncrease.getDateOfEntry());
             stmt.setInt(3, newProductsIncrease.getQuantity());
             stmt.setString(4, newProductsIncrease.getIdLocation());
-
-            int affectedRows = stmt.executeUpdate();
-            if (affectedRows > 0) {
-                try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-                    if (generatedKeys.next()) {
-                        newProductsIncrease.setIdProductIncrease(generatedKeys.getInt(1));
-                        LOGGER.log(Level.INFO, "Inserted product increase with ID: {0}", newProductsIncrease.getIdProductIncrease());
-                    }
-                }
-            }
-            return affectedRows > 0;
+            return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error adding product increase", e);
             return false;

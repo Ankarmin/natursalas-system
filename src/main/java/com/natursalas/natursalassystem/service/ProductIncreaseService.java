@@ -32,7 +32,7 @@ public class ProductIncreaseService {
     public List<ProductsIncreaseDTO> getAllProductsIncreases() {
         return productsIncreaseDAO.getAllProductsIncreases();
     }
-    
+
     public List<ProductsIncreaseDTO> getProductIncreasesByProductId(String idProduct) {
         return productsIncreaseDAO.getProductIncreasesByProductId(idProduct);
     }

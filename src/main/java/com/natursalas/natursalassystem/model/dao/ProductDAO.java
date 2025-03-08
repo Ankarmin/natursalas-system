@@ -104,6 +104,22 @@ public class ProductDAO implements IProductDAO {
     }
 
     @Override
+    public String getProductIdByProductName(String productName) {
+        String query = "SELECT idProduct FROM product WHERE productName = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, productName);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("idProduct");
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error retrieving product ID by product name", e);
+        }
+        return null;
+    }
+
+    @Override
     public boolean existsProduct(String idProduct) {
         String query = "SELECT COUNT(1) FROM product WHERE idProduct = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {

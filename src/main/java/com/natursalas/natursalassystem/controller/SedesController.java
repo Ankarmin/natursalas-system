@@ -33,10 +33,10 @@ import java.util.stream.Collectors;
 public class SedesController implements Initializable {
     private static final Logger LOGGER = Logger.getLogger(SedesController.class.getName());
     private final ObservableList<PatientDTO> patientsList = FXCollections.observableArrayList();
-    private final ObservableList<HistoryDTO> historyList = FXCollections.observableArrayList();
-    private final ObservableList<SaleSpecialDTO> salesList = FXCollections.observableArrayList();
+    private final ObservableList<ViewHistoryDTO> historyList = FXCollections.observableArrayList();
+    private final ObservableList<ViewSaleSpecialDTO> salesList = FXCollections.observableArrayList();
     private final ObservableList<String> productsNames = FXCollections.observableArrayList();
-    private final ObservableList<InventaryDTO> incrementsList = FXCollections.observableArrayList();
+    private final ObservableList<ViewInventaryDTO> incrementsList = FXCollections.observableArrayList();
     private final ObservableList<ProductsForLocationDTO> productsForLocationList = FXCollections.observableArrayList();
     @FXML
     private Button bttnCerrarSesion;
@@ -103,11 +103,11 @@ public class SedesController implements Initializable {
     @FXML
     private TableColumn<PatientDTO, String> pacientes_columna_telefono;
     @FXML
-    private TableColumn<HistoryDTO, String> pacientes_historial_columna_diagnostico;
+    private TableColumn<ViewHistoryDTO, String> pacientes_historial_columna_diagnostico;
     @FXML
-    private TableColumn<HistoryDTO, Timestamp> pacientes_historial_columna_fecha;
+    private TableColumn<ViewHistoryDTO, Timestamp> pacientes_historial_columna_fecha;
     @FXML
-    private TableColumn<HistoryDTO, Integer> pacientes_historial_columna_precioTotal;
+    private TableColumn<ViewHistoryDTO, Integer> pacientes_historial_columna_precioTotal;
     @FXML
     private Label pacientes_historial_dni;
     @FXML
@@ -117,7 +117,7 @@ public class SedesController implements Initializable {
     @FXML
     private Label pacientes_historial_name;
     @FXML
-    private TableView<HistoryDTO> pacientes_historial_tableViewMovimientos;
+    private TableView<ViewHistoryDTO> pacientes_historial_tableViewMovimientos;
     @FXML
     private Label pacientes_historial_telefono;
     @FXML
@@ -135,31 +135,31 @@ public class SedesController implements Initializable {
     @FXML
     private Button productos_bttnAumentar;
     @FXML
-    private TableColumn<InventaryDTO, Integer> productos_columna_cantidadAumentada;
+    private TableColumn<ViewInventaryDTO, Integer> productos_columna_cantidadAumentada;
     @FXML
-    private TableColumn<InventaryDTO, String> productos_columna_categoria;
+    private TableColumn<ViewInventaryDTO, String> productos_columna_categoria;
     @FXML
-    private TableColumn<InventaryDTO, Timestamp> productos_columna_fechaAumento;
+    private TableColumn<ViewInventaryDTO, Timestamp> productos_columna_fechaAumento;
     @FXML
-    private TableColumn<InventaryDTO, String> productos_columna_idProducto;
+    private TableColumn<ViewInventaryDTO, String> productos_columna_idProducto;
     @FXML
-    private TableColumn<InventaryDTO, String> productos_columna_producto;
+    private TableColumn<ViewInventaryDTO, String> productos_columna_producto;
     @FXML
-    private TableView<InventaryDTO> productos_tableViewInventario;
+    private TableView<ViewInventaryDTO> productos_tableViewInventario;
     @FXML
     private Button ventas_bttnAgregarVenta;
     @FXML
     private Button ventas_bttnFiltrar;
     @FXML
-    private TableColumn<SaleSpecialDTO, Integer> ventas_columna_precioTotal;
+    private TableColumn<ViewSaleSpecialDTO, Integer> ventas_columna_precioTotal;
     @FXML
-    private TableColumn<SaleSpecialDTO, String> ventas_columna_producto;
+    private TableColumn<ViewSaleSpecialDTO, String> ventas_columna_producto;
     @FXML
-    private TableColumn<SaleSpecialDTO, String> ventas_columna_dniPaciente;
+    private TableColumn<ViewSaleSpecialDTO, String> ventas_columna_dniPaciente;
     @FXML
-    private TableColumn<SaleSpecialDTO, Timestamp> ventas_columna_fechaVenta;
+    private TableColumn<ViewSaleSpecialDTO, Timestamp> ventas_columna_fechaVenta;
     @FXML
-    private TableColumn<SaleSpecialDTO, String> ventas_columna_nombrePaciente;
+    private TableColumn<ViewSaleSpecialDTO, String> ventas_columna_nombrePaciente;
     @FXML
     private DatePicker ventas_filtrar_desdeDate;
     @FXML
@@ -169,7 +169,7 @@ public class SedesController implements Initializable {
     @FXML
     private ComboBox<String> ventas_filtrar_productos;
     @FXML
-    private TableView<SaleSpecialDTO> ventas_tableViewVentas;
+    private TableView<ViewSaleSpecialDTO> ventas_tableViewVentas;
     private String idLocation;
     private PatientService patientService;
     private SaleDetailService saleDetailService;
@@ -390,7 +390,7 @@ public class SedesController implements Initializable {
         List<SaleDTO> sales = saleService.getSalesByDNI(dni);
 
         for (SaleDTO sale : sales) {
-            historyList.add(new HistoryDTO(sale.getIdSale(), sale.getSaleDate(), sale.getIdLocation(), sale.getDiagnosis(), sale.getSubtotal()));
+            historyList.add(new ViewHistoryDTO(sale.getIdSale(), sale.getSaleDate(), sale.getIdLocation(), sale.getDiagnosis(), sale.getSubtotal()));
         }
 
         pacientes_historial_tableViewMovimientos.setItems(historyList);
@@ -405,8 +405,7 @@ public class SedesController implements Initializable {
             List<SaleDetailDTO> saleDetails = saleDetailService.getSalesDetailsBySaleId(sale.getIdSale());
 
             for (SaleDetailDTO saleDetail : saleDetails) {
-                SaleSpecialDTO saleSpecial = new SaleSpecialDTO(sale.getIdSale(), sale.getIdLocation(), sale.getSaleDate(), sale.getDNI(), patientService.getPatient(sale.getDNI()).getFullName(), productService.getProduct(saleDetail.getIdProduct()).getProductName(), saleDetail.getSubtotal());
-                salesList.add(saleSpecial);
+                salesList.add(new ViewSaleSpecialDTO(sale.getIdSale(), sale.getIdLocation(), sale.getSaleDate(), sale.getDNI(), patientService.getPatient(sale.getDNI()).getFullName(), productService.getProduct(saleDetail.getIdProduct()).getProductName(), saleDetail.getSubtotal()));
             }
         }
 
@@ -436,7 +435,7 @@ public class SedesController implements Initializable {
 
     @FXML
     private void filtrarVentas() {
-        ObservableList<SaleSpecialDTO> filteredList = FXCollections.observableArrayList(salesList);
+        ObservableList<ViewSaleSpecialDTO> filteredList = FXCollections.observableArrayList(salesList);
 
         String product = ventas_filtrar_productos.getSelectionModel().getSelectedItem();
         String fullname = ventas_filtrar_pacientes.getSelectionModel().getSelectedItem();
@@ -479,7 +478,7 @@ public class SedesController implements Initializable {
         for (ProductsIncreaseDTO productIncrease : productsIncrease) {
             ProductsForLocationDTO product = productsForLocationService.getProductInLocation(productIncrease.getIdProduct(), productIncrease.getIdLocation());
             if (product != null) {
-                incrementsList.add(new InventaryDTO(productIncrease.getDateOfEntry(), productIncrease.getIdLocation(), productIncrease.getIdProduct(), product.getProductName(), product.getCategory(), productIncrease.getQuantity()));
+                incrementsList.add(new ViewInventaryDTO(productIncrease.getDateOfEntry(), productIncrease.getIdLocation(), productIncrease.getIdProduct(), product.getProductName(), product.getCategory(), productIncrease.getQuantity()));
             }
         }
         productos_tableViewInventario.setItems(incrementsList);
@@ -527,7 +526,7 @@ public class SedesController implements Initializable {
 
     private void agregarEventoDobleClickHistorial() {
         pacientes_historial_tableViewMovimientos.setRowFactory(tv -> {
-            TableRow<HistoryDTO> row = new TableRow<>();
+            TableRow<ViewHistoryDTO> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2 && (!row.isEmpty())) {
                     abrirVentanaSaleDetail(row.getItem());
@@ -537,7 +536,7 @@ public class SedesController implements Initializable {
         });
     }
 
-    private void abrirVentanaSaleDetail(HistoryDTO history) {
+    private void abrirVentanaSaleDetail(ViewHistoryDTO history) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/natursalas/natursalassystem/view/fxml/SaleDetailsSedes.fxml"));
             Parent root = fxmlLoader.load();
