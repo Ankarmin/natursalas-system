@@ -32,60 +32,6 @@ public class ProductsIncreaseDAO implements IProductsIncreaseDAO {
     }
 
     @Override
-    public boolean updateProductsIncrease(ProductsIncreaseDTO updatedProductsIncrease) {
-        if (!existsProductIncrease(updatedProductsIncrease.getIdProductIncrease())) {
-            LOGGER.log(Level.WARNING, "Attempted to update non-existing product increase: {0}", updatedProductsIncrease.getIdProductIncrease());
-            return false;
-        }
-
-        String query = "UPDATE productsIncrease SET idProduct = ?, dateOfEntry = ?, quantity = ?, idLocation = ? WHERE idProductIncrease = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setString(1, updatedProductsIncrease.getIdProduct());
-            stmt.setTimestamp(2, updatedProductsIncrease.getDateOfEntry());
-            stmt.setInt(3, updatedProductsIncrease.getQuantity());
-            stmt.setString(4, updatedProductsIncrease.getIdLocation());
-            stmt.setInt(5, updatedProductsIncrease.getIdProductIncrease());
-            return stmt.executeUpdate() > 0;
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error updating product increase", e);
-            return false;
-        }
-    }
-
-    @Override
-    public boolean deleteProductsIncrease(int idProductIncrease) {
-        if (!existsProductIncrease(idProductIncrease)) {
-            LOGGER.log(Level.WARNING, "Attempted to delete non-existing product increase: {0}", idProductIncrease);
-            return false;
-        }
-
-        String query = "DELETE FROM productsIncrease WHERE idProductIncrease = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setInt(1, idProductIncrease);
-            return stmt.executeUpdate() > 0;
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error deleting product increase", e);
-            return false;
-        }
-    }
-
-    @Override
-    public ProductsIncreaseDTO getProductsIncrease(int idProductIncrease) {
-        String query = "SELECT * FROM productsIncrease WHERE idProductIncrease = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setInt(1, idProductIncrease);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return new ProductsIncreaseDTO(rs.getInt("idProductIncrease"), rs.getString("idProduct"), rs.getTimestamp("dateOfEntry"), rs.getInt("quantity"), rs.getString("idLocation"));
-                }
-            }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error retrieving product increase", e);
-        }
-        return null;
-    }
-
-    @Override
     public List<ProductsIncreaseDTO> getAllProductsIncreases() {
         List<ProductsIncreaseDTO> productsIncreases = new ArrayList<>();
         String query = "SELECT * FROM productsIncrease";
@@ -95,24 +41,6 @@ public class ProductsIncreaseDAO implements IProductsIncreaseDAO {
             }
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error retrieving all product increases", e);
-        }
-        return productsIncreases;
-    }
-
-
-    @Override
-    public List<ProductsIncreaseDTO> getProductIncreasesByProductId(String idProduct) {
-        List<ProductsIncreaseDTO> productsIncreases = new ArrayList<>();
-        String query = "SELECT * FROM productsIncrease WHERE idProduct = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setString(1, idProduct);
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    productsIncreases.add(new ProductsIncreaseDTO(rs.getInt("idProductIncrease"), rs.getString("idProduct"), rs.getTimestamp("dateOfEntry"), rs.getInt("quantity"), rs.getString("idLocation")));
-                }
-            }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error retrieving product increases by product ID", e);
         }
         return productsIncreases;
     }
@@ -134,19 +62,5 @@ public class ProductsIncreaseDAO implements IProductsIncreaseDAO {
             LOGGER.log(Level.SEVERE, "Exception: ", e);
         }
         return productsIncreases;
-    }
-
-    @Override
-    public boolean existsProductIncrease(int idProductIncrease) {
-        String query = "SELECT 1 FROM productsIncrease WHERE idProductIncrease = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setInt(1, idProductIncrease);
-            try (ResultSet rs = stmt.executeQuery()) {
-                return rs.next();
-            }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error checking if product increase exists", e);
-            return false;
-        }
     }
 }

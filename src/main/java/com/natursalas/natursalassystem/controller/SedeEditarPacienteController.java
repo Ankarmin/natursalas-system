@@ -20,14 +20,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class SedeEditarPacienteController implements Initializable {
-
     private static final Logger LOGGER = Logger.getLogger(SedeEditarPacienteController.class.getName());
+
     @FXML
     private TextField editarPaciente_apellidos;
     @FXML
     private Button editarPaciente_bttnCancelar;
-    @FXML
-    private Button editarPaciente_bttnConfirmar;
     @FXML
     private TextField editarPaciente_dni;
     @FXML
@@ -38,6 +36,7 @@ public class SedeEditarPacienteController implements Initializable {
     private TextField editarPaciente_nombre;
     @FXML
     private TextField editarPaciente_telefono;
+
     private PatientDTO patientDTO;
     private PatientService patientService;
 
@@ -64,10 +63,8 @@ public class SedeEditarPacienteController implements Initializable {
 
     @FXML
     private void botonCancelar() {
-        boolean confirmar = AlertMessages.mostrarConfirmacion("¿Está seguro que desea cancelar? Los cambios no guardados se perderán.");
-        if (confirmar) {
-            Stage currentStage = (Stage) editarPaciente_bttnCancelar.getScene().getWindow();
-            currentStage.close();
+        if (AlertMessages.mostrarConfirmacion("¿Está seguro que desea cancelar? Los cambios no guardados se perderán.")) {
+            cerrarVentana();
         }
     }
 
@@ -115,9 +112,7 @@ public class SedeEditarPacienteController implements Initializable {
 
             if (patientService.updatePatient(patientDTO)) {
                 AlertMessages.mostrarAlerta("Paciente actualizado exitosamente.", Alert.AlertType.INFORMATION);
-
-                Stage currentStage = (Stage) editarPaciente_bttnConfirmar.getScene().getWindow();
-                currentStage.close();
+                cerrarVentana();
             } else {
                 AlertMessages.mostrarAlerta("No se pudo actualizar el paciente. Verifique los datos.", Alert.AlertType.ERROR);
             }
@@ -126,5 +121,10 @@ public class SedeEditarPacienteController implements Initializable {
             LOGGER.log(Level.SEVERE, "Error al actualizar paciente", e);
             AlertMessages.mostrarAlerta("Ocurrió un error inesperado.", Alert.AlertType.ERROR);
         }
+    }
+
+    private void cerrarVentana() {
+        Stage currentStage = (Stage) editarPaciente_bttnCancelar.getScene().getWindow();
+        currentStage.close();
     }
 }

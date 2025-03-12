@@ -1,16 +1,16 @@
 package com.natursalas.natursalassystem.model.dto;
 
-public class ViewSaleDetailSpecialDTO {
+public class ViewSaleDetailDTO {
     private String idLocation;
     private String productName;
     private int price;
     private int quantity;
     private int subtotal;
 
-    public ViewSaleDetailSpecialDTO() {
+    public ViewSaleDetailDTO() {
     }
 
-    public ViewSaleDetailSpecialDTO(String idLocation, String productName, int price, int quantity, int subtotal) {
+    public ViewSaleDetailDTO(String idLocation, String productName, int price, int quantity, int subtotal) {
         this.idLocation = idLocation;
         this.productName = productName;
         this.price = price;

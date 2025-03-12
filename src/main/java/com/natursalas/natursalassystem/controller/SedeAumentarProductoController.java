@@ -21,18 +21,11 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class SedeAumentarProductoController implements Initializable {
-
     private final ObservableList<String> productosNombres = FXCollections.observableArrayList();
     private final ObservableList<ViewProductoIncreaseDTO> aumentosProductos = FXCollections.observableArrayList();
 
     @FXML
-    private Button aumentarProducto_bttnAumentar;
-    @FXML
-    private Button aumentarProducto_bttnBorrar;
-    @FXML
     private Button aumentarProducto_bttnCancelar;
-    @FXML
-    private Button aumentarProducto_bttnInsertar;
     @FXML
     private TableColumn<ViewProductoIncreaseDTO, Integer> aumentarProducto_columna_cantidadAumentada;
     @FXML
@@ -84,8 +77,7 @@ public class SedeAumentarProductoController implements Initializable {
     @FXML
     private void botonCancelar() {
         if (AlertMessages.mostrarConfirmacion("¿Desea cancelar el aumento de productos?")) {
-            Stage currentStage = (Stage) aumentarProducto_bttnCancelar.getScene().getWindow();
-            currentStage.close();
+            cerrarVentana();
         }
     }
 
@@ -137,20 +129,35 @@ public class SedeAumentarProductoController implements Initializable {
             return;
         }
 
+        boolean allInserted = true;
+
         for (ViewProductoIncreaseDTO viewProductoIncreaseDTO : aumentosProductos) {
             ProductsIncreaseDTO productsIncreaseDTO = new ProductsIncreaseDTO();
             productsIncreaseDTO.setIdProduct(viewProductoIncreaseDTO.getIdProduct());
             productsIncreaseDTO.setDateOfEntry();
             productsIncreaseDTO.setQuantity(viewProductoIncreaseDTO.getQuantity());
             productsIncreaseDTO.setIdLocation(idLocation);
-            productIncreaseService.addProductsIncrease(productsIncreaseDTO);
+
+            boolean inserted = productIncreaseService.addProductsIncrease(productsIncreaseDTO);
+
+            if (!inserted) {
+                allInserted = false;
+                AlertMessages.mostrarAlerta("Error al aumentar el producto: " + viewProductoIncreaseDTO.getProductName(), Alert.AlertType.ERROR);
+            }
         }
 
-        AlertMessages.mostrarAlerta("Productos aumentados exitosamente.", Alert.AlertType.INFORMATION);
-        aumentosProductos.clear();
-        aumentarProducto_tableViewProductosAumentados.refresh();
+        if (allInserted) {
+            AlertMessages.mostrarAlerta("Productos aumentados exitosamente.", Alert.AlertType.INFORMATION);
+            aumentosProductos.clear();
+            aumentarProducto_tableViewProductosAumentados.refresh();
+            cerrarVentana();
+        } else {
+            AlertMessages.mostrarAlerta("Algunos productos no se pudieron aumentar. Verifique los errores.", Alert.AlertType.WARNING);
+        }
+    }
 
-        Stage currentStage = (Stage) aumentarProducto_bttnInsertar.getScene().getWindow();
+    private void cerrarVentana() {
+        Stage currentStage = (Stage) aumentarProducto_bttnCancelar.getScene().getWindow();
         currentStage.close();
     }
 }

@@ -2,6 +2,9 @@ package com.natursalas.natursalassystem.controller;
 
 import com.natursalas.natursalassystem.model.dto.*;
 import com.natursalas.natursalassystem.service.*;
+import com.natursalas.natursalassystem.util.AlertMessages;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,6 +20,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
@@ -32,14 +36,13 @@ import java.util.stream.Collectors;
 
 public class SedesController implements Initializable {
     private static final Logger LOGGER = Logger.getLogger(SedesController.class.getName());
+
     private final ObservableList<PatientDTO> patientsList = FXCollections.observableArrayList();
     private final ObservableList<ViewHistoryDTO> historyList = FXCollections.observableArrayList();
-    private final ObservableList<ViewSaleSpecialDTO> salesList = FXCollections.observableArrayList();
+    private final ObservableList<ViewSaleDTO> salesList = FXCollections.observableArrayList();
     private final ObservableList<String> productsNames = FXCollections.observableArrayList();
     private final ObservableList<ViewInventaryDTO> incrementsList = FXCollections.observableArrayList();
     private final ObservableList<ProductsForLocationDTO> productsForLocationList = FXCollections.observableArrayList();
-    @FXML
-    private Button bttnCerrarSesion;
     @FXML
     private Button bttnInformacion;
     @FXML
@@ -83,14 +86,6 @@ public class SedesController implements Initializable {
     @FXML
     private Label lblNombreCuenta;
     @FXML
-    private Label lblPath;
-    @FXML
-    private Label lblPath1;
-    @FXML
-    private Button pacientes_bttnAgregarPaciente;
-    @FXML
-    private Button pacientes_bttnEditarPaciente;
-    @FXML
     private TableColumn<PatientDTO, String> pacientes_columna_apellidos;
     @FXML
     private TableColumn<PatientDTO, String> pacientes_columna_dni;
@@ -133,8 +128,6 @@ public class SedesController implements Initializable {
     @FXML
     private AnchorPane panelVentas;
     @FXML
-    private Button productos_bttnAumentar;
-    @FXML
     private TableColumn<ViewInventaryDTO, Integer> productos_columna_cantidadAumentada;
     @FXML
     private TableColumn<ViewInventaryDTO, String> productos_columna_categoria;
@@ -147,19 +140,17 @@ public class SedesController implements Initializable {
     @FXML
     private TableView<ViewInventaryDTO> productos_tableViewInventario;
     @FXML
-    private Button ventas_bttnAgregarVenta;
+    private TableColumn<ViewSaleDTO, Integer> ventas_columna_precioTotal;
     @FXML
-    private Button ventas_bttnFiltrar;
+    private TableColumn<ViewSaleDTO, String> ventas_columna_producto;
     @FXML
-    private TableColumn<ViewSaleSpecialDTO, Integer> ventas_columna_precioTotal;
+    private TableColumn<ViewSaleDTO, String> ventas_columna_cantidad;
     @FXML
-    private TableColumn<ViewSaleSpecialDTO, String> ventas_columna_producto;
+    private TableColumn<ViewSaleDTO, String> ventas_columna_dniPaciente;
     @FXML
-    private TableColumn<ViewSaleSpecialDTO, String> ventas_columna_dniPaciente;
+    private TableColumn<ViewSaleDTO, Timestamp> ventas_columna_fechaVenta;
     @FXML
-    private TableColumn<ViewSaleSpecialDTO, Timestamp> ventas_columna_fechaVenta;
-    @FXML
-    private TableColumn<ViewSaleSpecialDTO, String> ventas_columna_nombrePaciente;
+    private TableColumn<ViewSaleDTO, String> ventas_columna_nombrePaciente;
     @FXML
     private DatePicker ventas_filtrar_desdeDate;
     @FXML
@@ -169,7 +160,8 @@ public class SedesController implements Initializable {
     @FXML
     private ComboBox<String> ventas_filtrar_productos;
     @FXML
-    private TableView<ViewSaleSpecialDTO> ventas_tableViewVentas;
+    private TableView<ViewSaleDTO> ventas_tableViewVentas;
+
     private String idLocation;
     private PatientService patientService;
     private SaleDetailService saleDetailService;
@@ -177,8 +169,6 @@ public class SedesController implements Initializable {
     private ProductsForLocationService productsForLocationService;
     private ProductIncreaseService productIncreaseService;
     private ProductService productService;
-    private LocationService locationService;
-    private UserService userService;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -206,8 +196,6 @@ public class SedesController implements Initializable {
         saleDetailService = new SaleDetailService(connection);
         productIncreaseService = new ProductIncreaseService(connection);
         productsForLocationService = new ProductsForLocationService(connection);
-        locationService = new LocationService(connection);
-        userService = new UserService(connection);
         productService = new ProductService(connection);
     }
 
@@ -223,23 +211,11 @@ public class SedesController implements Initializable {
 
     private void iniciarReloj() {
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a");
-        Thread relojThread = new Thread(() -> {
-            while (!Thread.currentThread().isInterrupted()) {
-                try {
-                    Thread.sleep(1000);
-                    Platform.runLater(() -> lblFecha.setText(format.format(new Date())));
-                } catch (InterruptedException e) {
-                    LOGGER.log(Level.WARNING, "El hilo del reloj fue interrumpido", e);
-                    Thread.currentThread().interrupt();
-                    break;
-                } catch (Exception e) {
-                    LOGGER.log(Level.SEVERE, "Error en el reloj", e);
-                }
-            }
-        });
 
-        relojThread.setDaemon(true);
-        relojThread.start();
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> lblFecha.setText(format.format(new Date()))));
+
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
     }
 
     @FXML
@@ -252,23 +228,25 @@ public class SedesController implements Initializable {
 
     @FXML
     private void cerrarSesion() {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/natursalas/natursalassystem/view/fxml/Login.fxml"));
-            Parent root = fxmlLoader.load();
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Inicio de Sesión");
-            Stage currentStage = (Stage) lblNombreCuenta.getScene().getWindow();
-            currentStage.close();
+        if (AlertMessages.mostrarConfirmacion("¿Está seguro que desea cerrar sesión?")) {
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/natursalas/natursalassystem/view/fxml/Login.fxml"));
+                Parent root = fxmlLoader.load();
+                Stage stage = new Stage();
+                stage.setScene(new Scene(root));
+                stage.setTitle("Inicio de Sesión");
+                Stage currentStage = (Stage) lblNombreCuenta.getScene().getWindow();
+                currentStage.close();
 
-            stage.setOnCloseRequest(event -> {
-                Platform.exit();
-                System.exit(0);
-            });
+                stage.setOnCloseRequest(event -> {
+                    Platform.exit();
+                    System.exit(0);
+                });
 
-            stage.show();
-        } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, "Error al cerrar sesión y cargar pantalla de login", e);
+                stage.show();
+            } catch (IOException e) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar sesión y cargar pantalla de login", e);
+            }
         }
     }
 
@@ -292,6 +270,7 @@ public class SedesController implements Initializable {
         ventas_columna_dniPaciente.setCellValueFactory(new PropertyValueFactory<>("DNI"));
         ventas_columna_nombrePaciente.setCellValueFactory(new PropertyValueFactory<>("fullName"));
         ventas_columna_producto.setCellValueFactory(new PropertyValueFactory<>("productName"));
+        ventas_columna_cantidad.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         ventas_columna_precioTotal.setCellValueFactory(new PropertyValueFactory<>("subtotal"));
     }
 
@@ -350,6 +329,7 @@ public class SedesController implements Initializable {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
             cargarPacientes(idLocation);
+            cargarPacientesComboBox(idLocation);
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error al abrir la ventana de agregar paciente para la sede: " + idLocation, e);
         }
@@ -373,6 +353,7 @@ public class SedesController implements Initializable {
                 stage.initModality(Modality.APPLICATION_MODAL);
                 stage.showAndWait();
                 cargarPacientes(idLocation);
+                cargarPacientesComboBox(idLocation);
             } catch (IOException e) {
                 LOGGER.log(Level.SEVERE, "Error al abrir la ventana de editar paciente para la sede: " + idLocation, e);
             }
@@ -405,7 +386,7 @@ public class SedesController implements Initializable {
             List<SaleDetailDTO> saleDetails = saleDetailService.getSalesDetailsBySaleId(sale.getIdSale());
 
             for (SaleDetailDTO saleDetail : saleDetails) {
-                salesList.add(new ViewSaleSpecialDTO(sale.getIdSale(), sale.getIdLocation(), sale.getSaleDate(), sale.getDNI(), patientService.getPatient(sale.getDNI()).getFullName(), productService.getProduct(saleDetail.getIdProduct()).getProductName(), saleDetail.getSubtotal()));
+                salesList.add(new ViewSaleDTO(sale.getIdSale(), sale.getIdLocation(), sale.getSaleDate(), sale.getDNI(), patientService.getPatient(sale.getDNI()).getFullName(), productService.getProduct(saleDetail.getIdProduct()).getProductName(), saleDetail.getQuantity(), saleDetail.getSubtotal()));
             }
         }
 
@@ -435,7 +416,7 @@ public class SedesController implements Initializable {
 
     @FXML
     private void filtrarVentas() {
-        ObservableList<ViewSaleSpecialDTO> filteredList = FXCollections.observableArrayList(salesList);
+        ObservableList<ViewSaleDTO> filteredList = FXCollections.observableArrayList(salesList);
 
         String product = ventas_filtrar_productos.getSelectionModel().getSelectedItem();
         String fullname = ventas_filtrar_pacientes.getSelectionModel().getSelectedItem();
@@ -538,9 +519,9 @@ public class SedesController implements Initializable {
 
     private void abrirVentanaSaleDetail(ViewHistoryDTO history) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/natursalas/natursalassystem/view/fxml/SaleDetailsSedes.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/natursalas/natursalassystem/view/fxml/SedeSaleDetails.fxml"));
             Parent root = fxmlLoader.load();
-            SaleDetailsSedeController controller = fxmlLoader.getController();
+            SedeSaleDetailsController controller = fxmlLoader.getController();
             controller.cargarDetallesVenta(history.getIdSale());
             Stage stage = new Stage();
             stage.setScene(new Scene(root));

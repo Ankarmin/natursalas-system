@@ -17,31 +17,11 @@ public class ProductIncreaseService {
         return productsIncreaseDAO.addProductsIncrease(newProductsIncrease);
     }
 
-    public boolean updateProductsIncrease(ProductsIncreaseDTO updatedProductsIncrease) {
-        return productsIncreaseDAO.updateProductsIncrease(updatedProductsIncrease);
-    }
-
-    public boolean deleteProductsIncrease(int idProductIncrease) {
-        return productsIncreaseDAO.deleteProductsIncrease(idProductIncrease);
-    }
-
-    public ProductsIncreaseDTO getProductsIncrease(int idProductIncrease) {
-        return productsIncreaseDAO.getProductsIncrease(idProductIncrease);
-    }
-
     public List<ProductsIncreaseDTO> getAllProductsIncreases() {
         return productsIncreaseDAO.getAllProductsIncreases();
     }
 
-    public List<ProductsIncreaseDTO> getProductIncreasesByProductId(String idProduct) {
-        return productsIncreaseDAO.getProductIncreasesByProductId(idProduct);
-    }
-
     public List<ProductsIncreaseDTO> getProductsIncreaseByLocation(String idLocation) {
         return productsIncreaseDAO.getProductsIncreaseByLocation(idLocation);
-    }
-
-    public boolean existsProductIncrease(int idProductIncrease) {
-        return productsIncreaseDAO.existsProductIncrease(idProductIncrease);
     }
 }

@@ -21,10 +21,6 @@ public class PatientService {
         return patientDAO.updatePatient(updatedPatient);
     }
 
-    public boolean deletePatient(String DNI) {
-        return patientDAO.deletePatient(DNI);
-    }
-
     public PatientDTO getPatient(String DNI) {
         return patientDAO.getPatient(DNI);
     }
@@ -35,9 +31,5 @@ public class PatientService {
 
     public List<PatientDTO> getPatientsByLocation(String idLocation) {
         return patientDAO.getPatientsByLocation(idLocation);
-    }
-
-    public boolean existsPatient(String DNI) {
-        return patientDAO.existsPatient(DNI);
     }
 }

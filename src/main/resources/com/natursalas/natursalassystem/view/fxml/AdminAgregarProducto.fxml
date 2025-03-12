@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.*?>
 <StackPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
            minWidth="-Infinity"
-           prefHeight="378.0" prefWidth="391.0" xmlns="http://javafx.com/javafx/23.0.1">
+           prefHeight="378.0" prefWidth="391.0" xmlns="http://javafx.com/javafx/23.0.1"
+           fx:controller="com.natursalas.natursalassystem.controller.AdminAgregarProductoController">
     <children>
         <AnchorPane prefHeight="200.0" prefWidth="200.0" styleClass="white-bg" stylesheets="@../css/SedeDesign.css">
             <children>
                 <Label layoutX="24.0" layoutY="24.0" styleClass="text" stylesheets="@../css/SedeDesign.css"
-                       text="Editar producto">
+                       text="Agregar producto">
                     <font>
                         <Font size="24.0"/>
                     </font>
@@ -37,17 +37,19 @@
                         <Font size="18.0"/>
                     </font>
                 </Label>
-                <Button fx:id="editarProducto_bttnEditar" layoutX="96.0" layoutY="296.0" mnemonicParsing="false"
-                        styleClass="button-general" stylesheets="@../css/SedeDesign.css" text="Editar"/>
-                <Button fx:id="editarProducto_bttnCancelar" layoutX="223.0" layoutY="296.0" mnemonicParsing="false"
-                        styleClass="button-general" stylesheets="@../css/SedeDesign.css" text="Cancelar"/>
-                <TextField fx:id="editarProducto_textFieldNombre" layoutX="142.0" layoutY="92.0" prefHeight="26.0"
+                <Button fx:id="agregarProducto_bttnEditar" layoutX="84.0" layoutY="296.0" mnemonicParsing="false"
+                        onAction="#agregarProducto" styleClass="button-general" stylesheets="@../css/SedeDesign.css"
+                        text="Agregar"/>
+                <Button fx:id="agregarProducto_bttnCancelar" layoutX="223.0" layoutY="296.0" mnemonicParsing="false"
+                        onAction="#botonCancelar" styleClass="button-general" stylesheets="@../css/SedeDesign.css"
+                        text="Cancelar"/>
+                <TextField fx:id="agregarProducto_textFieldNombre" layoutX="142.0" layoutY="92.0" prefHeight="26.0"
                            prefWidth="194.0" styleClass="text-field-1" stylesheets="@../css/SedeDesign.css"/>
-                <TextField fx:id="editarProducto_textFieldCodigo" layoutX="142.0" layoutY="134.0" prefHeight="26.0"
+                <TextField fx:id="agregarProducto_textFieldCodigo" layoutX="142.0" layoutY="134.0" prefHeight="26.0"
                            prefWidth="194.0" styleClass="text-field-1" stylesheets="@../css/SedeDesign.css"/>
-                <TextField fx:id="editarProducto_textFieldPrecio" layoutX="142.0" layoutY="226.0" prefHeight="26.0"
+                <TextField fx:id="agregarProducto_textFieldPrecio" layoutX="142.0" layoutY="226.0" prefHeight="26.0"
                            prefWidth="194.0" styleClass="text-field-1" stylesheets="@../css/SedeDesign.css"/>
-                <ComboBox fx:id="editarProducto_comboBoxCategoria" layoutX="142.0" layoutY="182.0" prefHeight="26.0"
+                <ComboBox fx:id="agregarProducto_comboBoxCategoria" layoutX="142.0" layoutY="182.0" prefHeight="26.0"
                           prefWidth="194.0" styleClass="text-field-1" stylesheets="@../css/SedeDesign.css"/>
             </children>
         </AnchorPane>

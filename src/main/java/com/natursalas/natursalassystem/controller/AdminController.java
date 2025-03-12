@@ -3,6 +3,8 @@ package com.natursalas.natursalassystem.controller;
 import com.natursalas.natursalassystem.model.dto.*;
 import com.natursalas.natursalassystem.service.*;
 import com.natursalas.natursalassystem.util.AlertMessages;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,6 +20,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
@@ -33,13 +36,16 @@ import java.util.stream.Collectors;
 
 public class AdminController implements Initializable {
     private static final Logger LOGGER = Logger.getLogger(AdminController.class.getName());
+
     private final ObservableList<PatientDTO> patientsList = FXCollections.observableArrayList();
     private final ObservableList<ViewHistoryDTO> historyList = FXCollections.observableArrayList();
-    private final ObservableList<ViewSaleSpecialDTO> salesList = FXCollections.observableArrayList();
+    private final ObservableList<ViewSaleDTO> salesList = FXCollections.observableArrayList();
+    private final ObservableList<ProductDTO> productsList = FXCollections.observableArrayList();
     private final ObservableList<ViewInventaryDTO> inventaryList = FXCollections.observableArrayList();
     private final ObservableList<ViewAccountDTO> accountList = FXCollections.observableArrayList();
     private final ObservableList<String> productosNombres = FXCollections.observableArrayList();
     private final ObservableList<String> sedesNombres = FXCollections.observableArrayList();
+
     @FXML
     private Button bttnCerrarSesion;
     @FXML
@@ -58,6 +64,30 @@ public class AdminController implements Initializable {
     private TableColumn<ViewAccountDTO, String> cuentas_columna_sede;
     @FXML
     private TableColumn<ViewAccountDTO, String> cuentas_columna_ubicacion;
+    @FXML
+    private CheckBox cuentas_crear_mostrarContrasena;
+    @FXML
+    private PasswordField cuentas_crear_pswFieldContrasena;
+    @FXML
+    private TextField cuentas_crear_txtFieldContrasena;
+    @FXML
+    private TextField cuentas_crear_txtFieldCorreo;
+    @FXML
+    private TextField cuentas_crear_txtFieldSede;
+    @FXML
+    private TextField cuentas_crear_txtFieldUbicacion;
+    @FXML
+    private CheckBox cuentas_editar_mostrarContrasena;
+    @FXML
+    private PasswordField cuentas_editar_pswFieldContrasena;
+    @FXML
+    private TextField cuentas_editar_txtFieldContrasena;
+    @FXML
+    private TextField cuentas_editar_txtFieldCorreo;
+    @FXML
+    private TextField cuentas_editar_txtFieldSede_;
+    @FXML
+    private TextField cuentas_editar_txtFieldUbicacion;
     @FXML
     private TableView<ViewAccountDTO> cuentas_tableViewCuentas;
     @FXML
@@ -93,53 +123,33 @@ public class AdminController implements Initializable {
     @FXML
     private TableColumn<ViewInventaryDTO, String> inventarios_columna_sede;
     @FXML
+    private TableColumn<ProductDTO, String> inventarios_productos_columna_categoria;
+    @FXML
+    private TableColumn<ProductDTO, String> inventarios_productos_columna_id;
+    @FXML
+    private TableColumn<ProductDTO, String> inventarios_productos_columna_nombre;
+    @FXML
+    private TableColumn<ProductDTO, Integer> inventarios_productos_columna_precio;
+    @FXML
     private TableView<ViewInventaryDTO> inventarios_tableView;
     @FXML
+    private TableView<ProductDTO> inventarios_tableView_Productos;
+    @FXML
     private Label lblFecha;
-    @FXML
-    private Label lblNombreCuenta;
-    @FXML
-    private Label lblPath;
-    @FXML
-    private Label lblPath1;
     @FXML
     private TableColumn<PatientDTO, String> pacientes_columna_apellidos;
     @FXML
     private TableColumn<PatientDTO, String> pacientes_columna_dni;
     @FXML
-    private TableColumn<PatientDTO, String> pacientes_columna_edad;
+    private TableColumn<PatientDTO, Integer> pacientes_columna_edad;
     @FXML
-    private TableColumn<PatientDTO, String> pacientes_columna_nacimiento;
+    private TableColumn<PatientDTO, Date> pacientes_columna_nacimiento;
     @FXML
     private TableColumn<PatientDTO, String> pacientes_columna_nombres;
     @FXML
     private TableColumn<PatientDTO, String> pacientes_columna_sede;
     @FXML
     private TableColumn<PatientDTO, String> pacientes_columna_telefono;
-    @FXML
-    private CheckBox cuentas_crear_mostrarContrasena;
-    @FXML
-    private PasswordField cuentas_crear_pswFieldContrasena;
-    @FXML
-    private TextField cuentas_crear_txtFieldContrasena;
-    @FXML
-    private TextField cuentas_crear_txtFieldCorreo;
-    @FXML
-    private TextField cuentas_crear_txtFieldSede;
-    @FXML
-    private TextField cuentas_crear_txtFieldUbicacion;
-    @FXML
-    private CheckBox cuentas_editar_mostrarContrasena;
-    @FXML
-    private PasswordField cuentas_editar_pswFieldContrasena;
-    @FXML
-    private TextField cuentas_editar_txtFieldContrasena;
-    @FXML
-    private TextField cuentas_editar_txtFieldCorreo;
-    @FXML
-    private TextField cuentas_editar_txtFieldSede_;
-    @FXML
-    private TextField cuentas_editar_txtFieldUbicacion;
     @FXML
     private TableColumn<ViewHistoryDTO, String> pacientes_historial_columna_diagnostico;
     @FXML
@@ -175,17 +185,19 @@ public class AdminController implements Initializable {
     @FXML
     private AnchorPane pnlInventarios;
     @FXML
-    private TableColumn<ViewSaleSpecialDTO, Integer> ventas_columna_PrecioTotal;
+    private TableColumn<ViewSaleDTO, Integer> ventas_columna_PrecioTotal;
     @FXML
-    private TableColumn<ViewSaleSpecialDTO, String> ventas_columna_producto;
+    private TableColumn<ViewSaleDTO, Integer> ventas_columna_cantidad;
     @FXML
-    private TableColumn<ViewSaleSpecialDTO, String> ventas_columna_dniPaciente;
+    private TableColumn<ViewSaleDTO, String> ventas_columna_dniPaciente;
     @FXML
-    private TableColumn<ViewSaleSpecialDTO, Timestamp> ventas_columna_fechaVenta;
+    private TableColumn<ViewSaleDTO, Timestamp> ventas_columna_fechaVenta;
     @FXML
-    private TableColumn<ViewSaleSpecialDTO, String> ventas_columna_paciente;
+    private TableColumn<ViewSaleDTO, String> ventas_columna_paciente;
     @FXML
-    private TableColumn<ViewSaleSpecialDTO, String> ventas_columna_sede;
+    private TableColumn<ViewSaleDTO, String> ventas_columna_producto;
+    @FXML
+    private TableColumn<ViewSaleDTO, String> ventas_columna_sede;
     @FXML
     private DatePicker ventas_filtrar_desdeDate;
     @FXML
@@ -195,7 +207,8 @@ public class AdminController implements Initializable {
     @FXML
     private ComboBox<String> ventas_filtrar_sede;
     @FXML
-    private TableView<ViewSaleSpecialDTO> ventas_tableViewVentas;
+    private TableView<ViewSaleDTO> ventas_tableViewVentas;
+
     private PatientService patientService;
     private SaleDetailService saleDetailService;
     private SaleService saleService;
@@ -213,12 +226,14 @@ public class AdminController implements Initializable {
         configurarColumnasPacientes();
         configurarColumnasHistorial();
         configurarColumnasVentas();
+        configurarColumnasProductos();
         configurarColumnasIncrementos();
         configurarColumnasCuentas();
 
         cargarPacientes();
         cargarVentas();
         cargarIncrementos();
+        cargarProductos();
         cargarCuentas();
 
         agregarEventoDobleClickPacientes();
@@ -254,45 +269,35 @@ public class AdminController implements Initializable {
 
     @FXML
     private void cerrarSesion() {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/natursalas/natursalassystem/view/fxml/Login.fxml"));
-            Parent root = fxmlLoader.load();
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Inicio de Sesión");
-            Stage currentStage = (Stage) bttnCerrarSesion.getScene().getWindow();
-            currentStage.close();
+        if (AlertMessages.mostrarConfirmacion("¿Está seguro de que desea cerrar sesión?")) {
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/natursalas/natursalassystem/view/fxml/Login.fxml"));
+                Parent root = fxmlLoader.load();
+                Stage stage = new Stage();
+                stage.setScene(new Scene(root));
+                stage.setTitle("Inicio de Sesión");
+                Stage currentStage = (Stage) bttnCerrarSesion.getScene().getWindow();
+                currentStage.close();
 
-            stage.setOnCloseRequest(event -> {
-                Platform.exit();
-                System.exit(0);
-            });
+                stage.setOnCloseRequest(event -> {
+                    Platform.exit();
+                    System.exit(0);
+                });
 
-            stage.show();
-        } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, "Error al cerrar sesión y cargar pantalla de login", e);
+                stage.show();
+            } catch (IOException e) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar sesión y cargar pantalla de login", e);
+            }
         }
     }
 
     private void iniciarReloj() {
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a");
-        Thread relojThread = new Thread(() -> {
-            while (!Thread.currentThread().isInterrupted()) {
-                try {
-                    Thread.sleep(1000);
-                    Platform.runLater(() -> lblFecha.setText(format.format(new Date())));
-                } catch (InterruptedException e) {
-                    LOGGER.log(Level.WARNING, "El hilo del reloj fue interrumpido", e);
-                    Thread.currentThread().interrupt();
-                    break;
-                } catch (Exception e) {
-                    LOGGER.log(Level.SEVERE, "Error en el reloj", e);
-                }
-            }
-        });
 
-        relojThread.setDaemon(true);
-        relojThread.start();
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> lblFecha.setText(format.format(new Date()))));
+
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
     }
 
     @FXML
@@ -341,7 +346,15 @@ public class AdminController implements Initializable {
         ventas_columna_dniPaciente.setCellValueFactory(new PropertyValueFactory<>("DNI"));
         ventas_columna_paciente.setCellValueFactory(new PropertyValueFactory<>("fullName"));
         ventas_columna_producto.setCellValueFactory(new PropertyValueFactory<>("productName"));
+        ventas_columna_cantidad.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         ventas_columna_PrecioTotal.setCellValueFactory(new PropertyValueFactory<>("subtotal"));
+    }
+
+    private void configurarColumnasProductos() {
+        inventarios_productos_columna_id.setCellValueFactory(new PropertyValueFactory<>("idProduct"));
+        inventarios_productos_columna_categoria.setCellValueFactory(new PropertyValueFactory<>("category"));
+        inventarios_productos_columna_nombre.setCellValueFactory(new PropertyValueFactory<>("productName"));
+        inventarios_productos_columna_precio.setCellValueFactory(new PropertyValueFactory<>("price"));
     }
 
     private void configurarColumnasIncrementos() {
@@ -403,7 +416,7 @@ public class AdminController implements Initializable {
             List<SaleDetailDTO> saleDetails = saleDetailService.getSalesDetailsBySaleId(sale.getIdSale());
 
             for (SaleDetailDTO saleDetail : saleDetails) {
-                salesList.add(new ViewSaleSpecialDTO(sale.getIdSale(), sale.getIdLocation(), sale.getSaleDate(), sale.getDNI(), patientService.getPatient(sale.getDNI()).getFullName(), productService.getProduct(saleDetail.getIdProduct()).getProductName(), saleDetail.getSubtotal()));
+                salesList.add(new ViewSaleDTO(sale.getIdSale(), sale.getIdLocation(), sale.getSaleDate(), sale.getDNI(), patientService.getPatient(sale.getDNI()).getFullName(), productService.getProduct(saleDetail.getIdProduct()).getProductName(), saleDetail.getQuantity(), saleDetail.getSubtotal()));
             }
         }
 
@@ -413,7 +426,7 @@ public class AdminController implements Initializable {
 
     @FXML
     private void filtrarVentas() {
-        ObservableList<ViewSaleSpecialDTO> filteredList = FXCollections.observableArrayList(salesList);
+        ObservableList<ViewSaleDTO> filteredList = FXCollections.observableArrayList(salesList);
 
         String product = ventas_filtrar_productos.getSelectionModel().getSelectedItem();
         String location = ventas_filtrar_sede.getSelectionModel().getSelectedItem();
@@ -438,6 +451,18 @@ public class AdminController implements Initializable {
 
         ventas_tableViewVentas.setItems(filteredList);
         ventas_tableViewVentas.refresh();
+    }
+
+    private void cargarProductos() {
+        productsList.clear();
+        List<ProductDTO> products = productService.getAllProducts();
+
+        if (products != null && !products.isEmpty()) {
+            productsList.addAll(products);
+        }
+
+        inventarios_tableView_Productos.setItems(productsList);
+        inventarios_tableView_Productos.refresh();
     }
 
     private void cargarIncrementos() {
@@ -517,10 +542,10 @@ public class AdminController implements Initializable {
 
     private void abrirVentanaSaleDetail(ViewHistoryDTO history) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/natursalas/natursalassystem/view/fxml/SaleDetailsAdmin.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/natursalas/natursalassystem/view/fxml/AdminSaleDetails.fxml"));
             Parent root = fxmlLoader.load();
 
-            SaleDetailsAdminController controller = fxmlLoader.getController();
+            AdminSaleDetailsController controller = fxmlLoader.getController();
             controller.cargarDetallesVenta(history.getIdSale());
 
             Stage stage = new Stage();
@@ -531,6 +556,54 @@ public class AdminController implements Initializable {
             stage.showAndWait();
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error al abrir ventana de detalles de venta", e);
+        }
+    }
+
+    @FXML
+    private void agregarProducto() {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/natursalas/natursalassystem/view/fxml/AdminAgregarProducto.fxml"));
+            Parent root = fxmlLoader.load();
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Agregar Producto");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+
+            cargarProductos();
+        } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, "Error al abrir ventana de agregar producto: {0}", e.getMessage());
+            AlertMessages.mostrarAlerta("Ocurrió un error al abrir la ventana para agregar un producto.", Alert.AlertType.ERROR);
+        }
+    }
+
+    @FXML
+    private void editarProducto() {
+        ProductDTO product = inventarios_tableView_Productos.getSelectionModel().getSelectedItem();
+
+        if (product == null) {
+            AlertMessages.mostrarAlerta("Por favor, seleccione un producto de la tabla para poder editarlo.", Alert.AlertType.WARNING);
+            return;
+        }
+
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/natursalas/natursalassystem/view/fxml/AdminEditarProducto.fxml"));
+            Parent root = fxmlLoader.load();
+
+            AdminEditarProductoController controller = fxmlLoader.getController();
+            controller.setProductDTO(product);
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Editar Producto");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+
+            cargarProductos();
+        } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, "Error al abrir ventana de editar producto: {0}", e.getMessage());
+            AlertMessages.mostrarAlerta("Ocurrió un error al abrir la ventana para editar un producto.", Alert.AlertType.ERROR);
         }
     }
 

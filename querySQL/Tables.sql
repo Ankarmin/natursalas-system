@@ -26,7 +26,6 @@ CREATE TABLE patient (
     phoneNumber VARCHAR(9) NOT NULL CHECK (phoneNumber REGEXP '^[0-9]{9}$'),
     dateOfEntry TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     dateOfBirth DATE NOT NULL,
-    district VARCHAR(50) NOT NULL,
     idLocation VARCHAR(50) NOT NULL,
     FOREIGN KEY (idLocation) REFERENCES location(idLocation)
 );

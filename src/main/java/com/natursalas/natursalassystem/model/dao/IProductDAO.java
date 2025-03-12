@@ -9,8 +9,6 @@ public interface IProductDAO {
 
     boolean updateProduct(ProductDTO updatedProduct);
 
-    boolean deleteProduct(String idProduct);
-
     ProductDTO getProduct(String idProduct);
 
     List<ProductDTO> getAllProducts();

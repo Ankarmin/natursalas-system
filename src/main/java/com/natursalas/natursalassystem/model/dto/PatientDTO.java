@@ -11,13 +11,12 @@ public class PatientDTO {
     private String phoneNumber;
     private Timestamp dateOfEntry;
     private Date dateOfBirth;
-    private String district;
     private String idLocation;
 
     public PatientDTO() {
     }
 
-    public PatientDTO(String DNI, String firstName, String lastName, int age, String phoneNumber, Timestamp dateOfEntry, Date dateOfBirth, String district, String idLocation) {
+    public PatientDTO(String DNI, String firstName, String lastName, int age, String phoneNumber, Timestamp dateOfEntry, Date dateOfBirth, String idLocation) {
         this.DNI = DNI;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -25,7 +24,6 @@ public class PatientDTO {
         this.phoneNumber = phoneNumber;
         this.dateOfEntry = dateOfEntry;
         this.dateOfBirth = dateOfBirth;
-        this.district = district;
         this.idLocation = idLocation;
     }
 
@@ -83,14 +81,6 @@ public class PatientDTO {
 
     public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
-    }
-
-    public String getDistrict() {
-        return district;
-    }
-
-    public void setDistrict(String district) {
-        this.district = district;
     }
 
     public String getIdLocation() {

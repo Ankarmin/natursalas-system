@@ -9,8 +9,6 @@ public interface ILocationDAO {
 
     boolean updateLocation(LocationDTO updatedLocation);
 
-    boolean deleteLocation(String idLocation);
-
     LocationDTO getLocation(String idLocation);
 
     List<LocationDTO> getAllLocations();

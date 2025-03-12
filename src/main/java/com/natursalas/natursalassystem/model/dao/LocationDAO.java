@@ -43,22 +43,6 @@ public class LocationDAO implements ILocationDAO {
     }
 
     @Override
-    public boolean deleteLocation(String locationId) {
-        if (!exists(locationId)) {
-            LOGGER.log(Level.WARNING, "Attempted to delete non-existing location: {0}", locationId);
-            return false;
-        }
-        String query = "DELETE FROM location WHERE idLocation = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setString(1, locationId);
-            return stmt.executeUpdate() > 0;
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error deleting location", e);
-            return false;
-        }
-    }
-
-    @Override
     public LocationDTO getLocation(String locationId) {
         String query = "SELECT idLocation, address FROM location WHERE idLocation = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {

@@ -21,19 +21,11 @@ public class LocationService {
         return locationDAO.updateLocation(updatedLocation);
     }
 
-    public boolean deleteLocation(String locationId) {
-        return locationDAO.deleteLocation(locationId);
-    }
-
     public LocationDTO getLocation(String locationId) {
         return locationDAO.getLocation(locationId);
     }
 
     public List<LocationDTO> getAllLocations() {
         return locationDAO.getAllLocations();
-    }
-
-    public boolean locationExists(String locationId) {
-        return locationDAO.exists(locationId);
     }
 }

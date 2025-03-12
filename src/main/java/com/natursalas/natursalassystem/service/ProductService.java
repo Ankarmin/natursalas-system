@@ -21,10 +21,6 @@ public class ProductService {
         return productDAO.updateProduct(updatedProduct);
     }
 
-    public boolean deleteProduct(String productId) {
-        return productDAO.deleteProduct(productId);
-    }
-
     public ProductDTO getProduct(String productId) {
         return productDAO.getProduct(productId);
     }

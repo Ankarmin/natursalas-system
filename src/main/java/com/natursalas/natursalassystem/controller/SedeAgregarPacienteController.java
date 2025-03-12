@@ -21,14 +21,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class SedeAgregarPacienteController implements Initializable {
-
     private static final Logger LOGGER = Logger.getLogger(SedeAgregarPacienteController.class.getName());
+
     @FXML
     private TextField agregarPaciente_apellidos;
     @FXML
     private Button agregarPaciente_bttnCancelar;
-    @FXML
-    private Button agregarPaciente_bttnConfirmar;
     @FXML
     private TextField agregarPaciente_dni;
     @FXML
@@ -39,6 +37,7 @@ public class SedeAgregarPacienteController implements Initializable {
     private TextField agregarPaciente_nombre;
     @FXML
     private TextField agregarPaciente_telefono;
+
     private String idLocation;
     private PatientService patientService;
 
@@ -58,10 +57,8 @@ public class SedeAgregarPacienteController implements Initializable {
 
     @FXML
     private void botonCancelar() {
-        boolean confirmar = AlertMessages.mostrarConfirmacion("¿Está seguro que desea cancelar? Los datos ingresados se perderán.");
-        if (confirmar) {
-            Stage currentStage = (Stage) agregarPaciente_bttnCancelar.getScene().getWindow();
-            currentStage.close();
+        if (AlertMessages.mostrarConfirmacion("¿Está seguro que desea cancelar? Los datos ingresados se perderán.")) {
+            cerrarVentana();
         }
     }
 
@@ -69,7 +66,6 @@ public class SedeAgregarPacienteController implements Initializable {
     private void agregarPaciente() {
         try {
             if (agregarPaciente_dni.getText().isEmpty() || agregarPaciente_nombre.getText().isEmpty() || agregarPaciente_apellidos.getText().isEmpty() || agregarPaciente_edad.getText().isEmpty() || agregarPaciente_telefono.getText().isEmpty() || agregarPaciente_fechaNacimiento.getValue() == null) {
-
                 AlertMessages.mostrarAlerta("Todos los campos son obligatorios.", Alert.AlertType.WARNING);
                 return;
             }
@@ -106,13 +102,11 @@ public class SedeAgregarPacienteController implements Initializable {
             }
 
             Timestamp dateOfEntry = new Timestamp(System.currentTimeMillis());
-            PatientDTO newPatient = new PatientDTO(DNI, agregarPaciente_nombre.getText().trim(), agregarPaciente_apellidos.getText().trim(), age, phoneNumber, dateOfEntry, dateOfBirth, "", this.idLocation);
+            PatientDTO newPatient = new PatientDTO(DNI, agregarPaciente_nombre.getText().trim(), agregarPaciente_apellidos.getText().trim(), age, phoneNumber, dateOfEntry, dateOfBirth, this.idLocation);
 
             if (patientService.addPatient(newPatient)) {
                 AlertMessages.mostrarAlerta("Paciente agregado exitosamente.", Alert.AlertType.INFORMATION);
-
-                Stage currentStage = (Stage) agregarPaciente_bttnConfirmar.getScene().getWindow();
-                currentStage.close();
+                cerrarVentana();
             } else {
                 AlertMessages.mostrarAlerta("No se pudo agregar el paciente. Verifique los datos.", Alert.AlertType.ERROR);
             }
@@ -121,5 +115,10 @@ public class SedeAgregarPacienteController implements Initializable {
             LOGGER.log(Level.SEVERE, "Error al agregar paciente", e);
             AlertMessages.mostrarAlerta("Ocurrió un error inesperado.", Alert.AlertType.ERROR);
         }
+    }
+
+    private void cerrarVentana() {
+        Stage currentStage = (Stage) agregarPaciente_bttnCancelar.getScene().getWindow();
+        currentStage.close();
     }
 }

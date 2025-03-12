@@ -57,23 +57,6 @@ public class ProductDAO implements IProductDAO {
     }
 
     @Override
-    public boolean deleteProduct(String productId) {
-        if (!existsProduct(productId)) {
-            LOGGER.log(Level.WARNING, "Attempted to delete non-existing product: {0}", productId);
-            return false;
-        }
-
-        String query = "DELETE FROM product WHERE idProduct = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setString(1, productId);
-            return stmt.executeUpdate() > 0;
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error deleting product", e);
-            return false;
-        }
-    }
-
-    @Override
     public ProductDTO getProduct(String productId) {
         String query = "SELECT * FROM product WHERE idProduct = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {

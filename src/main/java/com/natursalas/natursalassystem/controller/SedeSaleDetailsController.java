@@ -2,7 +2,7 @@ package com.natursalas.natursalassystem.controller;
 
 import com.natursalas.natursalassystem.model.dto.ProductsForLocationDTO;
 import com.natursalas.natursalassystem.model.dto.SaleDetailDTO;
-import com.natursalas.natursalassystem.model.dto.ViewSaleDetailSpecialDTO;
+import com.natursalas.natursalassystem.model.dto.ViewSaleDetailDTO;
 import com.natursalas.natursalassystem.service.DatabaseConnection;
 import com.natursalas.natursalassystem.service.ProductsForLocationService;
 import com.natursalas.natursalassystem.service.SaleDetailService;
@@ -19,19 +19,20 @@ import java.sql.Connection;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class SaleDetailsSedeController implements Initializable {
+public class SedeSaleDetailsController implements Initializable {
+    private final ObservableList<ViewSaleDetailDTO> observableList = FXCollections.observableArrayList();
 
-    private final ObservableList<ViewSaleDetailSpecialDTO> observableList = FXCollections.observableArrayList();
     @FXML
-    private TableColumn<ViewSaleDetailSpecialDTO, Integer> saleDetails_columna_cantidadVendida;
+    private TableColumn<ViewSaleDetailDTO, Integer> saleDetails_columna_cantidadVendida;
     @FXML
-    private TableColumn<ViewSaleDetailSpecialDTO, Integer> saleDetails_columna_precioTotal;
+    private TableColumn<ViewSaleDetailDTO, Integer> saleDetails_columna_precioTotal;
     @FXML
-    private TableColumn<ViewSaleDetailSpecialDTO, Integer> saleDetails_columna_precioUnitario;
+    private TableColumn<ViewSaleDetailDTO, Integer> saleDetails_columna_precioUnitario;
     @FXML
-    private TableColumn<ViewSaleDetailSpecialDTO, String> saleDetails_columna_producto;
+    private TableColumn<ViewSaleDetailDTO, String> saleDetails_columna_producto;
     @FXML
-    private TableView<ViewSaleDetailSpecialDTO> saleDetails_tableViewDetalles;
+    private TableView<ViewSaleDetailDTO> saleDetails_tableViewDetalles;
+
     private SaleDetailService saleDetailService;
     private ProductsForLocationService productsForLocationService;
 
@@ -60,7 +61,7 @@ public class SaleDetailsSedeController implements Initializable {
         for (SaleDetailDTO saleDetail : saleDetails) {
             ProductsForLocationDTO product = productsForLocationService.getProductInLocation(saleDetail.getIdProduct(), saleDetail.getIdLocation());
             if (product != null) {
-                observableList.add(new ViewSaleDetailSpecialDTO(saleDetail.getIdLocation(), product.getProductName(), saleDetail.getPrice(), saleDetail.getQuantity(), saleDetail.getSubtotal()));
+                observableList.add(new ViewSaleDetailDTO(saleDetail.getIdLocation(), product.getProductName(), saleDetail.getPrice(), saleDetail.getQuantity(), saleDetail.getSubtotal()));
             }
         }
 

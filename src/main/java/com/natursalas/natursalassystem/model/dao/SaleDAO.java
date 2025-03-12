@@ -1,7 +1,6 @@
 package com.natursalas.natursalassystem.model.dao;
 
 import com.natursalas.natursalassystem.model.dto.SaleDTO;
-import com.natursalas.natursalassystem.model.dto.SaleDetailDTO;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -15,72 +14,6 @@ public class SaleDAO implements ISaleDAO {
 
     public SaleDAO(Connection connection) {
         this.connection = connection;
-    }
-
-    @Override
-    public boolean addSale(SaleDTO newSale) {
-        String query = "INSERT INTO sale (idSale, DNI, diagnosis, category, idLocation, subtotal) VALUES (?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setString(1, newSale.getIdSale());
-            stmt.setString(2, newSale.getDNI());
-            stmt.setString(3, newSale.getDiagnosis());
-            stmt.setString(4, newSale.getCategory());
-            stmt.setString(5, newSale.getIdLocation());
-            stmt.setInt(6, newSale.getSubtotal());
-            return stmt.executeUpdate() > 0;
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error adding sale", e);
-            return false;
-        }
-    }
-
-    public boolean addSaleWithDetails(SaleDTO sale, List<SaleDetailDTO> details) {
-        String saleQuery = "INSERT INTO sale (idSale, DNI, diagnosis, category, idLocation, subtotal) VALUES (?, ?, ?, ?, ?, ?)";
-        String detailQuery = "INSERT INTO salesDetail (idSale, idProduct, idLocation, quantity, price) VALUES (?, ?, ?, ?, ?)";
-
-        try {
-            connection.setAutoCommit(false);
-
-            try (PreparedStatement saleStmt = connection.prepareStatement(saleQuery); PreparedStatement detailStmt = connection.prepareStatement(detailQuery)) {
-
-                // Insertar venta
-                saleStmt.setString(1, sale.getIdSale());
-                saleStmt.setString(2, sale.getDNI());
-                saleStmt.setString(3, sale.getDiagnosis());
-                saleStmt.setString(4, sale.getCategory());
-                saleStmt.setString(5, sale.getIdLocation());
-                saleStmt.setInt(6, sale.getSubtotal());
-                saleStmt.executeUpdate();
-
-                // Insertar detalles de venta
-                for (SaleDetailDTO detail : details) {
-                    detailStmt.setString(1, detail.getIdSale());
-                    detailStmt.setString(2, detail.getIdProduct());
-                    detailStmt.setString(3, detail.getIdLocation());
-                    detailStmt.setInt(4, detail.getQuantity());
-                    detailStmt.setInt(5, detail.getPrice());
-                    detailStmt.addBatch();
-                }
-                detailStmt.executeBatch();
-
-                connection.commit();
-                return true;
-            }
-        } catch (SQLException e) {
-            try {
-                connection.rollback();
-            } catch (SQLException ex) {
-                LOGGER.log(Level.SEVERE, "Rollback failed", ex);
-            }
-            LOGGER.log(Level.SEVERE, "Error adding sale with details", e);
-            return false;
-        } finally {
-            try {
-                connection.setAutoCommit(true);
-            } catch (SQLException e) {
-                LOGGER.log(Level.SEVERE, "Failed to reset auto-commit", e);
-            }
-        }
     }
 
     @Override
@@ -106,23 +39,6 @@ public class SaleDAO implements ISaleDAO {
     }
 
     @Override
-    public boolean deleteSale(String idSale) {
-        if (!existsSale(idSale)) {
-            LOGGER.log(Level.WARNING, "Attempted to delete non-existing sale: {0}", idSale);
-            return false;
-        }
-
-        String query = "DELETE FROM sale WHERE idSale = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setString(1, idSale);
-            return stmt.executeUpdate() > 0;
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error deleting sale", e);
-            return false;
-        }
-    }
-
-    @Override
     public List<SaleDTO> getAllSales() {
         List<SaleDTO> salesList = new ArrayList<>();
         String query = "SELECT * FROM sale ORDER BY saleDate DESC";
@@ -136,21 +52,6 @@ public class SaleDAO implements ISaleDAO {
             LOGGER.log(Level.SEVERE, "Error retrieving all sales", e);
         }
         return salesList;
-    }
-
-    @Override
-    public boolean updateSaleInfo(String idSale, String dni, String diagnosis, String category) {
-        String query = "UPDATE sale SET DNI = ?, diagnosis = ?, category = ? WHERE idSale = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setString(1, dni);
-            stmt.setString(2, diagnosis);
-            stmt.setString(3, category);
-            stmt.setString(4, idSale);
-            return stmt.executeUpdate() > 0;
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error updating sale info", e);
-            return false;
-        }
     }
 
     @Override
@@ -180,15 +81,7 @@ public class SaleDAO implements ISaleDAO {
             stmt.setString(1, idLocation);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    salesList.add(new SaleDTO(
-                            rs.getString("idSale"),
-                            rs.getString("DNI"),
-                            rs.getString("diagnosis"),
-                            rs.getString("category"),
-                            rs.getTimestamp("saleDate"),
-                            rs.getString("idLocation"),
-                            rs.getInt("subtotal")
-                    ));
+                    salesList.add(new SaleDTO(rs.getString("idSale"), rs.getString("DNI"), rs.getString("diagnosis"), rs.getString("category"), rs.getTimestamp("saleDate"), rs.getString("idLocation"), rs.getInt("subtotal")));
                 }
             }
         } catch (SQLException e) {

@@ -22,6 +22,7 @@ import java.util.logging.Logger;
 
 public class LoginController implements Initializable {
     private static final Logger LOGGER = Logger.getLogger(LoginController.class.getName());
+
     @FXML
     private Button bttnIngresar;
     @FXML
@@ -32,6 +33,7 @@ public class LoginController implements Initializable {
     private TextField txtMostrarContrasena;
     @FXML
     private TextField txtNombreUsuario;
+
     private UserService userService;
 
     @Override
