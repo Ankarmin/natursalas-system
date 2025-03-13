@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class AdminInfoDAO {
+public class AdminInfoDAO implements IAdminInfoDAO {
     private static final Logger LOGGER = Logger.getLogger(AdminInfoDAO.class.getName());
     private final Connection connection;
 
@@ -20,6 +20,7 @@ public class AdminInfoDAO {
         this.connection = connection;
     }
 
+    @Override
     public AdminInfoDTO getAdminInfo() {
         String bestSellingLocation = getBestSellingLocation();
         int productsSoldToday = executeSingleIntQuery("""

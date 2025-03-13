@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class SedeInfoDAO {
+public class SedeInfoDAO implements ISedeInfoDAO {
     private static final Logger LOGGER = Logger.getLogger(SedeInfoDAO.class.getName());
     private final Connection connection;
 
@@ -20,6 +20,7 @@ public class SedeInfoDAO {
         this.connection = connection;
     }
 
+    @Override
     public SedeInfoDTO getSedeInfo(String idLocation) {
         String bestSellingProduct = getBestSellingProduct(idLocation);
         int productsSoldToday = getProductsSoldToday(idLocation);
