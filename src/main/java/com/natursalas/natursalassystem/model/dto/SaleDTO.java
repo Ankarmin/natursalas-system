@@ -84,14 +84,14 @@ public class SaleDTO {
     @Override
     public String toString() {
         return "SaleDTO{" +
-                "idSale='" + idSale + '\'' +
-                ", DNI='" + DNI + '\'' +
-                ", diagnosis='" + diagnosis + '\'' +
-                ", category='" + category + '\'' +
-                ", saleDate=" + saleDate +
-                ", idLocation='" + idLocation + '\'' +
-                ", subtotal=" + subtotal +
-                '}';
+               "idSale='" + idSale + '\'' +
+               ", DNI='" + DNI + '\'' +
+               ", diagnosis='" + diagnosis + '\'' +
+               ", category='" + category + '\'' +
+               ", saleDate=" + saleDate +
+               ", idLocation='" + idLocation + '\'' +
+               ", subtotal=" + subtotal +
+               '}';
     }
 
     @Override

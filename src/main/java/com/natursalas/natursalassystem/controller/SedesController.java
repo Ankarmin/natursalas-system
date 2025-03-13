@@ -43,6 +43,7 @@ public class SedesController implements Initializable {
     private final ObservableList<String> productsNames = FXCollections.observableArrayList();
     private final ObservableList<ViewInventaryDTO> incrementsList = FXCollections.observableArrayList();
     private final ObservableList<ProductsForLocationDTO> productsForLocationList = FXCollections.observableArrayList();
+    private final ObservableList<PatientDTO> patientsListInfo = FXCollections.observableArrayList();
     @FXML
     private Button bttnInformacion;
     @FXML
@@ -54,13 +55,13 @@ public class SedesController implements Initializable {
     @FXML
     private Label informacion_blPacientesNuevos;
     @FXML
-    private TableColumn<?, ?> informacion_columna_apellidosPaciente;
+    private TableColumn<PatientDTO, String> informacion_columna_apellidosPaciente;
     @FXML
-    private TableColumn<?, ?> informacion_columna_dni;
+    private TableColumn<PatientDTO, String> informacion_columna_dni;
     @FXML
-    private TableColumn<?, ?> informacion_columna_nombrePaciente;
+    private TableColumn<PatientDTO, String> informacion_columna_nombrePaciente;
     @FXML
-    private TableColumn<?, ?> informacion_columna_numeroPaciente;
+    private TableColumn<PatientDTO, String> informacion_columna_numeroPaciente;
     @FXML
     private Label informacion_lblPacientesAtendidos;
     @FXML
@@ -68,7 +69,7 @@ public class SedesController implements Initializable {
     @FXML
     private Label informacion_lblProductosVendidos;
     @FXML
-    private TableView<?> informacion_tableViewClientesAtendidos;
+    private TableView<PatientDTO> informacion_tableViewClientesAtendidos;
     @FXML
     private TableColumn<ProductsForLocationDTO, String> inventarios_columna_cantidad;
     @FXML
@@ -169,12 +170,14 @@ public class SedesController implements Initializable {
     private ProductsForLocationService productsForLocationService;
     private ProductIncreaseService productIncreaseService;
     private ProductService productService;
+    private SedeInfoService sedeInfoService;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         configurarBaseDatos();
         iniciarReloj();
 
+        configurarColumnasInformacion();
         configurarColumnasPacientes();
         configurarColumnasHistorial();
         configurarColumnasVentas();
@@ -197,6 +200,7 @@ public class SedesController implements Initializable {
         productIncreaseService = new ProductIncreaseService(connection);
         productsForLocationService = new ProductsForLocationService(connection);
         productService = new ProductService(connection);
+        sedeInfoService = new SedeInfoService(connection);
     }
 
     public void setIdLocation(String idLocation) {
@@ -207,6 +211,7 @@ public class SedesController implements Initializable {
         cargarPacientesComboBox(idLocation);
         cargarProductos(idLocation);
         cargarIncrementos(idLocation);
+        cargarInformacion(idLocation);
     }
 
     private void iniciarReloj() {
@@ -250,6 +255,18 @@ public class SedesController implements Initializable {
         }
     }
 
+    private void cargarInformacion(String idLocation) {
+        patientsListInfo.clear();
+        SedeInfoDTO sedeInfo = sedeInfoService.getSedeInfo(idLocation);
+        informacion_lblProductoMasVendido.setText(sedeInfo.getBestSellingProduct());
+        informacion_lblProductosVendidos.setText(String.valueOf(sedeInfo.getProductsSoldToday()));
+        informacion_lblPacientesAtendidos.setText(String.valueOf(sedeInfo.getPatientsAttendedToday()));
+        informacion_blPacientesNuevos.setText(String.valueOf(sedeInfo.getNewPatientsToday()));
+        patientsListInfo.addAll(sedeInfo.getPatientsAttendedTodayList());
+        informacion_tableViewClientesAtendidos.setItems(patientsListInfo);
+        informacion_tableViewClientesAtendidos.refresh();
+    }
+
     private void configurarColumnasPacientes() {
         pacientes_columna_dni.setCellValueFactory(new PropertyValueFactory<>("DNI"));
         pacientes_columna_nombres.setCellValueFactory(new PropertyValueFactory<>("firstName"));
@@ -288,6 +305,13 @@ public class SedesController implements Initializable {
         productos_columna_producto.setCellValueFactory(new PropertyValueFactory<>("productName"));
         productos_columna_categoria.setCellValueFactory(new PropertyValueFactory<>("category"));
         productos_columna_cantidadAumentada.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+    }
+
+    private void configurarColumnasInformacion() {
+        informacion_columna_dni.setCellValueFactory(new PropertyValueFactory<>("DNI"));
+        informacion_columna_nombrePaciente.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+        informacion_columna_apellidosPaciente.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        informacion_columna_numeroPaciente.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
     }
 
     private void cargarPacientes(String idLocation) {
@@ -330,6 +354,7 @@ public class SedesController implements Initializable {
             stage.showAndWait();
             cargarPacientes(idLocation);
             cargarPacientesComboBox(idLocation);
+            cargarInformacion(idLocation);
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error al abrir la ventana de agregar paciente para la sede: " + idLocation, e);
         }
@@ -354,6 +379,7 @@ public class SedesController implements Initializable {
                 stage.showAndWait();
                 cargarPacientes(idLocation);
                 cargarPacientesComboBox(idLocation);
+                cargarInformacion(idLocation);
             } catch (IOException e) {
                 LOGGER.log(Level.SEVERE, "Error al abrir la ventana de editar paciente para la sede: " + idLocation, e);
             }
@@ -410,6 +436,7 @@ public class SedesController implements Initializable {
             stage.showAndWait();
             cargarVentas(idLocation);
             cargarProductos(idLocation);
+            cargarInformacion(idLocation);
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error al abrir la ventana de agregar venta para la sede: " + idLocation, e);
         }

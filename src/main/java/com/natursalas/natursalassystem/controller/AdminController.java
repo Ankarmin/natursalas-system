@@ -45,6 +45,7 @@ public class AdminController implements Initializable {
     private final ObservableList<ViewAccountDTO> accountList = FXCollections.observableArrayList();
     private final ObservableList<String> productosNombres = FXCollections.observableArrayList();
     private final ObservableList<String> sedesNombres = FXCollections.observableArrayList();
+    private final ObservableList<ViewAdminInfoDTO> adminInfoList = FXCollections.observableArrayList();
 
     @FXML
     private Button bttnCerrarSesion;
@@ -93,15 +94,15 @@ public class AdminController implements Initializable {
     @FXML
     private Label informacion_blPacientesNuevos;
     @FXML
-    private TableColumn<?, ?> informacion_columna_pacientesAtendidos;
+    private TableColumn<ViewAdminInfoDTO, Integer> informacion_columna_pacientesAtendidos;
     @FXML
-    private TableColumn<?, ?> informacion_columna_pacientesNuevos;
+    private TableColumn<ViewAdminInfoDTO, Integer> informacion_columna_pacientesNuevos;
     @FXML
-    private TableColumn<?, ?> informacion_columna_productoMasVendido;
+    private TableColumn<ViewAdminInfoDTO, String> informacion_columna_productoMasVendido;
     @FXML
-    private TableColumn<?, ?> informacion_columna_productosVendidos;
+    private TableColumn<ViewAdminInfoDTO, Integer> informacion_columna_productosVendidos;
     @FXML
-    private TableColumn<?, ?> informacion_columna_sede;
+    private TableColumn<ViewAdminInfoDTO, String> informacion_columna_sede;
     @FXML
     private Label informacion_lblPacientesAtendidos;
     @FXML
@@ -109,7 +110,7 @@ public class AdminController implements Initializable {
     @FXML
     private Label informacion_lblSedeMasVentas;
     @FXML
-    private TableView<?> informacion_tableViewVentasPorSede;
+    private TableView<ViewAdminInfoDTO> informacion_tableViewVentasPorSede;
     @FXML
     private TableColumn<ViewInventaryDTO, Integer> inventarios_columna_cantidadAumentada;
     @FXML
@@ -217,12 +218,14 @@ public class AdminController implements Initializable {
     private ProductService productService;
     private LocationService locationService;
     private UserService userService;
+    private AdminInfoService adminInfoService;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         configurarBaseDatos();
         iniciarReloj();
 
+        configurarColumnasInformacion();
         configurarColumnasPacientes();
         configurarColumnasHistorial();
         configurarColumnasVentas();
@@ -230,6 +233,7 @@ public class AdminController implements Initializable {
         configurarColumnasIncrementos();
         configurarColumnasCuentas();
 
+        cargarInformacion();
         cargarPacientes();
         cargarVentas();
         cargarIncrementos();
@@ -256,6 +260,7 @@ public class AdminController implements Initializable {
         locationService = new LocationService(connection);
         userService = new UserService(connection);
         productService = new ProductService(connection);
+        adminInfoService = new AdminInfoService(connection);
     }
 
     @FXML
@@ -323,6 +328,14 @@ public class AdminController implements Initializable {
         }
     }
 
+    private void configurarColumnasInformacion() {
+        informacion_columna_sede.setCellValueFactory(new PropertyValueFactory<>("idLocation"));
+        informacion_columna_productosVendidos.setCellValueFactory(new PropertyValueFactory<>("productsSoldToday"));
+        informacion_columna_pacientesAtendidos.setCellValueFactory(new PropertyValueFactory<>("patientsAttendedToday"));
+        informacion_columna_pacientesNuevos.setCellValueFactory(new PropertyValueFactory<>("newPatientsToday"));
+        informacion_columna_productoMasVendido.setCellValueFactory(new PropertyValueFactory<>("bestSellingProduct"));
+    }
+
     private void configurarColumnasPacientes() {
         pacientes_columna_sede.setCellValueFactory(new PropertyValueFactory<>("idLocation"));
         pacientes_columna_dni.setCellValueFactory(new PropertyValueFactory<>("DNI"));
@@ -370,6 +383,18 @@ public class AdminController implements Initializable {
         cuentas_columna_sede.setCellValueFactory(new PropertyValueFactory<>("idLocation"));
         cuentas_columna_ubicacion.setCellValueFactory(new PropertyValueFactory<>("address"));
         cuentas_columna_correo.setCellValueFactory(new PropertyValueFactory<>("email"));
+    }
+
+    private void cargarInformacion() {
+        adminInfoList.clear();
+        AdminInfoDTO adminInfo = adminInfoService.getAdminInfo();
+        informacion_lblSedeMasVentas.setText(adminInfo.getBestSellingLocation());
+        informacion_lblProductosVendidos.setText(String.valueOf(adminInfo.getProductsSoldToday()));
+        informacion_lblPacientesAtendidos.setText(String.valueOf(adminInfo.getPatientsAttendedToday()));
+        informacion_blPacientesNuevos.setText(String.valueOf(adminInfo.getNewPatientsToday()));
+        adminInfoList.addAll(adminInfo.getAdminInfoList());
+        informacion_tableViewVentasPorSede.setItems(adminInfoList);
+        informacion_tableViewVentasPorSede.refresh();
     }
 
     private void cargarPacientes() {
