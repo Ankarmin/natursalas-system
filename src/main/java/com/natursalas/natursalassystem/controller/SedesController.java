@@ -409,6 +409,7 @@ public class SedesController implements Initializable {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
             cargarVentas(idLocation);
+            cargarProductos(idLocation);
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error al abrir la ventana de agregar venta para la sede: " + idLocation, e);
         }
