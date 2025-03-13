@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import java.lang.String?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
@@ -38,16 +39,12 @@
                                         <String fx:value="shadow" />
                                     </styleClass>
                                 </AnchorPane>
-                                <Label fx:id="lblPath" layoutX="264.0" layoutY="13.0" prefHeight="18.0" prefWidth="222.0" styleClass="text" stylesheets="@../css/AdminDesign.css" text="Inicio" AnchorPane.leftAnchor="264.0" AnchorPane.topAnchor="13.0">
-                                    <font>
-                                        <Font size="18.0" />
-                                    </font>
-                                </Label>
-                                <Label fx:id="lblFecha" layoutX="921.0" layoutY="16.0" prefHeight="18.0" prefWidth="278.0" textAlignment="RIGHT" AnchorPane.rightAnchor="14.199999999999818">
+                                <Label fx:id="lblFecha" layoutX="256.0" layoutY="16.0" prefHeight="18.0" prefWidth="278.0" textAlignment="RIGHT" AnchorPane.leftAnchor="255.9999999999999">
                                     <font>
                                         <Font size="16.0" />
                                     </font>
                                 </Label>
+                        <FontAwesomeIconView fx:id="font_actualizarBaseDeDatos" fill="#9e551d" glyphName="HISTORY" layoutX="1162.0" layoutY="39.0" size="30" styleClass="icon-button" AnchorPane.rightAnchor="25.885715103149323" />
                             </children>
                             <styleClass>
                                 <String fx:value="white-bg" />
@@ -75,6 +72,7 @@
                                 <Button fx:id="bttnCrearCuenta" layoutX="21.0" layoutY="477.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="200.0" styleClass="button-1" stylesheets="@../css/AdminDesign.css" text="Crear cuenta" />
                                 <Button fx:id="bttnCerrarSesion" layoutX="21.0" layoutY="538.0" mnemonicParsing="false" onAction="#cerrarSesion" prefHeight="46.0" prefWidth="200.0" styleClass="button-2" stylesheets="@../css/AdminDesign.css" text="Cerrar sesión" />
                                 <Button fx:id="bttnInventarios" layoutX="20.0" layoutY="419.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="46.0" prefWidth="200.0" styleClass="button-1" stylesheets="@../css/AdminDesign.css" text="Inventarios" />
+                        <FontAwesomeIconView fill="WHITE" fontSmoothingType="LCD" glyphName="USER" layoutX="89.0" layoutY="110.0" size="90" />
                             </children>
                             <styleClass>
                                 <String fx:value="gb-color-1" />
@@ -110,9 +108,9 @@
                                                                                 <Font size="18.0" />
                                                                             </font>
                                                                         </Label>
-                                                                        <Label fx:id="informacion_lblSedeMasVentas" layoutX="149.0" layoutY="96.0" text="Sin ventas" textFill="WHITE">
+                                                                        <Label fx:id="informacion_lblSedeMasVentas" layoutX="89.0" layoutY="89.0" text="Sin ventas" textFill="WHITE">
                                                                             <font>
-                                                                                <Font size="18.0" />
+                                                                                <Font name="System Bold" size="18.0" />
                                                                             </font>
                                                                         </Label>
                                                                     </children>
@@ -134,6 +132,7 @@
                                                                                 <Font size="18.0" />
                                                                             </font>
                                                                         </Label>
+                                                      <FontAwesomeIconView fill="WHITE" glyphName="MEDKIT" layoutX="53.0" layoutY="143.0" size="70" />
                                                                     </children>
                                                                 </AnchorPane>
                                                                 <AnchorPane layoutX="615.0" layoutY="14.0" prefHeight="178.0" prefWidth="259.0" stylesheets="@../css/AdminDesign.css">
@@ -153,9 +152,10 @@
                                                                                 <Font size="18.0" />
                                                                             </font>
                                                                         </Label>
+                                                      <FontAwesomeIconView fill="WHITE" glyphName="USERS" layoutX="43.0" layoutY="141.0" size="70" />
                                                                     </children>
                                                                 </AnchorPane>
-                                                                <AnchorPane layoutX="915.0" layoutY="14.0" prefHeight="178.0" prefWidth="259.0" stylesheets="@../css/AdminDesign.css">
+                                                                <AnchorPane layoutX="909.0" layoutY="14.0" prefHeight="178.0" prefWidth="259.0" stylesheets="@../css/AdminDesign.css">
                                                                     <styleClass>
                                                                         <String fx:value="gb-color-1" />
                                                                         <String fx:value="radius" />
@@ -172,6 +172,7 @@
                                                                                 <Font size="18.0" />
                                                                             </font>
                                                                         </Label>
+                                                      <FontAwesomeIconView fill="WHITE" glyphName="USER_PLUS" layoutX="44.0" layoutY="133.0" size="70" />
                                                                     </children>
                                                                 </AnchorPane>
                                                             </children>
@@ -366,33 +367,39 @@
                                             </styleClass>
                                             <children>
                                                 <ScrollPane layoutY="10.0" prefHeight="95.0" prefWidth="922.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                    <content>
-                                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="92.0" prefWidth="1241.0" stylesheets="@../css/AdminDesign.css">
+                                       <content>
+                                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="92.0" prefWidth="1362.0" stylesheets="@../css/AdminDesign.css">
                                                             <children>
-                                                                <DatePicker fx:id="ventas_filtrar_desdeDate" layoutX="74.0" layoutY="28.0" onAction="#filtrarVentas" prefHeight="37.0" prefWidth="159.0" AnchorPane.bottomAnchor="27.200000000000003" AnchorPane.topAnchor="28.0" />
-                                                                <Label layoutX="282.0" layoutY="27.0" prefHeight="38.0" prefWidth="49.0" text="Hasta:" AnchorPane.bottomAnchor="26.599999999999994" AnchorPane.leftAnchor="282.0" AnchorPane.topAnchor="27.0">
+                                                                <DatePicker fx:id="ventas_filtrar_desdeDate" layoutX="74.0" layoutY="28.0" onAction="#filtrarVentas" prefHeight="37.0" prefWidth="159.0" styleClass="custom-datepicker" stylesheets="@../css/AdminDesign.css" AnchorPane.bottomAnchor="27.200000000000003" AnchorPane.topAnchor="28.0" />
+                                                                <Label layoutX="266.0" layoutY="27.0" prefHeight="38.0" prefWidth="49.0" text="Hasta:" AnchorPane.bottomAnchor="26.599999999999994" AnchorPane.leftAnchor="266.0" AnchorPane.topAnchor="27.0">
                                                                     <font>
                                                                         <Font size="18.0" />
                                                                     </font>
                                                                 </Label>
-                                                                <DatePicker fx:id="ventas_filtrar_hastaDate" layoutX="342.0" layoutY="27.0" onAction="#filtrarVentas" prefHeight="38.0" prefWidth="159.0" AnchorPane.bottomAnchor="27.400000000000006" AnchorPane.topAnchor="27.0" />
-                                                                <Label layoutX="551.0" layoutY="31.0" prefHeight="30.0" prefWidth="77.0" text="Producto:" AnchorPane.bottomAnchor="31.4" AnchorPane.topAnchor="31.0">
+                                                                <DatePicker fx:id="ventas_filtrar_hastaDate" layoutX="326.0" layoutY="27.0" onAction="#filtrarVentas" prefHeight="38.0" prefWidth="159.0" styleClass="custom-datepicker" stylesheets="@../css/AdminDesign.css" AnchorPane.bottomAnchor="27.400000000000006" AnchorPane.topAnchor="27.0" />
+                                                                <Label layoutX="518.0" layoutY="31.0" prefHeight="30.0" prefWidth="77.0" text="Producto:" AnchorPane.bottomAnchor="31.400000000000006" AnchorPane.topAnchor="31.0">
                                                                     <font>
                                                                         <Font size="18.0" />
                                                                     </font>
                                                                 </Label>
-                                                                <Label layoutX="865.0" layoutY="28.0" prefHeight="35.0" prefWidth="43.0" text="Sede:" AnchorPane.bottomAnchor="28.800000000000004" AnchorPane.topAnchor="28.0">
+                                                                <Label layoutX="817.0" layoutY="28.0" prefHeight="35.0" prefWidth="43.0" text="Sede:" AnchorPane.bottomAnchor="28.799999999999997" AnchorPane.topAnchor="28.0">
                                                                     <font>
                                                                         <Font size="18.0" />
                                                                     </font>
                                                                 </Label>
-                                                                <ComboBox fx:id="ventas_filtrar_sede" layoutX="644.0" layoutY="27.0" onAction="#filtrarVentas" prefHeight="38.0" prefWidth="175.0" AnchorPane.bottomAnchor="27.400000000000006" AnchorPane.topAnchor="27.0" />
-                                                                <ComboBox fx:id="ventas_filtrar_productos" layoutX="923.0" layoutY="27.0" onAction="#filtrarVentas" prefHeight="42.0" prefWidth="175.0" AnchorPane.bottomAnchor="27.400000000000006" AnchorPane.topAnchor="27.0" />
+                                                                <ComboBox fx:id="ventas_filtrar_sede" layoutX="604.0" layoutY="27.0" onAction="#filtrarVentas" prefHeight="38.0" prefWidth="175.0" styleClass="custom-combo-box" stylesheets="@../css/AdminDesign.css" AnchorPane.bottomAnchor="27.400000000000006" AnchorPane.topAnchor="27.0" />
+                                                                <ComboBox fx:id="ventas_filtrar_productos" layoutX="872.0" layoutY="27.0" onAction="#filtrarVentas" prefHeight="42.0" prefWidth="175.0" styleClass="custom-combo-box" stylesheets="@../css/AdminDesign.css" AnchorPane.bottomAnchor="27.400000000000006" AnchorPane.topAnchor="27.0" />
                                                                 <Label layoutX="14.0" layoutY="29.0" prefHeight="34.0" prefWidth="60.0" text="Desde:" AnchorPane.bottomAnchor="29.400000000000006" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="29.0">
                                                                     <font>
                                                                         <Font size="18.0" />
                                                                     </font>
                                                                 </Label>
+                                                <Label layoutX="1081.0" layoutY="28.0" prefHeight="35.0" prefWidth="118.0" text="Tipo de venta:">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
+                                                </Label>
+                                                <ComboBox fx:id="ventas_filtrar_tipoVenta" layoutX="1199.0" layoutY="24.0" prefWidth="150.0" styleClass="custom-combo-box" stylesheets="@../css/AdminDesign.css" />
                                                             </children>
                                                             <styleClass>
                                                                 <String fx:value="white-bg" />
@@ -400,13 +407,13 @@
                                                                 <String fx:value="shadow" />
                                                             </styleClass>
                                                         </AnchorPane>
-                                                    </content>
+                                       </content>
                                                 </ScrollPane>
                                             </children>
                                         </AnchorPane>
                                     </children>
                                 </AnchorPane>
-                                <AnchorPane fx:id="pnlInventarios" layoutX="133.0" layoutY="184.0" prefHeight="660.8" prefWidth="971.2" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <AnchorPane fx:id="pnlInventarios" prefHeight="660.8" prefWidth="971.2" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <children>
                                         <Label layoutX="22.0" layoutY="316.0" styleClass="text" stylesheets="@../css/AdminDesign.css" text="Incremento de productos por sede">
                                             <font>
@@ -462,6 +469,7 @@
                                         </AnchorPane>
                                         <Button fx:id="inventarios_bttnAgregar" layoutX="762.0" layoutY="10.0" mnemonicParsing="false" onAction="#agregarProducto" styleClass="button-general" stylesheets="@../css/AdminDesign.css" text="Agregar" AnchorPane.rightAnchor="120.40000000000009" />
                                         <Button fx:id="inventarios_bttnEditar" layoutX="878.0" layoutY="10.0" mnemonicParsing="false" onAction="#editarProducto" styleClass="button-general" stylesheets="@../css/AdminDesign.css" text="Editar" AnchorPane.rightAnchor="22.0" />
+                              <TextField fx:id="inventario_textFieldProductos" layoutX="146.0" layoutY="9.0" styleClass="text-field-1" stylesheets="@../css/AdminDesign.css" />
                                     </children>
                                 </AnchorPane>
                                 <AnchorPane fx:id="panelCrearCuenta" layoutX="191.0" layoutY="104.0" prefHeight="660.8" prefWidth="971.2" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">

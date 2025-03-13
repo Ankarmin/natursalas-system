@@ -135,8 +135,8 @@
 }
 
 .text-field-1 {
-    -fx-border-color: #000;
-    -fx-border-width: .3px;
+    -fx-border-color: linear-gradient(to bottom right, #7D4110, #F78020);
+    -fx-border-width: .5px;
     -fx-font-size: 18px;
     -fx-font-family: Tahoma;
 }
@@ -188,4 +188,74 @@
 
 .check-box:selected .mark {
     -fx-background-color: white;
+}
+
+.icon-button {
+    -fx-text-fill: linear-gradient(to bottom right, #7D4110, #F78020);
+    -fx-cursor: hand;
+    -fx-transition: all 0.2s ease-in-out;
+}
+
+.icon-button:pressed {
+    -fx-translate-y: 2px;
+}
+
+.custom-combo-box {
+    -fx-background-color: white;
+    -fx-border-color: linear-gradient(to bottom right, #7D4110, #F78020);
+    -fx-border-radius: 10px;
+    -fx-padding: 5px;
+    -fx-font-size: 14px;
+}
+
+.custom-combo-box .arrow {
+    -fx-background-color: linear-gradient(to bottom right, #7D4110, #F78020);
+}
+
+.custom-combo-box .list-cell {
+    -fx-background-color: white;
+    -fx-text-fill: black;
+}
+
+.custom-combo-box .list-cell:hover {
+    -fx-background-color: #FFAF59;
+    -fx-text-fill: white;
+}
+
+.custom-datepicker {
+    -fx-background-color: white;
+    -fx-border-color: linear-gradient(to bottom right, #7D4110, #F78020);
+    -fx-border-radius: 10px;
+    -fx-padding: 5px;
+    -fx-font-size: 14px;
+}
+
+.custom-datepicker .arrow-button {
+    -fx-background-color: linear-gradient(to bottom right, #7D4110, #F78020);
+    -fx-background-radius: 0 10px 10px 0;
+}
+
+.custom-datepicker .arrow-button:hover {
+    -fx-background-color: linear-gradient(to bottom right, #996409, #E0930D);
+}
+
+.custom-datepicker .text-field {
+    -fx-background-color: transparent;
+    -fx-text-fill: black;
+}
+
+.date-picker-popup {
+    -fx-background-color: white;
+    -fx-border-color: linear-gradient(to bottom right, #7D4110, #F78020);
+}
+
+.date-picker-popup .day-cell:hover {
+    -fx-background-color: linear-gradient(to bottom right, #996409, #E0930D);
+    -fx-text-fill: white;
+}
+
+.date-picker-popup .day-cell:selected {
+    -fx-background-color: linear-gradient(to bottom right, #996409, #E0930D);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
 }
