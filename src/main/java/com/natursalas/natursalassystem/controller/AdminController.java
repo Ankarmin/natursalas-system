@@ -27,6 +27,7 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -38,6 +39,7 @@ public class AdminController implements Initializable {
     private static final Logger LOGGER = Logger.getLogger(AdminController.class.getName());
 
     private final ObservableList<PatientDTO> patientsList = FXCollections.observableArrayList();
+    private final ObservableList<String> tipoVentas = FXCollections.observableArrayList();
     private final ObservableList<ViewHistoryDTO> historyList = FXCollections.observableArrayList();
     private final ObservableList<ViewSaleDTO> salesList = FXCollections.observableArrayList();
     private final ObservableList<ProductDTO> productsList = FXCollections.observableArrayList();
@@ -136,6 +138,8 @@ public class AdminController implements Initializable {
     @FXML
     private TableView<ProductDTO> inventarios_tableView_Productos;
     @FXML
+    private TextField inventario_textFieldProductos;
+    @FXML
     private Label lblFecha;
     @FXML
     private TableColumn<PatientDTO, String> pacientes_columna_apellidos;
@@ -209,6 +213,8 @@ public class AdminController implements Initializable {
     private ComboBox<String> ventas_filtrar_productos;
     @FXML
     private ComboBox<String> ventas_filtrar_sede;
+    @FXML
+    private ComboBox<String> ventas_filtrar_tipoVenta;
     @FXML
     private TableView<ViewSaleDTO> ventas_tableViewVentas;
 
@@ -357,8 +363,8 @@ public class AdminController implements Initializable {
 
     private void configurarColumnasVentas() {
         ventas_columna_sede.setCellValueFactory(new PropertyValueFactory<>("idLocation"));
-        ventas_columna_tipoVenta.setCellValueFactory(new PropertyValueFactory<>("category"));
         ventas_columna_fechaVenta.setCellValueFactory(new PropertyValueFactory<>("saleDate"));
+        ventas_columna_tipoVenta.setCellValueFactory(new PropertyValueFactory<>("category"));
         ventas_columna_dniPaciente.setCellValueFactory(new PropertyValueFactory<>("DNI"));
         ventas_columna_paciente.setCellValueFactory(new PropertyValueFactory<>("fullName"));
         ventas_columna_producto.setCellValueFactory(new PropertyValueFactory<>("productName"));
@@ -412,15 +418,18 @@ public class AdminController implements Initializable {
 
     @FXML
     private void cargarPaciente() {
-        String dni = pacientes_txtFieldBuscarDNI.getText().trim();
+        String referencia = pacientes_txtFieldBuscarDNI.getText().trim().toLowerCase();
 
-        if (dni.isEmpty()) {
+        if (referencia.isEmpty()) {
             pacientes_tableViewPacientes.setItems(patientsList);
-        } else {
-            ObservableList<PatientDTO> filteredList = FXCollections.observableArrayList(patientsList.stream().filter(paciente -> paciente.getDNI().startsWith(dni)).collect(Collectors.toList()));
-            pacientes_tableViewPacientes.setItems(filteredList);
+            return;
         }
 
+        List<String> palabrasClave = Arrays.asList(referencia.split("\\s+"));
+
+        ObservableList<PatientDTO> filteredList = FXCollections.observableArrayList(patientsList.stream().filter(paciente -> palabrasClave.stream().anyMatch(palabra -> paciente.getDNI().toLowerCase().contains(palabra) || paciente.getFirstName().toLowerCase().contains(palabra) || paciente.getLastName().toLowerCase().contains(palabra))).collect(Collectors.toList()));
+
+        pacientes_tableViewPacientes.setItems(filteredList);
         pacientes_tableViewPacientes.refresh();
     }
 
@@ -491,6 +500,22 @@ public class AdminController implements Initializable {
 
         inventarios_tableView_Productos.setItems(productsList);
         inventarios_tableView_Productos.refresh();
+    }
+
+    @FXML
+    private void buscarInventarioProductos() {
+        String referencia = inventario_textFieldProductos.getText().trim().toLowerCase();
+
+        if (referencia.isEmpty()) {
+            inventarios_tableView_Productos.setItems(productsList);
+            return;
+        }
+
+        List<String> palabrasClave = Arrays.asList(referencia.split("\\s+"));
+
+        ObservableList<ProductDTO> filteredList = FXCollections.observableArrayList(productsList.stream().filter(product -> palabrasClave.stream().anyMatch(palabra -> product.getProductName().toLowerCase().contains(palabra) || product.getIdProduct().toLowerCase().contains(palabra))).collect(Collectors.toList()));
+
+        inventarios_tableView_Productos.setItems(filteredList);
     }
 
     private void cargarIncrementos() {
@@ -775,6 +800,14 @@ public class AdminController implements Initializable {
         ventas_filtrar_sede.setItems(sedesNombres);
     }
 
+    private void cargarTipoVentasComboBox() {
+        tipoVentas.clear();
+        List<SaleDTO> ventas = saleService.getAllSales();
+        List<String> tipoVentasFiltered = ventas.stream().map(SaleDTO::getCategory).distinct().toList();
+        tipoVentas.addAll(tipoVentasFiltered);
+        ventas_filtrar_tipoVenta.setItems(tipoVentas);
+    }
+
     private void inicializarEventosBorrarFiltro() {
         ventas_filtrar_productos.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.DELETE) {
@@ -805,5 +838,26 @@ public class AdminController implements Initializable {
                 filtrarVentas();
             }
         });
+
+        ventas_filtrar_tipoVenta.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.DELETE) {
+                ventas_filtrar_tipoVenta.getSelectionModel().clearSelection();
+                ventas_filtrar_tipoVenta.setValue(null);
+                filtrarVentas();
+            }
+        });
+    }
+
+    @FXML
+    private void refreshDatos() {
+        cargarInformacion();
+        cargarPacientes();
+        cargarVentas();
+        cargarIncrementos();
+        cargarProductos();
+        cargarCuentas();
+        cargarProductosComboBox();
+        cargarSedesComboBox();
+        cargarTipoVentasComboBox();
     }
 }

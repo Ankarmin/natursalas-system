@@ -27,6 +27,7 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -83,6 +84,8 @@ public class SedesController implements Initializable {
     private TableColumn<ProductsForLocationDTO, String> inventarios_columna_producto;
     @FXML
     private TableView<ProductsForLocationDTO> inventarios_tableView;
+    @FXML
+    private TextField inventario_textFieldProductos;
     @FXML
     private Label lblFecha;
     @FXML
@@ -333,15 +336,18 @@ public class SedesController implements Initializable {
 
     @FXML
     private void cargarPaciente() {
-        String dni = pacientes_txtFieldBuscarDNI.getText().trim();
+        String referencia = pacientes_txtFieldBuscarDNI.getText().trim().toLowerCase();
 
-        if (dni.isEmpty()) {
+        if (referencia.isEmpty()) {
             pacientes_tableViewPacientes.setItems(patientsList);
-        } else {
-            ObservableList<PatientDTO> filteredList = FXCollections.observableArrayList(patientsList.stream().filter(paciente -> paciente.getDNI().startsWith(dni)).collect(Collectors.toList()));
-            pacientes_tableViewPacientes.setItems(filteredList);
+            return;
         }
 
+        List<String> palabrasClave = Arrays.asList(referencia.split("\\s+"));
+
+        ObservableList<PatientDTO> filteredList = FXCollections.observableArrayList(patientsList.stream().filter(paciente -> palabrasClave.stream().anyMatch(palabra -> paciente.getDNI().toLowerCase().contains(palabra) || paciente.getFirstName().toLowerCase().contains(palabra) || paciente.getLastName().toLowerCase().contains(palabra))).collect(Collectors.toList()));
+
+        pacientes_tableViewPacientes.setItems(filteredList);
         pacientes_tableViewPacientes.refresh();
     }
 
@@ -490,6 +496,24 @@ public class SedesController implements Initializable {
         List<ProductsForLocationDTO> filteredProducts = productsForLocation.stream().filter(product -> product.getStock() > 0).toList();
         productsForLocationList.addAll(filteredProducts);
         inventarios_tableView.setItems(productsForLocationList);
+        inventarios_tableView.refresh();
+    }
+
+    @FXML
+    private void buscarInventarioProductos() {
+        String referencia = inventario_textFieldProductos.getText().trim().toLowerCase();
+
+        if (referencia.isEmpty()) {
+            inventarios_tableView.setItems(productsForLocationList);
+            return;
+        }
+
+        List<String> palabrasClave = Arrays.asList(referencia.split("\\s+"));
+
+        ObservableList<ProductsForLocationDTO> filteredList = FXCollections.observableArrayList(productsForLocationList.stream().filter(product -> palabrasClave.stream().anyMatch(palabra -> product.getProductName().toLowerCase().contains(palabra) || product.getIdProduct().toLowerCase().contains(palabra)  // También busca en idProduct
+        )).collect(Collectors.toList()));
+
+        inventarios_tableView.setItems(filteredList);
         inventarios_tableView.refresh();
     }
 
@@ -642,5 +666,17 @@ public class SedesController implements Initializable {
                 filtrarVentas();
             }
         });
+    }
+
+    @FXML
+    private void refreshDatos() {
+        cargarInformacion(idLocation);
+        cargarPacientes(idLocation);
+        cargarVentas(idLocation);
+        cargarIncrementos(idLocation);
+        cargarProductos(idLocation);
+        cargarPacientesComboBox(idLocation);
+        cargarProductosComboBox();
+        cargarTipoVentasComboBox();
     }
 }
