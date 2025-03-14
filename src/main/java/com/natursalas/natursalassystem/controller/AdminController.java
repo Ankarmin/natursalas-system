@@ -198,6 +198,8 @@ public class AdminController implements Initializable {
     @FXML
     private TableColumn<ViewSaleDTO, String> ventas_columna_producto;
     @FXML
+    private TableColumn<ViewSaleDTO, String> ventas_columna_tipoVenta;
+    @FXML
     private TableColumn<ViewSaleDTO, String> ventas_columna_sede;
     @FXML
     private DatePicker ventas_filtrar_desdeDate;
@@ -355,6 +357,7 @@ public class AdminController implements Initializable {
 
     private void configurarColumnasVentas() {
         ventas_columna_sede.setCellValueFactory(new PropertyValueFactory<>("idLocation"));
+        ventas_columna_tipoVenta.setCellValueFactory(new PropertyValueFactory<>("category"));
         ventas_columna_fechaVenta.setCellValueFactory(new PropertyValueFactory<>("saleDate"));
         ventas_columna_dniPaciente.setCellValueFactory(new PropertyValueFactory<>("DNI"));
         ventas_columna_paciente.setCellValueFactory(new PropertyValueFactory<>("fullName"));
@@ -441,7 +444,7 @@ public class AdminController implements Initializable {
             List<SaleDetailDTO> saleDetails = saleDetailService.getSalesDetailsBySaleId(sale.getIdSale());
 
             for (SaleDetailDTO saleDetail : saleDetails) {
-                salesList.add(new ViewSaleDTO(sale.getIdSale(), sale.getIdLocation(), sale.getSaleDate(), sale.getDNI(), patientService.getPatient(sale.getDNI()).getFullName(), productService.getProduct(saleDetail.getIdProduct()).getProductName(), saleDetail.getQuantity(), saleDetail.getSubtotal()));
+                salesList.add(new ViewSaleDTO(sale.getIdSale(), sale.getCategory(), sale.getIdLocation(), sale.getSaleDate(), sale.getDNI(), patientService.getPatient(sale.getDNI()).getFullName(), productService.getProduct(saleDetail.getIdProduct()).getProductName(), saleDetail.getQuantity(), saleDetail.getSubtotal()));
             }
         }
 

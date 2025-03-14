@@ -77,7 +77,7 @@
                     <center>
                         <AnchorPane prefHeight="606.0" prefWidth="972.0" BorderPane.alignment="CENTER">
                             <children>
-                                <AnchorPane fx:id="panelInformacion" layoutX="120.0" layoutY="130.0" prefHeight="660.8" prefWidth="971.2" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <AnchorPane fx:id="panelInformacion" layoutX="120.0" layoutY="130.0" prefHeight="660.8" prefWidth="971.2" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <children>
                                         <AnchorPane layoutX="15.2" layoutY="14.0" prefHeight="220.0" prefWidth="962.0" stylesheets="@../css/AdminDesign.css" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
                                             <styleClass>
@@ -314,7 +314,7 @@
                                         <Button fx:id="pacientes_bttnEditarPaciente" layoutX="564.0" layoutY="39.0" mnemonicParsing="false" onAction="#editarPaciente" prefHeight="34.0" prefWidth="186.0" styleClass="button-general" stylesheets="@../css/SedeDesign.css" text="Editar paciente" AnchorPane.rightAnchor="220.80000000000007" />
                                     </children>
                                 </AnchorPane>
-                                <AnchorPane fx:id="panelVentas" prefHeight="660.8" prefWidth="971.2" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <AnchorPane fx:id="panelVentas" prefHeight="660.8" prefWidth="971.2" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <children>
                                         <AnchorPane layoutX="24.0" layoutY="272.0" prefHeight="362.0" prefWidth="922.0" stylesheets="@../css/AdminDesign.css" AnchorPane.bottomAnchor="26.0" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="272.0">
                                             <styleClass>
@@ -395,7 +395,7 @@
                                                       <Font size="18.0" />
                                                    </font>
                                                 </Label>
-                                                <ComboBox fx:id="ventas_filtrar_tipoVenta" layoutX="930.0" layoutY="21.0" prefWidth="150.0" styleClass="custom-combo-box" stylesheets="@../css/SedeDesign.css" />
+                                                <ComboBox fx:id="ventas_filtrar_tipoVenta" layoutX="930.0" layoutY="21.0" onAction="#filtrarVentas" prefWidth="150.0" styleClass="custom-combo-box" stylesheets="@../css/SedeDesign.css" />
                                              </children>
                                           </AnchorPane>
                                        </content>

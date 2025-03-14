@@ -38,6 +38,7 @@ public class SedesController implements Initializable {
     private static final Logger LOGGER = Logger.getLogger(SedesController.class.getName());
 
     private final ObservableList<PatientDTO> patientsList = FXCollections.observableArrayList();
+    private final ObservableList<String> tipoVentas = FXCollections.observableArrayList();
     private final ObservableList<ViewHistoryDTO> historyList = FXCollections.observableArrayList();
     private final ObservableList<ViewSaleDTO> salesList = FXCollections.observableArrayList();
     private final ObservableList<String> productsNames = FXCollections.observableArrayList();
@@ -149,6 +150,8 @@ public class SedesController implements Initializable {
     @FXML
     private TableColumn<ViewSaleDTO, String> ventas_columna_dniPaciente;
     @FXML
+    private TableColumn<ViewSaleDTO, String> ventas_columna_tipoVenta;
+    @FXML
     private TableColumn<ViewSaleDTO, Timestamp> ventas_columna_fechaVenta;
     @FXML
     private TableColumn<ViewSaleDTO, String> ventas_columna_nombrePaciente;
@@ -160,6 +163,8 @@ public class SedesController implements Initializable {
     private ComboBox<String> ventas_filtrar_pacientes;
     @FXML
     private ComboBox<String> ventas_filtrar_productos;
+    @FXML
+    private ComboBox<String> ventas_filtrar_tipoVenta;
     @FXML
     private TableView<ViewSaleDTO> ventas_tableViewVentas;
 
@@ -188,6 +193,7 @@ public class SedesController implements Initializable {
         agregarEventoDobleClickHistorial();
 
         cargarProductosComboBox();
+        cargarTipoVentasComboBox();
 
         inicializarEventosBorrarFiltro();
     }
@@ -284,6 +290,7 @@ public class SedesController implements Initializable {
 
     private void configurarColumnasVentas() {
         ventas_columna_fechaVenta.setCellValueFactory(new PropertyValueFactory<>("saleDate"));
+        ventas_columna_tipoVenta.setCellValueFactory(new PropertyValueFactory<>("category"));
         ventas_columna_dniPaciente.setCellValueFactory(new PropertyValueFactory<>("DNI"));
         ventas_columna_nombrePaciente.setCellValueFactory(new PropertyValueFactory<>("fullName"));
         ventas_columna_producto.setCellValueFactory(new PropertyValueFactory<>("productName"));
@@ -412,7 +419,7 @@ public class SedesController implements Initializable {
             List<SaleDetailDTO> saleDetails = saleDetailService.getSalesDetailsBySaleId(sale.getIdSale());
 
             for (SaleDetailDTO saleDetail : saleDetails) {
-                salesList.add(new ViewSaleDTO(sale.getIdSale(), sale.getIdLocation(), sale.getSaleDate(), sale.getDNI(), patientService.getPatient(sale.getDNI()).getFullName(), productService.getProduct(saleDetail.getIdProduct()).getProductName(), saleDetail.getQuantity(), saleDetail.getSubtotal()));
+                salesList.add(new ViewSaleDTO(sale.getIdSale(), sale.getCategory(), sale.getIdLocation(), sale.getSaleDate(), sale.getDNI(), patientService.getPatient(sale.getDNI()).getFullName(), productService.getProduct(saleDetail.getIdProduct()).getProductName(), saleDetail.getQuantity(), saleDetail.getSubtotal()));
             }
         }
 
@@ -437,6 +444,7 @@ public class SedesController implements Initializable {
             cargarVentas(idLocation);
             cargarProductos(idLocation);
             cargarInformacion(idLocation);
+            cargarTipoVentasComboBox();
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error al abrir la ventana de agregar venta para la sede: " + idLocation, e);
         }
@@ -450,6 +458,7 @@ public class SedesController implements Initializable {
         String fullname = ventas_filtrar_pacientes.getSelectionModel().getSelectedItem();
         Timestamp from = ventas_filtrar_desdeDate.getValue() != null ? Timestamp.valueOf(ventas_filtrar_desdeDate.getValue().atStartOfDay()) : null;
         Timestamp to = ventas_filtrar_hastaDate.getValue() != null ? Timestamp.valueOf(ventas_filtrar_hastaDate.getValue().atStartOfDay().plusDays(1)) : null;
+        String saleType = ventas_filtrar_tipoVenta.getSelectionModel().getSelectedItem();
 
         if (product != null && !product.isEmpty()) {
             filteredList = filteredList.stream().filter(sale -> sale.getProductName().equals(product)).collect(Collectors.toCollection(FXCollections::observableArrayList));
@@ -465,6 +474,10 @@ public class SedesController implements Initializable {
 
         if (to != null) {
             filteredList = filteredList.stream().filter(sale -> !sale.getSaleDate().after(to)).collect(Collectors.toCollection(FXCollections::observableArrayList));
+        }
+
+        if (saleType != null && !saleType.isEmpty()) {
+            filteredList = filteredList.stream().filter(sale -> sale.getCategory().equals(saleType)).collect(Collectors.toCollection(FXCollections::observableArrayList));
         }
 
         ventas_tableViewVentas.setItems(filteredList);
@@ -572,6 +585,14 @@ public class SedesController implements Initializable {
         ventas_filtrar_productos.setItems(productsNames);
     }
 
+    private void cargarTipoVentasComboBox() {
+        tipoVentas.clear();
+        List<SaleDTO> ventas = saleService.getAllSales();
+        List<String> tipoVentasFiltered = ventas.stream().map(SaleDTO::getCategory).distinct().toList();
+        tipoVentas.addAll(tipoVentasFiltered);
+        ventas_filtrar_tipoVenta.setItems(tipoVentas);
+    }
+
     private void cargarPacientesComboBox(String idLocation) {
         List<PatientDTO> pacientes = patientService.getPatientsByLocation(idLocation);
         ObservableList<String> pacientesNombres = FXCollections.observableArrayList();
@@ -610,6 +631,14 @@ public class SedesController implements Initializable {
         ventas_filtrar_hastaDate.getEditor().setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.DELETE) {
                 ventas_filtrar_hastaDate.setValue(null);
+                filtrarVentas();
+            }
+        });
+
+        ventas_filtrar_tipoVenta.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.DELETE) {
+                ventas_filtrar_tipoVenta.getSelectionModel().clearSelection();
+                ventas_filtrar_tipoVenta.setValue(null);
                 filtrarVentas();
             }
         });

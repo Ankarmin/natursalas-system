@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 
 public class ViewSaleDTO {
     private String idSale;
+    private String category;
     private String idLocation;
     private Timestamp saleDate;
     private String DNI;
@@ -15,8 +16,9 @@ public class ViewSaleDTO {
     public ViewSaleDTO() {
     }
 
-    public ViewSaleDTO(String idSale, String idLocation, Timestamp saleDate, String DNI, String fullName, String productName, int quantity, int subtotal) {
+    public ViewSaleDTO(String idSale, String category, String idLocation, Timestamp saleDate, String DNI, String fullName, String productName, int quantity, int subtotal) {
         this.idSale = idSale;
+        this.category = category;
         this.idLocation = idLocation;
         this.saleDate = saleDate;
         this.DNI = DNI;
@@ -34,6 +36,14 @@ public class ViewSaleDTO {
         this.idSale = idSale;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
     public String getIdLocation() {
         return idLocation;
     }
@@ -46,6 +56,10 @@ public class ViewSaleDTO {
         return saleDate;
     }
 
+    public void setSaleDate(Timestamp saleDate) {
+        this.saleDate = saleDate;
+    }
+
     public String getDNI() {
         return DNI;
     }
@@ -56,6 +70,10 @@ public class ViewSaleDTO {
 
     public String getFullName() {
         return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public String getProductName() {
