@@ -36,12 +36,7 @@
                                         <String fx:value="shadow" />
                                     </styleClass>
                                 </AnchorPane>
-                                <Label fx:id="lblPath" layoutX="264.0" layoutY="13.0" prefHeight="18.0" prefWidth="222.0" styleClass="text" stylesheets="@../css/SedeDesign.css" text="Inicio" AnchorPane.leftAnchor="264.0" AnchorPane.topAnchor="13.0">
-                                    <font>
-                                        <Font size="18.0" />
-                                    </font>
-                                </Label>
-                                <Label fx:id="lblFecha" layoutX="921.0" layoutY="16.0" prefHeight="18.0" prefWidth="278.0" textAlignment="RIGHT" AnchorPane.rightAnchor="14.199999999999818">
+                                <Label fx:id="lblFecha" layoutX="255.0" layoutY="16.0" prefHeight="18.0" prefWidth="278.0" textAlignment="RIGHT" AnchorPane.leftAnchor="255.19999999999993">
                                     <font>
                                         <Font size="16.0" />
                                     </font>
@@ -107,9 +102,9 @@
                                                                                 <Font size="18.0" />
                                                                             </font>
                                                                         </Label>
-                                                                        <Label fx:id="informacion_lblProductoMasVendido" layoutX="149.0" layoutY="96.0" text="Sin ventas" textFill="WHITE">
+                                                                        <Label fx:id="informacion_lblProductoMasVendido" layoutX="86.0" layoutY="89.0" text="Sin ventas" textFill="WHITE">
                                                                             <font>
-                                                                                <Font size="18.0" />
+                                                                                <Font name="System Bold" size="18.0" />
                                                                             </font>
                                                                         </Label>
                                                                     </children>
@@ -152,7 +147,7 @@
                                                                         </Label>
                                                                     </children>
                                                                 </AnchorPane>
-                                                                <AnchorPane layoutX="915.0" layoutY="14.0" prefHeight="178.0" prefWidth="259.0" stylesheets="@../css/SedeDesign.css">
+                                                                <AnchorPane layoutX="907.0" layoutY="14.0" prefHeight="178.0" prefWidth="259.0" stylesheets="@../css/SedeDesign.css">
                                                                     <styleClass>
                                                                         <String fx:value="gb-color-1" />
                                                                         <String fx:value="radius" />
@@ -321,16 +316,17 @@
                                 </AnchorPane>
                                 <AnchorPane fx:id="panelVentas" prefHeight="660.8" prefWidth="971.2" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <children>
-                                        <AnchorPane layoutX="24.0" layoutY="300.8" prefHeight="334.0" prefWidth="922.0" stylesheets="@../css/AdminDesign.css" AnchorPane.bottomAnchor="26.0" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="301.0">
+                                        <AnchorPane layoutX="24.0" layoutY="272.0" prefHeight="362.0" prefWidth="922.0" stylesheets="@../css/AdminDesign.css" AnchorPane.bottomAnchor="26.0" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="272.0">
                                             <styleClass>
                                                 <String fx:value="white-bg" />
                                                 <String fx:value="shadow" />
                                                 <String fx:value="radius" />
                                             </styleClass>
                                             <children>
-                                                <TableView fx:id="ventas_tableViewVentas" layoutX="81.0" layoutY="192.0" prefHeight="280.0" prefWidth="922.0" stylesheets="@../css/SedeDesign.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                <TableView fx:id="ventas_tableViewVentas" layoutX="81.0" layoutY="12.0" prefHeight="322.0" prefWidth="922.0" stylesheets="@../css/SedeDesign.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                     <columns>
                                                         <TableColumn fx:id="ventas_columna_fechaVenta" prefWidth="75.0" text="FECHA DE VENTA" />
+                                          <TableColumn fx:id="ventas_columna_tipoVenta" prefWidth="75.0" text="TIPO DE VENTA" />
                                                         <TableColumn fx:id="ventas_columna_dniPaciente" prefWidth="75.0" text="DNI" />
                                                         <TableColumn fx:id="ventas_columna_nombrePaciente" prefWidth="75.0" text="PACIENTE" />
                                                         <TableColumn fx:id="ventas_columna_producto" prefWidth="75.0" text="PRODUCTO" />
@@ -343,7 +339,7 @@
                                                 </TableView>
                                             </children>
                                         </AnchorPane>
-                                        <Label layoutX="24.0" layoutY="254.0" styleClass="text" stylesheets="@../css/SedeDesign.css" text="Total de ventas">
+                                        <Label layoutX="24.0" layoutY="230.0" styleClass="text" stylesheets="@../css/SedeDesign.css" text="Total de ventas">
                                             <font>
                                                 <Font size="18.0" />
                                             </font>
@@ -353,40 +349,59 @@
                                                 <Font size="18.0" />
                                             </font>
                                         </Label>
-                                        <AnchorPane layoutX="24.0" layoutY="75.2" prefHeight="159.0" prefWidth="636.0" stylesheets="@../css/AdminDesign.css" AnchorPane.leftAnchor="24.0" AnchorPane.topAnchor="75.0">
-                                            <styleClass>
+                                        <Button fx:id="ventas_bttnAgregarVenta" layoutX="805.0" layoutY="226.0" mnemonicParsing="false" onAction="#agregarVenta" styleClass="button-general" stylesheets="@../css/SedeDesign.css" text="Agregar venta" AnchorPane.rightAnchor="28.600000000000023" />
+                              <AnchorPane layoutX="24.0" layoutY="66.0" prefHeight="103.0" prefWidth="919.0" stylesheets="@../css/SedeDesign.css" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="28.0">
+                                 <styleClass>
+                                    <String fx:value="white-bg" />
+                                    <String fx:value="radius" />
+                                    <String fx:value="shadow" />
+                                 </styleClass>
+                                 <children>
+                                    <ScrollPane layoutX="104.0" prefHeight="95.0" prefWidth="919.0" AnchorPane.bottomAnchor="-14.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <content>
+                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="103.0" prefWidth="1370.0" stylesheets="@../css/SedeDesign.css">
+                                             <styleClass>
                                                 <String fx:value="white-bg" />
                                                 <String fx:value="shadow" />
                                                 <String fx:value="radius" />
-                                            </styleClass>
-                                            <children>
-                                                <Label layoutX="22.0" layoutY="24.0" text="Desde:" AnchorPane.bottomAnchor="107.99999999999999" AnchorPane.leftAnchor="22.0" AnchorPane.topAnchor="24.0">
-                                                    <font>
-                                                        <Font size="18.0" />
-                                                    </font>
+                                             </styleClass>
+                                             <children>
+                                                <Label layoutX="20.0" layoutY="30.0" prefHeight="27.0" prefWidth="54.0" text="Desde:" AnchorPane.bottomAnchor="46.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="30.0">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
                                                 </Label>
-                                                <Label layoutX="22.0" layoutY="79.0" text="Hasta:" AnchorPane.bottomAnchor="53.0" AnchorPane.leftAnchor="22.0" AnchorPane.topAnchor="79.0">
-                                                    <font>
-                                                        <Font size="18.0" />
-                                                    </font>
+                                                <Label layoutX="268.0" layoutY="29.0" prefHeight="29.0" prefWidth="49.0" text="Hasta:" AnchorPane.bottomAnchor="45.4" AnchorPane.leftAnchor="268.0" AnchorPane.topAnchor="29.0">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
                                                 </Label>
-                                                <Label layoutX="326.0" layoutY="24.0" text="Paciente:" AnchorPane.bottomAnchor="107.2" AnchorPane.topAnchor="24.0">
-                                                    <font>
-                                                        <Font size="18.0" />
-                                                    </font>
+                                                <Label layoutX="1109.0" layoutY="22.0" prefHeight="34.0" prefWidth="71.0" text="Paciente:" AnchorPane.bottomAnchor="47.0" AnchorPane.topAnchor="22.0">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
                                                 </Label>
-                                                <Label layoutX="323.0" layoutY="79.0" text="Producto:" AnchorPane.bottomAnchor="52.79999999999998" AnchorPane.topAnchor="79.0">
-                                                    <font>
-                                                        <Font size="18.0" />
-                                                    </font>
+                                                <Label layoutX="522.0" layoutY="29.0" prefHeight="30.0" prefWidth="77.0" text="Producto:" AnchorPane.bottomAnchor="44.6" AnchorPane.topAnchor="29.0">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
                                                 </Label>
-                                                <DatePicker fx:id="ventas_filtrar_desdeDate" layoutX="82.0" layoutY="20.0" onAction="#filtrarVentas" prefHeight="34.0" prefWidth="183.0" AnchorPane.bottomAnchor="104.0" AnchorPane.topAnchor="20.000000000000007" />
-                                                <DatePicker fx:id="ventas_filtrar_hastaDate" layoutX="81.0" layoutY="75.0" onAction="#filtrarVentas" prefHeight="34.0" prefWidth="183.0" AnchorPane.bottomAnchor="49.0" AnchorPane.topAnchor="75.0" />
-                                                <ComboBox fx:id="ventas_filtrar_productos" layoutX="420.0" layoutY="76.0" onAction="#filtrarVentas" prefHeight="32.0" prefWidth="175.0" AnchorPane.bottomAnchor="50.400000000000006" AnchorPane.topAnchor="76.0" />
-                                                <ComboBox fx:id="ventas_filtrar_pacientes" layoutX="420.0" layoutY="22.0" onAction="#filtrarVentas" prefHeight="32.0" prefWidth="175.0" AnchorPane.bottomAnchor="105.2" AnchorPane.topAnchor="22.0" />
-                                            </children>
-                                        </AnchorPane>
-                                        <Button fx:id="ventas_bttnAgregarVenta" layoutX="869.0" layoutY="250.0" mnemonicParsing="false" onAction="#agregarVenta" styleClass="button-general" stylesheets="@../css/SedeDesign.css" text="Agregar venta" AnchorPane.rightAnchor="25.40000000000005" />
+                                                <DatePicker fx:id="ventas_filtrar_desdeDate" layoutX="82.0" layoutY="20.0" onAction="#filtrarVentas" prefHeight="44.0" prefWidth="155.0" styleClass="custom-datepicker" stylesheets="@../css/SedeDesign.css" AnchorPane.bottomAnchor="39.0" AnchorPane.topAnchor="20.0" />
+                                                <DatePicker fx:id="ventas_filtrar_hastaDate" layoutX="324.0" layoutY="20.0" onAction="#filtrarVentas" prefHeight="44.0" prefWidth="158.0" styleClass="custom-datepicker" stylesheets="@../css/SedeDesign.css" AnchorPane.bottomAnchor="39.0" AnchorPane.topAnchor="20.0" />
+                                                <ComboBox fx:id="ventas_filtrar_productos" layoutX="607.0" layoutY="20.0" onAction="#filtrarVentas" prefHeight="44.0" prefWidth="175.0" styleClass="custom-combo-box" stylesheets="@../css/SedeDesign.css" AnchorPane.bottomAnchor="39.0" AnchorPane.topAnchor="20.0" />
+                                                <ComboBox fx:id="ventas_filtrar_pacientes" layoutX="1194.0" layoutY="22.0" onAction="#filtrarVentas" prefHeight="43.0" prefWidth="175.0" styleClass="custom-combo-box" stylesheets="@../css/SedeDesign.css" AnchorPane.bottomAnchor="38.0" AnchorPane.topAnchor="22.0" />
+                                                <Label layoutX="811.0" layoutY="28.0" text="Tipo de venta:">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
+                                                </Label>
+                                                <ComboBox fx:id="ventas_filtrar_tipoVenta" layoutX="930.0" layoutY="21.0" prefWidth="150.0" styleClass="custom-combo-box" stylesheets="@../css/SedeDesign.css" />
+                                             </children>
+                                          </AnchorPane>
+                                       </content>
+                                    </ScrollPane>
+                                 </children>
+                              </AnchorPane>
                                     </children>
                                 </AnchorPane>
                                 <AnchorPane fx:id="panelProductos" layoutX="133.0" layoutY="184.0" prefHeight="660.8" prefWidth="971.2" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -444,6 +459,8 @@
                                             </children>
                                         </AnchorPane>
                                         <Button fx:id="productos_bttnAumentar" layoutX="849.0" layoutY="367.0" mnemonicParsing="false" onAction="#agregarIncremento" styleClass="button-general" stylesheets="@../css/SedeDesign.css" text="Aumentar" AnchorPane.bottomAnchor="259.4" AnchorPane.rightAnchor="20.799999999999912" />
+                              <TextField fx:id="inventario_textFieldProductos" layoutX="167.0" layoutY="19.0" styleClass="text-field-1" stylesheets="@../css/SedeDesign.css" />
+                              <TextField fx:id="inventario_textFieldInventario" layoutX="167.0" layoutY="366.0" styleClass="text-field-1" stylesheets="@../css/SedeDesign.css" AnchorPane.bottomAnchor="258.79999999999995" />
                                     </children>
                                 </AnchorPane>
                             </children>
