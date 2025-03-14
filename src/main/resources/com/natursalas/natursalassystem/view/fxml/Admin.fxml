@@ -11,6 +11,8 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.StackPane?>
@@ -43,6 +45,11 @@
                                         <Font size="16.0" />
                                     </font>
                                 </Label>
+                        <ImageView fx:id="font_refresh" fitHeight="35.0" fitWidth="46.0" layoutX="1150.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true" styleClass="icon-button" AnchorPane.rightAnchor="22.236363983154206">
+                           <image>
+                              <Image url="@../assets/refresh_orange.jpg" />
+                           </image>
+                        </ImageView>
                             </children>
                             <styleClass>
                                 <String fx:value="white-bg" />

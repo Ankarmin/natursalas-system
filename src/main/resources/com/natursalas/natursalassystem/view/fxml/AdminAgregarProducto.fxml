@@ -42,7 +42,7 @@
                 <TextField fx:id="agregarProducto_textFieldNombre" layoutX="142.0" layoutY="92.0" prefHeight="26.0" prefWidth="194.0" styleClass="text-field-1" stylesheets="@../css/AdminDesign.css" />
                 <TextField fx:id="agregarProducto_textFieldCodigo" layoutX="142.0" layoutY="134.0" prefHeight="26.0" prefWidth="194.0" styleClass="text-field-1" stylesheets="@../css/AdminDesign.css" />
                 <TextField fx:id="agregarProducto_textFieldPrecio" layoutX="142.0" layoutY="222.0" prefHeight="26.0" prefWidth="194.0" styleClass="text-field-1" stylesheets="@../css/AdminDesign.css" />
-                <ComboBox fx:id="agregarProducto_comboBoxCategoria" layoutX="142.0" layoutY="174.0" prefHeight="26.0" prefWidth="194.0" styleClass="custom-combo-box" stylesheets="@../css/AdminDesign.css" />
+                <ComboBox fx:id="agregarProducto_comboBoxCategoria" layoutX="142.0" layoutY="174.0" prefHeight="35.0" prefWidth="194.0" styleClass="custom-combo-box" stylesheets="@../css/AdminDesign.css" />
             </children>
         </AnchorPane>
     </children>
