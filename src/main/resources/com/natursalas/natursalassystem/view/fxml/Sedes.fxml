@@ -9,6 +9,8 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.StackPane?>
@@ -41,6 +43,11 @@
                                         <Font size="16.0" />
                                     </font>
                                 </Label>
+                        <ImageView fx:id="font_refresh" fitHeight="32.0" fitWidth="39.0" layoutX="1150.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true" styleClass="icon-button">
+                           <image>
+                              <Image url="@../assets/refresh_green.jpg" />
+                           </image>
+                        </ImageView>
                             </children>
                             <styleClass>
                                 <String fx:value="white-bg" />

@@ -28,7 +28,7 @@
     -fx-text-fill: #fff;
     -fx-font-family: Arial;
     -fx-cursor: hand;
-    -fx-font-size: 18px;
+    -fx-font-size: 16px;
 }
 
 .button-1:hover {
@@ -58,7 +58,7 @@
     -fx-text-fill: #fff;
     -fx-font-family: Arial;
     -fx-cursor: hand;
-    -fx-font-size: 18px;
+    -fx-font-size: 16px;
 }
 
 .button-2:hover {
@@ -136,7 +136,7 @@
 .text-field-1 {
     -fx-border-color: linear-gradient(to bottom right, #197D53, #29CF89);
     -fx-border-width: .5px;
-    -fx-font-size: 18px;
+    -fx-font-size: 16px;
     -fx-font-family: Tahoma;
 }
 
@@ -149,7 +149,7 @@
     -fx-background-color: linear-gradient(to bottom right, #197D53, #29CF89);
     -fx-cursor: hand;
     -fx-text-fill: #fff;
-    -fx-font-size: 18px;
+    -fx-font-size: 16px;
     -fx-font-family: Arial;
 }
 
@@ -178,7 +178,8 @@
     -fx-border-color: linear-gradient(to bottom right, #197D53, #29CF89);
     -fx-border-radius: 10px;
     -fx-padding: 5px;
-    -fx-font-size: 14px;
+    -fx-font-size: 16px;
+    -fx-font-family: Tahoma;
 }
 
 .custom-combo-box .arrow {
@@ -200,7 +201,8 @@
     -fx-border-color: linear-gradient(to bottom right, #197D53, #29CF89);
     -fx-border-radius: 10px;
     -fx-padding: 5px;
-    -fx-font-size: 14px;
+    -fx-font-size: 16px;
+    -fx-font-family: Tahoma;
 }
 
 .custom-datepicker .arrow-button {
