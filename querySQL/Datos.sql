@@ -49,36 +49,38 @@ INSERT INTO patient (DNI, firstName, lastName, age, phoneNumber, dateOfEntry, da
 ('10000040', 'Ximena', 'Ortega', 28, '901234570', NOW(), '1996-02-25', 'Carabayllo');
 
 INSERT INTO product (idProduct, category, productName, price) VALUES
-('P001', 'Medicamento', 'Paracetamol 500mg', 5),
-('P002', 'Medicamento', 'Ibuprofeno 400mg', 7),
-('P003', 'Medicamento', 'Omeprazol 20mg', 10),
-('P004', 'Medicamento', 'Amoxicilina 500mg', 15),
-('P005', 'Medicamento', 'Loratadina 10mg', 8),
-('P006', 'Equipo Médico', 'Termómetro Digital', 25),
-('P007', 'Equipo Médico', 'Tensiómetro', 50),
-('P008', 'Equipo Médico', 'Oxímetro de Pulso', 35),
-('P009', 'Equipo Médico', 'Glucómetro', 40),
-('P010', 'Equipo Médico', 'Estetoscopio', 55),
-('P011', 'Higiene', 'Jabón Antibacterial', 3),
-('P012', 'Higiene', 'Gel Desinfectante 500ml', 12),
-('P013', 'Higiene', 'Toallitas Desinfectantes', 10),
-('P014', 'Higiene', 'Papel Higiénico (4 rollos)', 7),
-('P015', 'Higiene', 'Shampoo Anticaspa', 15),
-('P016', 'Suplemento', 'Vitamina C 500mg', 18),
-('P017', 'Suplemento', 'Omega 3', 25),
-('P018', 'Suplemento', 'Colágeno Hidrolizado', 30),
-('P019', 'Suplemento', 'Proteína en Polvo', 45),
-('P020', 'Suplemento', 'Magnesio en Cápsulas', 22),
-('P021', 'Bebida', 'Agua Mineral 1L', 2),
-('P022', 'Bebida', 'Bebida Energética', 8),
-('P023', 'Bebida', 'Té Verde en Botella', 5),
-('P024', 'Bebida', 'Jugo Natural 500ml', 6),
-('P025', 'Bebida', 'Leche Deslactosada 1L', 10),
-('P026', 'Snack', 'Barra de Granola', 4),
-('P027', 'Snack', 'Chocolate Negro 70%', 9),
-('P028', 'Snack', 'Galletas Integrales', 7),
-('P029', 'Snack', 'Nueces Mixtas 250g', 20),
-('P030', 'Snack', 'Chips de Plátano', 6);
+('P001', 'Natursalas', 'Paracetamol 500mg', 5),
+('P002', 'Natursalas', 'Ibuprofeno 400mg', 7),
+('P003', 'Natursalas', 'Omeprazol 20mg', 10),
+('P004', 'Natursalas', 'Amoxicilina 500mg', 15),
+('P005', 'Natursalas', 'Loratadina 10mg', 8),
+('P006', 'Natursalas', 'Termómetro Digital', 25),
+('P007', 'Natursalas', 'Tensiómetro', 50),
+('P008', 'Natursalas', 'Oxímetro de Pulso', 35),
+('P009', 'Natursalas', 'Glucómetro', 40),
+('P010', 'Natursalas', 'Estetoscopio', 55),
+
+('P011', 'Farmacia', 'Jabón Antibacterial', 3),
+('P012', 'Farmacia', 'Gel Desinfectante 500ml', 12),
+('P013', 'Farmacia', 'Toallitas Desinfectantes', 10),
+('P014', 'Farmacia', 'Papel Higiénico (4 rollos)', 7),
+('P015', 'Farmacia', 'Shampoo Anticaspa', 15),
+('P016', 'Farmacia', 'Vitamina C 500mg', 18),
+('P017', 'Farmacia', 'Omega 3', 25),
+('P018', 'Farmacia', 'Colágeno Hidrolizado', 30),
+('P019', 'Farmacia', 'Proteína en Polvo', 45),
+('P020', 'Farmacia', 'Magnesio en Cápsulas', 22),
+
+('P021', 'Otros', 'Agua Mineral 1L', 2),
+('P022', 'Otros', 'Bebida Energética', 8),
+('P023', 'Otros', 'Té Verde en Botella', 5),
+('P024', 'Otros', 'Jugo Natural 500ml', 6),
+('P025', 'Otros', 'Leche Deslactosada 1L', 10),
+('P026', 'Otros', 'Barra de Granola', 4),
+('P027', 'Otros', 'Chocolate Negro 70%', 9),
+('P028', 'Otros', 'Galletas Integrales', 7),
+('P029', 'Otros', 'Nueces Mixtas 250g', 20),
+('P030', 'Otros', 'Chips de Plátano', 6);
 
 INSERT INTO productsIncrease (idProduct, dateOfEntry, quantity, idLocation) VALUES
 -- Incrementos en Los Olivos
@@ -192,3 +194,11 @@ INSERT INTO salesDetail (idSale, idProduct, idLocation, quantity, price) VALUES
 (@sale18, 'P020', 'Carabayllo', 2, 22), (@sale18, 'P019', 'Carabayllo', 1, 45),
 (@sale19, 'P022', 'Carabayllo', 1, 8), (@sale19, 'P024', 'Carabayllo', 2, 6),
 (@sale20, 'P026', 'Carabayllo', 1, 4), (@sale20, 'P028', 'Carabayllo', 2, 7);
+
+-- Actualizar las primeras 10 ventas con la categoría "Venta"
+UPDATE sale SET category = 'Venta' WHERE idSale IN 
+(@sale1, @sale2, @sale3, @sale4, @sale5, @sale6, @sale7, @sale8, @sale9, @sale10);
+
+-- Actualizar las siguientes 10 ventas con la categoría "Zero"
+UPDATE sale SET category = 'Zero' WHERE idSale IN 
+(@sale11, @sale12, @sale13, @sale14, @sale15, @sale16, @sale17, @sale18, @sale19, @sale20);

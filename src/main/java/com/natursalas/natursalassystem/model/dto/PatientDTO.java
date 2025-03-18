@@ -92,6 +92,6 @@ public class PatientDTO {
     }
 
     public String getFullName() {
-        return firstName + " " + lastName;
+        return lastName + " " + firstName;
     }
 }

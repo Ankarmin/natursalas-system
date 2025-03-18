@@ -27,10 +27,7 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -39,6 +36,7 @@ public class SedesController implements Initializable {
     private static final Logger LOGGER = Logger.getLogger(SedesController.class.getName());
 
     private final ObservableList<PatientDTO> patientsList = FXCollections.observableArrayList();
+    private final ObservableList<String> pacientesNombres = FXCollections.observableArrayList();
     private final ObservableList<String> tipoVentas = FXCollections.observableArrayList();
     private final ObservableList<ViewHistoryDTO> historyList = FXCollections.observableArrayList();
     private final ObservableList<ViewSaleDTO> salesList = FXCollections.observableArrayList();
@@ -196,7 +194,6 @@ public class SedesController implements Initializable {
         agregarEventoDobleClickHistorial();
 
         cargarProductosComboBox();
-        cargarTipoVentasComboBox();
 
         inicializarEventosBorrarFiltro();
     }
@@ -215,12 +212,13 @@ public class SedesController implements Initializable {
     public void setIdLocation(String idLocation) {
         this.idLocation = idLocation;
         lblNombreCuenta.setText(idLocation);
+        cargarInformacion(idLocation);
         cargarPacientes(idLocation);
         cargarVentas(idLocation);
-        cargarPacientesComboBox(idLocation);
-        cargarProductos(idLocation);
         cargarIncrementos(idLocation);
-        cargarInformacion(idLocation);
+        cargarProductos(idLocation);
+        cargarPacientesComboBox(idLocation);
+        cargarTipoVentasComboBox(idLocation);
     }
 
     private void iniciarReloj() {
@@ -278,8 +276,8 @@ public class SedesController implements Initializable {
 
     private void configurarColumnasPacientes() {
         pacientes_columna_dni.setCellValueFactory(new PropertyValueFactory<>("DNI"));
-        pacientes_columna_nombres.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         pacientes_columna_apellidos.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        pacientes_columna_nombres.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         pacientes_columna_edad.setCellValueFactory(new PropertyValueFactory<>("age"));
         pacientes_columna_telefono.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
         pacientes_columna_nacimiento.setCellValueFactory(new PropertyValueFactory<>("dateOfBirth"));
@@ -450,7 +448,7 @@ public class SedesController implements Initializable {
             cargarVentas(idLocation);
             cargarProductos(idLocation);
             cargarInformacion(idLocation);
-            cargarTipoVentasComboBox();
+            cargarTipoVentasComboBox(idLocation);
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error al abrir la ventana de agregar venta para la sede: " + idLocation, e);
         }
@@ -602,6 +600,8 @@ public class SedesController implements Initializable {
         productsNames.clear();
         List<ProductDTO> productos = productService.getAllProducts();
 
+        productos.sort(Comparator.comparing(ProductDTO::getProductName));
+
         for (ProductDTO producto : productos) {
             productsNames.add(producto.getProductName());
         }
@@ -609,22 +609,21 @@ public class SedesController implements Initializable {
         ventas_filtrar_productos.setItems(productsNames);
     }
 
-    private void cargarTipoVentasComboBox() {
+    private void cargarTipoVentasComboBox(String idLocation) {
         tipoVentas.clear();
-        List<SaleDTO> ventas = saleService.getAllSales();
+        List<SaleDTO> ventas = saleService.getSalesByLocation(idLocation);
         List<String> tipoVentasFiltered = ventas.stream().map(SaleDTO::getCategory).distinct().toList();
         tipoVentas.addAll(tipoVentasFiltered);
         ventas_filtrar_tipoVenta.setItems(tipoVentas);
     }
 
     private void cargarPacientesComboBox(String idLocation) {
+        pacientesNombres.clear();
         List<PatientDTO> pacientes = patientService.getPatientsByLocation(idLocation);
-        ObservableList<String> pacientesNombres = FXCollections.observableArrayList();
 
-        for (PatientDTO paciente : pacientes) {
-            pacientesNombres.add(paciente.getFullName());
-        }
+        List<String> pacientesOrdenados = pacientes.stream().map(PatientDTO::getFullName).sorted(String::compareToIgnoreCase).toList();
 
+        pacientesNombres.addAll(pacientesOrdenados);
         ventas_filtrar_pacientes.setItems(pacientesNombres);
     }
 
@@ -675,8 +674,8 @@ public class SedesController implements Initializable {
         cargarVentas(idLocation);
         cargarIncrementos(idLocation);
         cargarProductos(idLocation);
-        cargarPacientesComboBox(idLocation);
+        cargarTipoVentasComboBox(idLocation);
         cargarProductosComboBox();
-        cargarTipoVentasComboBox();
+        cargarPacientesComboBox(idLocation);
     }
 }

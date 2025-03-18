@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import java.net.URL;
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
@@ -104,7 +105,9 @@ public class SedeAgregarVentaController implements Initializable {
     private void cargarProductosComboBox(String idLocation) {
         productsNames.clear();
         List<ProductsForLocationDTO> productsForLocation = productsForLocationService.getProductsForLocation(idLocation);
-        List<ProductsForLocationDTO> filteredProducts = productsForLocation.stream().filter(product -> product.getStock() > 0).toList();
+        List<ProductsForLocationDTO> filteredProducts = new ArrayList<>(productsForLocation.stream().filter(product -> product.getStock() > 0).toList());
+        
+        filteredProducts.sort(Comparator.comparing(ProductsForLocationDTO::getProductName));
 
         for (ProductsForLocationDTO producto : filteredProducts) {
             productsNames.add(producto.getProductName());
@@ -195,6 +198,19 @@ public class SedeAgregarVentaController implements Initializable {
 
         productsSelected.add(new ViewAddSaleDTO(productId, productName, price, quantity, price * quantity));
         limpiarDatos();
+        agregarVenta_tableViewProductosSeleccionados.setItems(productsSelected);
+    }
+
+    @FXML
+    private void eliminarSeleccion() {
+        ViewAddSaleDTO product = agregarVenta_tableViewProductosSeleccionados.getSelectionModel().getSelectedItem();
+
+        if (product == null) {
+            AlertMessages.mostrarAlerta("Seleccione un producto para eliminar.", Alert.AlertType.WARNING);
+            return;
+        }
+
+        productsSelected.remove(product);
         agregarVenta_tableViewProductosSeleccionados.setItems(productsSelected);
     }
 

@@ -27,10 +27,7 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -253,6 +250,7 @@ public class AdminController implements Initializable {
         agregarEventoDobleClickCuentas();
 
         cargarProductosComboBox();
+        cargarTipoVentasComboBox();
         cargarSedesComboBox();
 
         inicializarEventosBorrarFiltro();
@@ -347,8 +345,8 @@ public class AdminController implements Initializable {
     private void configurarColumnasPacientes() {
         pacientes_columna_sede.setCellValueFactory(new PropertyValueFactory<>("idLocation"));
         pacientes_columna_dni.setCellValueFactory(new PropertyValueFactory<>("DNI"));
-        pacientes_columna_nombres.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         pacientes_columna_apellidos.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        pacientes_columna_nombres.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         pacientes_columna_edad.setCellValueFactory(new PropertyValueFactory<>("age"));
         pacientes_columna_telefono.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
         pacientes_columna_nacimiento.setCellValueFactory(new PropertyValueFactory<>("dateOfBirth"));
@@ -374,8 +372,8 @@ public class AdminController implements Initializable {
 
     private void configurarColumnasProductos() {
         inventarios_productos_columna_id.setCellValueFactory(new PropertyValueFactory<>("idProduct"));
-        inventarios_productos_columna_categoria.setCellValueFactory(new PropertyValueFactory<>("category"));
         inventarios_productos_columna_nombre.setCellValueFactory(new PropertyValueFactory<>("productName"));
+        inventarios_productos_columna_categoria.setCellValueFactory(new PropertyValueFactory<>("category"));
         inventarios_productos_columna_precio.setCellValueFactory(new PropertyValueFactory<>("price"));
     }
 
@@ -484,6 +482,10 @@ public class AdminController implements Initializable {
 
         if (to != null) {
             filteredList = filteredList.stream().filter(sale -> !sale.getSaleDate().after(to)).collect(Collectors.toCollection(FXCollections::observableArrayList));
+        }
+
+        if (ventas_filtrar_tipoVenta.getSelectionModel().getSelectedItem() != null) {
+            filteredList = filteredList.stream().filter(sale -> sale.getCategory().equals(ventas_filtrar_tipoVenta.getSelectionModel().getSelectedItem())).collect(Collectors.toCollection(FXCollections::observableArrayList));
         }
 
         ventas_tableViewVentas.setItems(filteredList);
@@ -782,6 +784,8 @@ public class AdminController implements Initializable {
         productosNombres.clear();
         List<ProductDTO> productos = productService.getAllProducts();
 
+        productos.sort(Comparator.comparing(ProductDTO::getProductName));
+
         for (ProductDTO producto : productos) {
             productosNombres.add(producto.getProductName());
         }
@@ -792,6 +796,8 @@ public class AdminController implements Initializable {
     private void cargarSedesComboBox() {
         sedesNombres.clear();
         List<LocationDTO> sedes = locationService.getAllLocations();
+
+        sedes.sort(Comparator.comparing(LocationDTO::getIdLocation));
 
         for (LocationDTO sede : sedes) {
             sedesNombres.add(sede.getIdLocation());
@@ -856,8 +862,8 @@ public class AdminController implements Initializable {
         cargarIncrementos();
         cargarProductos();
         cargarCuentas();
+        cargarTipoVentasComboBox();
         cargarProductosComboBox();
         cargarSedesComboBox();
-        cargarTipoVentasComboBox();
     }
 }

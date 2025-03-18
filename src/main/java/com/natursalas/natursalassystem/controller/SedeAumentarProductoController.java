@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 
 import java.net.URL;
 import java.sql.Connection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -61,6 +62,8 @@ public class SedeAumentarProductoController implements Initializable {
     private void cargarProductosComboBox() {
         productosNombres.clear();
         List<ProductDTO> productos = productService.getAllProducts();
+
+        productos.sort(Comparator.comparing(ProductDTO::getProductName));
 
         for (ProductDTO producto : productos) {
             productosNombres.add(producto.getProductName());
