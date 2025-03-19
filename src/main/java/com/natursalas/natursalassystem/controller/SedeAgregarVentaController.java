@@ -106,7 +106,7 @@ public class SedeAgregarVentaController implements Initializable {
         productsNames.clear();
         List<ProductsForLocationDTO> productsForLocation = productsForLocationService.getProductsForLocation(idLocation);
         List<ProductsForLocationDTO> filteredProducts = new ArrayList<>(productsForLocation.stream().filter(product -> product.getStock() > 0).toList());
-        
+
         filteredProducts.sort(Comparator.comparing(ProductsForLocationDTO::getProductName));
 
         for (ProductsForLocationDTO producto : filteredProducts) {

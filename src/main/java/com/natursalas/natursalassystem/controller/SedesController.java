@@ -195,7 +195,8 @@ public class SedesController implements Initializable {
 
         cargarProductosComboBox();
 
-        inicializarEventosBorrarFiltro();
+        inicializarEventosBorrarFiltroVentas();
+        inicializarEventosBorrarFiltroIncrementos();
     }
 
     private void configurarBaseDatos() {
@@ -530,6 +531,30 @@ public class SedesController implements Initializable {
     }
 
     @FXML
+    private void filtrarIncrementos() {
+        ObservableList<ViewInventaryDTO> filteredList = FXCollections.observableArrayList(incrementsList);
+
+//        String product = .getSelectionModel().getSelectedItem();
+//        Timestamp from = .getValue() != null ? Timestamp.valueOf(ventas_filtrar_desdeDate.getValue().atStartOfDay()) : null;
+//        Timestamp to = .getValue() != null ? Timestamp.valueOf(ventas_filtrar_hastaDate.getValue().atStartOfDay().plusDays(1)) : null;
+//
+//        if (product != null && !product.isEmpty()) {
+//            filteredList = filteredList.stream().filter(inventary -> inventary.getIdProduct().equals(product)).collect(Collectors.toCollection(FXCollections::observableArrayList));
+//        }
+//
+//        if (from != null) {
+//            filteredList = filteredList.stream().filter(inventary -> !inventary.getDateOfEntry().before(from)).collect(Collectors.toCollection(FXCollections::observableArrayList));
+//        }
+//
+//        if (to != null) {
+//            filteredList = filteredList.stream().filter(inventary -> !inventary.getDateOfEntry().after(to)).collect(Collectors.toCollection(FXCollections::observableArrayList));
+//        }
+
+        productos_tableViewInventario.setItems(filteredList);
+        productos_tableViewInventario.refresh();
+    }
+
+    @FXML
     private void agregarIncremento() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/natursalas/natursalassystem/view/fxml/SedeAumentarProducto.fxml"));
@@ -596,6 +621,14 @@ public class SedesController implements Initializable {
         }
     }
 
+    private void cargarTipoVentasComboBox(String idLocation) {
+        tipoVentas.clear();
+        List<SaleDTO> ventas = saleService.getSalesByLocation(idLocation);
+        List<String> tipoVentasFiltered = ventas.stream().map(SaleDTO::getCategory).distinct().toList();
+        tipoVentas.addAll(tipoVentasFiltered);
+        ventas_filtrar_tipoVenta.setItems(tipoVentas);
+    }
+
     private void cargarProductosComboBox() {
         productsNames.clear();
         List<ProductDTO> productos = productService.getAllProducts();
@@ -609,25 +642,20 @@ public class SedesController implements Initializable {
         ventas_filtrar_productos.setItems(productsNames);
     }
 
-    private void cargarTipoVentasComboBox(String idLocation) {
-        tipoVentas.clear();
-        List<SaleDTO> ventas = saleService.getSalesByLocation(idLocation);
-        List<String> tipoVentasFiltered = ventas.stream().map(SaleDTO::getCategory).distinct().toList();
-        tipoVentas.addAll(tipoVentasFiltered);
-        ventas_filtrar_tipoVenta.setItems(tipoVentas);
-    }
-
     private void cargarPacientesComboBox(String idLocation) {
         pacientesNombres.clear();
         List<PatientDTO> pacientes = patientService.getPatientsByLocation(idLocation);
 
-        List<String> pacientesOrdenados = pacientes.stream().map(PatientDTO::getFullName).sorted(String::compareToIgnoreCase).toList();
+        pacientes.sort(Comparator.comparing(PatientDTO::getFullName));
 
-        pacientesNombres.addAll(pacientesOrdenados);
+        for (PatientDTO paciente : pacientes) {
+            pacientesNombres.add(paciente.getFullName());
+        }
+
         ventas_filtrar_pacientes.setItems(pacientesNombres);
     }
 
-    private void inicializarEventosBorrarFiltro() {
+    private void inicializarEventosBorrarFiltroVentas() {
         ventas_filtrar_productos.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.DELETE) {
                 ventas_filtrar_productos.getSelectionModel().clearSelection();
@@ -665,6 +693,31 @@ public class SedesController implements Initializable {
                 filtrarVentas();
             }
         });
+    }
+
+    private void inicializarEventosBorrarFiltroIncrementos() {
+//        PARA INCREMENTOS
+//        ventas_filtrar_productos.setOnKeyPressed(event -> {
+//            if (event.getCode() == KeyCode.DELETE) {
+//                ventas_filtrar_productos.getSelectionModel().clearSelection();
+//                ventas_filtrar_productos.setValue(null);
+//                filtrarIncrementos();
+//            }
+//        });
+//
+//        ventas_filtrar_desdeDate.getEditor().setOnKeyPressed(event -> {
+//            if (event.getCode() == KeyCode.DELETE) {
+//                ventas_filtrar_desdeDate.setValue(null);
+//                filtrarIncrementos();
+//            }
+//        });
+//
+//        ventas_filtrar_hastaDate.getEditor().setOnKeyPressed(event -> {
+//            if (event.getCode() == KeyCode.DELETE) {
+//                ventas_filtrar_hastaDate.setValue(null);
+//                filtrarIncrementos();
+//            }
+//        });
     }
 
     @FXML
