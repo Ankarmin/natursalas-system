@@ -169,6 +169,245 @@ public class SedesController implements Initializable {
     @FXML
     private TableView<ViewSaleDTO> ventas_tableViewVentas;
 
+    /*
+     @FXML
+    private Button bttnCerrarSesion;
+
+    @FXML
+    private Button bttnIncrementos;
+
+    @FXML
+    private Button bttnInformacion;
+
+    @FXML
+    private Button bttnPacientes;
+
+    @FXML
+    private Button bttnProductos;
+
+    @FXML
+    private Button bttnVentas;
+
+    @FXML
+    private ImageView font_refresh;
+
+    @FXML
+    private Button incrementos_bttnAumentar;
+
+    @FXML
+    private TableColumn<?, ?> incrementos_columna_cantidadAumentada;
+
+    @FXML
+    private TableColumn<?, ?> incrementos_columna_categoria;
+
+    @FXML
+    private TableColumn<?, ?> incrementos_columna_fechaAumento;
+
+    @FXML
+    private TableColumn<?, ?> incrementos_columna_idProducto;
+
+    @FXML
+    private TableColumn<?, ?> incrementos_columna_producto;
+
+    @FXML
+    private DatePicker incrementos_filtrar_desdeDate;
+
+    @FXML
+    private DatePicker incrementos_filtrar_hastaDate;
+
+    @FXML
+    private ComboBox<?> incrementos_filtrar_productos;
+
+    @FXML
+    private Label incrementos_lblTtoalIncrementos;
+
+    @FXML
+    private TableView<?> incrementos_tableViewInventario;
+
+    @FXML
+    private Label informacion_blPacientesNuevos;
+
+    @FXML
+    private TableColumn<?, ?> informacion_columna_apellidosPaciente;
+
+    @FXML
+    private TableColumn<?, ?> informacion_columna_dni;
+
+    @FXML
+    private TableColumn<?, ?> informacion_columna_nombrePaciente;
+
+    @FXML
+    private TableColumn<?, ?> informacion_columna_numeroPaciente;
+
+    @FXML
+    private Label informacion_lblPacientesAtendidos;
+
+    @FXML
+    private Label informacion_lblProductoMasVendido;
+
+    @FXML
+    private Label informacion_lblProductosVendidos;
+
+    @FXML
+    private TableView<?> informacion_tableViewClientesAtendidos;
+
+    @FXML
+    private Label lblFecha;
+
+    @FXML
+    private Label lblNombreCuenta;
+
+    @FXML
+    private Label lblPath1;
+
+    @FXML
+    private Button pacientes_bttnAgregarPaciente;
+
+    @FXML
+    private Button pacientes_bttnEditarPaciente;
+
+    @FXML
+    private TableColumn<?, ?> pacientes_columna_apellidos;
+
+    @FXML
+    private TableColumn<?, ?> pacientes_columna_dni;
+
+    @FXML
+    private TableColumn<?, ?> pacientes_columna_edad;
+
+    @FXML
+    private TableColumn<?, ?> pacientes_columna_nacimiento;
+
+    @FXML
+    private TableColumn<?, ?> pacientes_columna_nombres;
+
+    @FXML
+    private TableColumn<?, ?> pacientes_columna_telefono;
+
+    @FXML
+    private TableColumn<?, ?> pacientes_historial_columna_diagnostico;
+
+    @FXML
+    private TableColumn<?, ?> pacientes_historial_columna_fecha;
+
+    @FXML
+    private TableColumn<?, ?> pacientes_historial_columna_precioTotal;
+
+    @FXML
+    private Label pacientes_historial_dni;
+
+    @FXML
+    private Label pacientes_historial_lastName;
+
+    @FXML
+    private Label pacientes_historial_nacimiento;
+
+    @FXML
+    private Label pacientes_historial_name;
+
+    @FXML
+    private TableView<?> pacientes_historial_tableViewMovimientos;
+
+    @FXML
+    private Label pacientes_historial_telefono;
+
+    @FXML
+    private TableView<?> pacientes_tableViewPacientes;
+
+    @FXML
+    private TextField pacientes_txtFieldBuscarDNI;
+
+    @FXML
+    private AnchorPane panelInformacion;
+
+    @FXML
+    private AnchorPane panelPacientes;
+
+    @FXML
+    private AnchorPane panelProductos;
+
+    @FXML
+    private AnchorPane panelProductos1;
+
+    @FXML
+    private AnchorPane panelVentas;
+
+    @FXML
+    private TableColumn<?, ?> productos_columna_cantidad;
+
+    @FXML
+    private TableColumn<?, ?> productos_columna_categoria;
+
+    @FXML
+    private TableColumn<?, ?> productos_columna_idProducto;
+
+    @FXML
+    private TableColumn<?, ?> productos_columna_precio;
+
+    @FXML
+    private TableColumn<?, ?> productos_columna_producto;
+
+    @FXML
+    private Label productos_lblTotalProductos;
+
+    @FXML
+    private TableView<?> productos_tableView;
+
+    @FXML
+    private TextField productos_textFieldProductos;
+
+    @FXML
+    private Button ventas_bttnAgregarVenta;
+
+    @FXML
+    private TableColumn<?, ?> ventas_columna_cantidad;
+
+    @FXML
+    private TableColumn<?, ?> ventas_columna_dniPaciente;
+
+    @FXML
+    private TableColumn<?, ?> ventas_columna_fechaVenta;
+
+    @FXML
+    private TableColumn<?, ?> ventas_columna_nombrePaciente;
+
+    @FXML
+    private TableColumn<?, ?> ventas_columna_precioTotal;
+
+    @FXML
+    private TableColumn<?, ?> ventas_columna_producto;
+
+    @FXML
+    private TableColumn<?, ?> ventas_columna_tipoVenta;
+
+    @FXML
+    private DatePicker ventas_comboBoxDesde;
+
+    @FXML
+    private DatePicker ventas_comboBoxHasta;
+
+    @FXML
+    private DatePicker ventas_filtrar_desdeDate;
+
+    @FXML
+    private DatePicker ventas_filtrar_hastaDate;
+
+    @FXML
+    private ComboBox<?> ventas_filtrar_pacientes;
+
+    @FXML
+    private ComboBox<?> ventas_filtrar_productos;
+
+    @FXML
+    private ComboBox<?> ventas_filtrar_tipoVenta;
+
+    @FXML
+    private Label ventas_lblTotalVentas;
+
+    @FXML
+    private TableView<?> ventas_tableViewVentas;
+    * */
+
     private String idLocation;
     private PatientService patientService;
     private SaleDetailService saleDetailService;
