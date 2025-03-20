@@ -16,6 +16,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
@@ -40,7 +42,7 @@ public class AdminController implements Initializable {
     private final ObservableList<ViewHistoryDTO> historyList = FXCollections.observableArrayList();
     private final ObservableList<ViewSaleDTO> salesList = FXCollections.observableArrayList();
     private final ObservableList<ProductDTO> productsList = FXCollections.observableArrayList();
-    private final ObservableList<ViewInventaryDTO> incrementsList = FXCollections.observableArrayList();
+    private final ObservableList<ViewIncrementsDTO> incrementsList = FXCollections.observableArrayList();
     private final ObservableList<ViewAccountDTO> accountList = FXCollections.observableArrayList();
     private final ObservableList<String> productosNombres = FXCollections.observableArrayList();
     private final ObservableList<String> sedesNombres = FXCollections.observableArrayList();
@@ -51,11 +53,13 @@ public class AdminController implements Initializable {
     @FXML
     private Button bttnCrearCuenta;
     @FXML
+    private Button bttnIncrementos;
+    @FXML
     private Button bttnInformacion;
     @FXML
-    private Button bttnInventarios;
-    @FXML
     private Button bttnPacientes;
+    @FXML
+    private Button bttnProductos;
     @FXML
     private Button bttnVentas;
     @FXML
@@ -64,6 +68,8 @@ public class AdminController implements Initializable {
     private TableColumn<ViewAccountDTO, String> cuentas_columna_sede;
     @FXML
     private TableColumn<ViewAccountDTO, String> cuentas_columna_ubicacion;
+    @FXML
+    private Button cuentas_crear_bttnCrear;
     @FXML
     private CheckBox cuentas_crear_mostrarContrasena;
     @FXML
@@ -76,6 +82,10 @@ public class AdminController implements Initializable {
     private TextField cuentas_crear_txtFieldSede;
     @FXML
     private TextField cuentas_crear_txtFieldUbicacion;
+    @FXML
+    private Button cuentas_editar_bttnEditar;
+    @FXML
+    private Button cuentas_editar_bttnEliminar;
     @FXML
     private CheckBox cuentas_editar_mostrarContrasena;
     @FXML
@@ -90,6 +100,32 @@ public class AdminController implements Initializable {
     private TextField cuentas_editar_txtFieldUbicacion;
     @FXML
     private TableView<ViewAccountDTO> cuentas_tableViewCuentas;
+    @FXML
+    private ImageView font_refresh;
+    @FXML
+    private TableColumn<ViewIncrementsDTO, Integer> incrementos_columna_cantidadAumentada;
+    @FXML
+    private TableColumn<ViewIncrementsDTO, String> incrementos_columna_categoriaProducto;
+    @FXML
+    private TableColumn<ViewIncrementsDTO, Timestamp> incrementos_columna_fecha;
+    @FXML
+    private TableColumn<ViewIncrementsDTO, String> incrementos_columna_idProducto;
+    @FXML
+    private TableColumn<ViewIncrementsDTO, String> incrementos_columna_nombreProducto;
+    @FXML
+    private TableColumn<ViewIncrementsDTO, String> incrementos_columna_sede;
+    @FXML
+    private DatePicker incrementos_filtrar_desdeDate;
+    @FXML
+    private DatePicker incrementos_filtrar_hastaDate;
+    @FXML
+    private ComboBox<String> incrementos_filtrar_productos;
+    @FXML
+    private ComboBox<String> incrementos_filtrar_sede;
+    @FXML
+    private Label incrementos_lblTotalIncrementos;
+    @FXML
+    private TableView<ViewIncrementsDTO> incrementos_tableView;
     @FXML
     private Label informacion_blPacientesNuevos;
     @FXML
@@ -111,33 +147,11 @@ public class AdminController implements Initializable {
     @FXML
     private TableView<ViewAdminInfoDTO> informacion_tableViewVentasPorSede;
     @FXML
-    private TableColumn<ViewInventaryDTO, Integer> inventarios_columna_cantidadAumentada;
-    @FXML
-    private TableColumn<ViewInventaryDTO, String> inventarios_columna_categoriaProducto;
-    @FXML
-    private TableColumn<ViewInventaryDTO, Timestamp> inventarios_columna_fecha;
-    @FXML
-    private TableColumn<ViewInventaryDTO, String> inventarios_columna_idProducto;
-    @FXML
-    private TableColumn<ViewInventaryDTO, String> inventarios_columna_nombreProducto;
-    @FXML
-    private TableColumn<ViewInventaryDTO, String> inventarios_columna_sede;
-    @FXML
-    private TableColumn<ProductDTO, String> inventarios_productos_columna_categoria;
-    @FXML
-    private TableColumn<ProductDTO, String> inventarios_productos_columna_id;
-    @FXML
-    private TableColumn<ProductDTO, String> inventarios_productos_columna_nombre;
-    @FXML
-    private TableColumn<ProductDTO, Integer> inventarios_productos_columna_precio;
-    @FXML
-    private TableView<ViewInventaryDTO> inventarios_tableView;
-    @FXML
-    private TableView<ProductDTO> inventarios_tableView_Productos;
-    @FXML
-    private TextField inventario_textFieldProductos;
-    @FXML
     private Label lblFecha;
+    @FXML
+    private Label lblNombreCuenta;
+    @FXML
+    private Label lblPath1;
     @FXML
     private TableColumn<PatientDTO, String> pacientes_columna_apellidos;
     @FXML
@@ -152,6 +166,8 @@ public class AdminController implements Initializable {
     private TableColumn<PatientDTO, String> pacientes_columna_sede;
     @FXML
     private TableColumn<PatientDTO, String> pacientes_columna_telefono;
+    @FXML
+    private ComboBox<String> pacientes_comboBoxSede;
     @FXML
     private TableColumn<ViewHistoryDTO, String> pacientes_historial_columna_diagnostico;
     @FXML
@@ -169,25 +185,47 @@ public class AdminController implements Initializable {
     @FXML
     private Label pacientes_historial_name;
     @FXML
-    private TableView<ViewHistoryDTO> pacientes_historial_tableViewMovimientos;
+    private TableView<ViewHistoryDTO> pacientes_historial_tableView;
     @FXML
     private Label pacientes_historial_telefono;
     @FXML
-    private TableView<PatientDTO> pacientes_tableViewPacientes;
+    private Label pacientes_lblTotalPacientes;
+    @FXML
+    private TableView<PatientDTO> pacientes_tableView;
     @FXML
     private TextField pacientes_txtFieldBuscarDNI;
     @FXML
     private AnchorPane panelCrearCuenta;
     @FXML
+    private AnchorPane panelIncrementos;
+    @FXML
     private AnchorPane panelInformacion;
     @FXML
     private AnchorPane panelPacientes;
     @FXML
+    private AnchorPane panelProductos;
+    @FXML
     private AnchorPane panelVentas;
     @FXML
-    private AnchorPane pnlInventarios;
+    private Button productos_bttnAgregar;
     @FXML
-    private TableColumn<ViewSaleDTO, Integer> ventas_columna_PrecioTotal;
+    private Button productos_bttnEditar;
+    @FXML
+    private TableColumn<ProductDTO, String> productos_columna_categoria;
+    @FXML
+    private TableColumn<ProductDTO, String> productos_columna_id;
+    @FXML
+    private TableColumn<ProductDTO, String> productos_columna_nombre;
+    @FXML
+    private TableColumn<ProductDTO, Integer> productos_columna_precio;
+    @FXML
+    private Label productos_lblTotalProductos;
+    @FXML
+    private TableView<ProductDTO> productos_tableView_Productos;
+    @FXML
+    private TextField productos_textFieldProductos;
+    @FXML
+    private TableColumn<ViewSaleDTO, Integer> ventas_columna_precioTotal;
     @FXML
     private TableColumn<ViewSaleDTO, Integer> ventas_columna_cantidad;
     @FXML
@@ -199,9 +237,9 @@ public class AdminController implements Initializable {
     @FXML
     private TableColumn<ViewSaleDTO, String> ventas_columna_producto;
     @FXML
-    private TableColumn<ViewSaleDTO, String> ventas_columna_tipoVenta;
-    @FXML
     private TableColumn<ViewSaleDTO, String> ventas_columna_sede;
+    @FXML
+    private TableColumn<ViewSaleDTO, String> ventas_columna_tipoVenta;
     @FXML
     private DatePicker ventas_filtrar_desdeDate;
     @FXML
@@ -213,318 +251,9 @@ public class AdminController implements Initializable {
     @FXML
     private ComboBox<String> ventas_filtrar_tipoVenta;
     @FXML
-    private TableView<ViewSaleDTO> ventas_tableViewVentas;
-
-    /*
-        @FXML
-    private Button bttnCerrarSesion;
-
-    @FXML
-    private Button bttnCrearCuenta;
-
-    @FXML
-    private Button bttnInformacion;
-
-    @FXML
-    private Button bttnInventarios;
-
-    @FXML
-    private Button bttnPacientes;
-
-    @FXML
-    private Button bttnProductos;
-
-    @FXML
-    private Button bttnVentas;
-
-    @FXML
-    private TableColumn<?, ?> cuentas_columna_correo;
-
-    @FXML
-    private TableColumn<?, ?> cuentas_columna_sede;
-
-    @FXML
-    private TableColumn<?, ?> cuentas_columna_ubicacion;
-
-    @FXML
-    private Button cuentas_crear_bttnCrear;
-
-    @FXML
-    private CheckBox cuentas_crear_mostrarContrasena;
-
-    @FXML
-    private PasswordField cuentas_crear_pswFieldContrasena;
-
-    @FXML
-    private TextField cuentas_crear_txtFieldContrasena;
-
-    @FXML
-    private TextField cuentas_crear_txtFieldCorreo;
-
-    @FXML
-    private TextField cuentas_crear_txtFieldSede;
-
-    @FXML
-    private TextField cuentas_crear_txtFieldUbicacion;
-
-    @FXML
-    private Button cuentas_editar_bttnEditar;
-
-    @FXML
-    private Button cuentas_editar_bttnEliminar;
-
-    @FXML
-    private CheckBox cuentas_editar_mostrarContrasena;
-
-    @FXML
-    private PasswordField cuentas_editar_pswFieldContrasena;
-
-    @FXML
-    private TextField cuentas_editar_txtFieldContrasena;
-
-    @FXML
-    private TextField cuentas_editar_txtFieldCorreo;
-
-    @FXML
-    private TextField cuentas_editar_txtFieldSede_;
-
-    @FXML
-    private TextField cuentas_editar_txtFieldUbicacion;
-
-    @FXML
-    private TableView<?> cuentas_tableViewCuentas;
-
-    @FXML
-    private ImageView font_refresh;
-
-    @FXML
-    private Label informacion_blPacientesNuevos;
-
-    @FXML
-    private TableColumn<?, ?> informacion_columna_pacientesAtendidos;
-
-    @FXML
-    private TableColumn<?, ?> informacion_columna_pacientesNuevos;
-
-    @FXML
-    private TableColumn<?, ?> informacion_columna_productoMasVendido;
-
-    @FXML
-    private TableColumn<?, ?> informacion_columna_productosVendidos;
-
-    @FXML
-    private TableColumn<?, ?> informacion_columna_sede;
-
-    @FXML
-    private Label informacion_lblPacientesAtendidos;
-
-    @FXML
-    private Label informacion_lblProductosVendidos;
-
-    @FXML
-    private Label informacion_lblSedeMasVentas;
-
-    @FXML
-    private TableView<?> informacion_tableViewVentasPorSede;
-
-    @FXML
-    private TableColumn<?, ?> inventarios_columna_cantidadAumentada;
-
-    @FXML
-    private TableColumn<?, ?> inventarios_columna_categoriaProducto;
-
-    @FXML
-    private TableColumn<?, ?> inventarios_columna_fecha;
-
-    @FXML
-    private TableColumn<?, ?> inventarios_columna_idProducto;
-
-    @FXML
-    private TableColumn<?, ?> inventarios_columna_nombreProducto;
-
-    @FXML
-    private TableColumn<?, ?> inventarios_columna_sede;
-
-    @FXML
-    private DatePicker inventarios_filtrar_desdeDate;
-
-    @FXML
-    private DatePicker inventarios_filtrar_hastaDate;
-
-    @FXML
-    private ComboBox<?> inventarios_filtrar_productos;
-
-    @FXML
-    private ComboBox<?> inventarios_filtrar_sede;
-
-    @FXML
-    private Label inventarios_lblTotalInventarios;
-
-    @FXML
-    private TableView<?> inventarios_tableView;
-
-    @FXML
-    private Label lblFecha;
-
-    @FXML
-    private Label lblNombreCuenta;
-
-    @FXML
-    private Label lblPath1;
-
-    @FXML
-    private TableColumn<?, ?> pacientes_columna_apellidos;
-
-    @FXML
-    private TableColumn<?, ?> pacientes_columna_dni;
-
-    @FXML
-    private TableColumn<?, ?> pacientes_columna_edad;
-
-    @FXML
-    private TableColumn<?, ?> pacientes_columna_nacimiento;
-
-    @FXML
-    private TableColumn<?, ?> pacientes_columna_nombres;
-
-    @FXML
-    private TableColumn<?, ?> pacientes_columna_sede;
-
-    @FXML
-    private TableColumn<?, ?> pacientes_columna_telefono;
-
-    @FXML
-    private ComboBox<?> pacientes_comboBoxSede;
-
-    @FXML
-    private TableColumn<?, ?> pacientes_historial_columna_diagnostico;
-
-    @FXML
-    private TableColumn<?, ?> pacientes_historial_columna_fecha;
-
-    @FXML
-    private TableColumn<?, ?> pacientes_historial_columna_precioTotal;
-
-    @FXML
-    private TableColumn<?, ?> pacientes_historial_columna_sede;
-
-    @FXML
-    private Label pacientes_historial_dni;
-
-    @FXML
-    private Label pacientes_historial_lastName;
-
-    @FXML
-    private Label pacientes_historial_nacimiento;
-
-    @FXML
-    private Label pacientes_historial_name;
-
-    @FXML
-    private TableView<?> pacientes_historial_tableViewMovimientos;
-
-    @FXML
-    private Label pacientes_historial_telefono;
-
-    @FXML
-    private Label pacientes_lblTotalPacientes;
-
-    @FXML
-    private TableView<?> pacientes_tableViewPacientes;
-
-    @FXML
-    private TextField pacientes_txtFieldBuscarDNI;
-
-    @FXML
-    private AnchorPane panelCrearCuenta;
-
-    @FXML
-    private AnchorPane panelInformacion;
-
-    @FXML
-    private AnchorPane panelPacientes;
-
-    @FXML
-    private AnchorPane panelVentas;
-
-    @FXML
-    private AnchorPane pnlInventarios;
-
-    @FXML
-    private AnchorPane pnlProductos;
-
-    @FXML
-    private Button productos_bttnAgregar;
-
-    @FXML
-    private Button productos_bttnEditar;
-
-    @FXML
-    private TableColumn<?, ?> productos_columna_categoria;
-
-    @FXML
-    private TableColumn<?, ?> productos_columna_id;
-
-    @FXML
-    private TableColumn<?, ?> productos_columna_nombre;
-
-    @FXML
-    private TableColumn<?, ?> productos_columna_precio;
-
-    @FXML
-    private Label productos_lblTotalProductos;
-
-    @FXML
-    private TableView<?> productos_tableView_Productos;
-
-    @FXML
-    private TextField productos_textFieldProductos;
-
-    @FXML
-    private TableColumn<?, ?> ventas_columna_PrecioTotal;
-
-    @FXML
-    private TableColumn<?, ?> ventas_columna_cantidad;
-
-    @FXML
-    private TableColumn<?, ?> ventas_columna_dniPaciente;
-
-    @FXML
-    private TableColumn<?, ?> ventas_columna_fechaVenta;
-
-    @FXML
-    private TableColumn<?, ?> ventas_columna_paciente;
-
-    @FXML
-    private TableColumn<?, ?> ventas_columna_producto;
-
-    @FXML
-    private TableColumn<?, ?> ventas_columna_sede;
-
-    @FXML
-    private TableColumn<?, ?> ventas_columna_tipoVenta;
-
-    @FXML
-    private DatePicker ventas_filtrar_desdeDate;
-
-    @FXML
-    private DatePicker ventas_filtrar_hastaDate;
-
-    @FXML
-    private ComboBox<?> ventas_filtrar_productos;
-
-    @FXML
-    private ComboBox<?> ventas_filtrar_sede;
-
-    @FXML
-    private ComboBox<?> ventas_filtrar_tipoVenta;
-
-    @FXML
     private Label ventas_lblTotalVentas;
-
     @FXML
-    private TableView<?> ventas_tableViewVentas;
-    * */
+    private TableView<ViewSaleDTO> ventas_tableView;
 
     private PatientService patientService;
     private SaleDetailService saleDetailService;
@@ -552,8 +281,8 @@ public class AdminController implements Initializable {
         cargarInformacion();
         cargarPacientes();
         cargarVentas();
-        cargarIncrementos();
         cargarProductos();
+        cargarIncrementos();
         cargarCuentas();
 
         agregarEventoDobleClickPacientes();
@@ -564,6 +293,7 @@ public class AdminController implements Initializable {
         cargarTipoVentasComboBox();
         cargarSedesComboBox();
 
+        inicializarEventosBorrarFiltroPacientes();
         inicializarEventosBorrarFiltroVentas();
         inicializarEventosBorrarFiltroIncrementos();
     }
@@ -587,7 +317,8 @@ public class AdminController implements Initializable {
         panelPacientes.setVisible(event.getSource() == bttnPacientes);
         panelVentas.setVisible(event.getSource() == bttnVentas);
         panelCrearCuenta.setVisible(event.getSource() == bttnCrearCuenta);
-        pnlInventarios.setVisible(event.getSource() == bttnInventarios);
+        panelProductos.setVisible(event.getSource() == bttnProductos);
+        panelIncrementos.setVisible(event.getSource() == bttnIncrementos);
     }
 
     @FXML
@@ -599,6 +330,7 @@ public class AdminController implements Initializable {
                 Stage stage = new Stage();
                 stage.setScene(new Scene(root));
                 stage.setTitle("Inicio de Sesión");
+                stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/natursalas/natursalassystem/view/assets/logo.png"))));
                 Stage currentStage = (Stage) bttnCerrarSesion.getScene().getWindow();
                 currentStage.close();
 
@@ -679,23 +411,23 @@ public class AdminController implements Initializable {
         ventas_columna_paciente.setCellValueFactory(new PropertyValueFactory<>("fullName"));
         ventas_columna_producto.setCellValueFactory(new PropertyValueFactory<>("productName"));
         ventas_columna_cantidad.setCellValueFactory(new PropertyValueFactory<>("quantity"));
-        ventas_columna_PrecioTotal.setCellValueFactory(new PropertyValueFactory<>("subtotal"));
+        ventas_columna_precioTotal.setCellValueFactory(new PropertyValueFactory<>("subtotal"));
     }
 
     private void configurarColumnasProductos() {
-        inventarios_productos_columna_id.setCellValueFactory(new PropertyValueFactory<>("idProduct"));
-        inventarios_productos_columna_nombre.setCellValueFactory(new PropertyValueFactory<>("productName"));
-        inventarios_productos_columna_categoria.setCellValueFactory(new PropertyValueFactory<>("category"));
-        inventarios_productos_columna_precio.setCellValueFactory(new PropertyValueFactory<>("price"));
+        productos_columna_id.setCellValueFactory(new PropertyValueFactory<>("idProduct"));
+        productos_columna_nombre.setCellValueFactory(new PropertyValueFactory<>("productName"));
+        productos_columna_categoria.setCellValueFactory(new PropertyValueFactory<>("category"));
+        productos_columna_precio.setCellValueFactory(new PropertyValueFactory<>("price"));
     }
 
     private void configurarColumnasIncrementos() {
-        inventarios_columna_fecha.setCellValueFactory(new PropertyValueFactory<>("dateOfEntry"));
-        inventarios_columna_sede.setCellValueFactory(new PropertyValueFactory<>("idLocation"));
-        inventarios_columna_idProducto.setCellValueFactory(new PropertyValueFactory<>("idProduct"));
-        inventarios_columna_nombreProducto.setCellValueFactory(new PropertyValueFactory<>("productName"));
-        inventarios_columna_categoriaProducto.setCellValueFactory(new PropertyValueFactory<>("category"));
-        inventarios_columna_cantidadAumentada.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        incrementos_columna_fecha.setCellValueFactory(new PropertyValueFactory<>("dateOfEntry"));
+        incrementos_columna_sede.setCellValueFactory(new PropertyValueFactory<>("idLocation"));
+        incrementos_columna_idProducto.setCellValueFactory(new PropertyValueFactory<>("idProduct"));
+        incrementos_columna_nombreProducto.setCellValueFactory(new PropertyValueFactory<>("productName"));
+        incrementos_columna_categoriaProducto.setCellValueFactory(new PropertyValueFactory<>("category"));
+        incrementos_columna_cantidadAumentada.setCellValueFactory(new PropertyValueFactory<>("quantity"));
     }
 
     private void configurarColumnasCuentas() {
@@ -722,8 +454,10 @@ public class AdminController implements Initializable {
         if (pacientes != null && !pacientes.isEmpty()) {
             patientsList.addAll(pacientes);
         }
-        pacientes_tableViewPacientes.setItems(patientsList);
-        pacientes_tableViewPacientes.refresh();
+        pacientes_tableView.setItems(patientsList);
+        pacientes_tableView.refresh();
+
+        pacientes_lblTotalPacientes.setText(String.valueOf(patientsList.size()));
     }
 
     @FXML
@@ -731,7 +465,7 @@ public class AdminController implements Initializable {
         String referencia = pacientes_txtFieldBuscarDNI.getText().trim().toLowerCase();
 
         if (referencia.isEmpty()) {
-            pacientes_tableViewPacientes.setItems(patientsList);
+            pacientes_tableView.setItems(patientsList);
             return;
         }
 
@@ -739,8 +473,26 @@ public class AdminController implements Initializable {
 
         ObservableList<PatientDTO> filteredList = FXCollections.observableArrayList(patientsList.stream().filter(paciente -> palabrasClave.stream().anyMatch(palabra -> paciente.getDNI().toLowerCase().contains(palabra) || paciente.getFirstName().toLowerCase().contains(palabra) || paciente.getLastName().toLowerCase().contains(palabra))).collect(Collectors.toList()));
 
-        pacientes_tableViewPacientes.setItems(filteredList);
-        pacientes_tableViewPacientes.refresh();
+        pacientes_tableView.setItems(filteredList);
+        pacientes_tableView.refresh();
+
+        pacientes_lblTotalPacientes.setText(String.valueOf(filteredList.size()));
+    }
+
+    @FXML
+    private void filtrarPacientes() {
+        ObservableList<PatientDTO> filteredList = FXCollections.observableArrayList(patientsList);
+
+        String location = pacientes_comboBoxSede.getSelectionModel().getSelectedItem();
+
+        if (location != null && !location.isEmpty()) {
+            filteredList = filteredList.stream().filter(patient -> patient.getIdLocation().equals(location)).collect(Collectors.toCollection(FXCollections::observableArrayList));
+        }
+
+        pacientes_tableView.setItems(filteredList);
+        pacientes_tableView.refresh();
+
+        pacientes_lblTotalPacientes.setText(String.valueOf(filteredList.size()));
     }
 
     private void cargarHistorialVentas(String dni) {
@@ -751,8 +503,8 @@ public class AdminController implements Initializable {
             historyList.add(new ViewHistoryDTO(sale.getIdSale(), sale.getSaleDate(), sale.getIdLocation(), sale.getDiagnosis(), sale.getSubtotal()));
         }
 
-        pacientes_historial_tableViewMovimientos.setItems(historyList);
-        pacientes_historial_tableViewMovimientos.refresh();
+        pacientes_historial_tableView.setItems(historyList);
+        pacientes_historial_tableView.refresh();
     }
 
     private void cargarVentas() {
@@ -767,8 +519,10 @@ public class AdminController implements Initializable {
             }
         }
 
-        ventas_tableViewVentas.setItems(salesList);
-        ventas_tableViewVentas.refresh();
+        ventas_tableView.setItems(salesList);
+        ventas_tableView.refresh();
+
+        ventas_lblTotalVentas.setText(String.valueOf(salesList.size()));
     }
 
     @FXML
@@ -800,8 +554,10 @@ public class AdminController implements Initializable {
             filteredList = filteredList.stream().filter(sale -> sale.getCategory().equals(ventas_filtrar_tipoVenta.getSelectionModel().getSelectedItem())).collect(Collectors.toCollection(FXCollections::observableArrayList));
         }
 
-        ventas_tableViewVentas.setItems(filteredList);
-        ventas_tableViewVentas.refresh();
+        ventas_tableView.setItems(filteredList);
+        ventas_tableView.refresh();
+
+        ventas_lblTotalVentas.setText(String.valueOf(filteredList.size()));
     }
 
     private void cargarProductos() {
@@ -812,16 +568,18 @@ public class AdminController implements Initializable {
             productsList.addAll(products);
         }
 
-        inventarios_tableView_Productos.setItems(productsList);
-        inventarios_tableView_Productos.refresh();
+        productos_tableView_Productos.setItems(productsList);
+        productos_tableView_Productos.refresh();
+
+        productos_lblTotalProductos.setText(String.valueOf(productsList.size()));
     }
 
     @FXML
     private void buscarInventarioProductos() {
-        String referencia = inventario_textFieldProductos.getText().trim().toLowerCase();
+        String referencia = productos_textFieldProductos.getText().trim().toLowerCase();
 
         if (referencia.isEmpty()) {
-            inventarios_tableView_Productos.setItems(productsList);
+            productos_tableView_Productos.setItems(productsList);
             return;
         }
 
@@ -829,7 +587,9 @@ public class AdminController implements Initializable {
 
         ObservableList<ProductDTO> filteredList = FXCollections.observableArrayList(productsList.stream().filter(product -> palabrasClave.stream().anyMatch(palabra -> product.getProductName().toLowerCase().contains(palabra) || product.getIdProduct().toLowerCase().contains(palabra))).collect(Collectors.toList()));
 
-        inventarios_tableView_Productos.setItems(filteredList);
+        productos_tableView_Productos.setItems(filteredList);
+
+        productos_lblTotalProductos.setText(String.valueOf(filteredList.size()));
     }
 
     private void cargarIncrementos() {
@@ -839,40 +599,44 @@ public class AdminController implements Initializable {
         for (ProductsIncreaseDTO productIncrease : productsIncrease) {
             ProductsForLocationDTO product = productsForLocationService.getProductInLocation(productIncrease.getIdProduct(), productIncrease.getIdLocation());
             if (product != null) {
-                incrementsList.add(new ViewInventaryDTO(productIncrease.getDateOfEntry(), productIncrease.getIdLocation(), productIncrease.getIdProduct(), product.getProductName(), product.getCategory(), productIncrease.getQuantity()));
+                incrementsList.add(new ViewIncrementsDTO(productIncrease.getDateOfEntry(), productIncrease.getIdLocation(), productIncrease.getIdProduct(), product.getProductName(), product.getCategory(), productIncrease.getQuantity()));
             }
         }
-        inventarios_tableView.setItems(incrementsList);
-        inventarios_tableView.refresh();
+        incrementos_tableView.setItems(incrementsList);
+        incrementos_tableView.refresh();
+
+        incrementos_lblTotalIncrementos.setText(String.valueOf(incrementsList.size()));
     }
 
     @FXML
     private void filtrarIncrementos() {
-        ObservableList<ViewInventaryDTO> filteredList = FXCollections.observableArrayList(incrementsList);
+        ObservableList<ViewIncrementsDTO> filteredList = FXCollections.observableArrayList(incrementsList);
 
-//        String product = .getSelectionModel().getSelectedItem();
-//        String location = .getSelectionModel().getSelectedItem();
-//        Timestamp from = .getValue() != null ? Timestamp.valueOf(ventas_filtrar_desdeDate.getValue().atStartOfDay()) : null;
-//        Timestamp to = .getValue() != null ? Timestamp.valueOf(ventas_filtrar_hastaDate.getValue().atStartOfDay().plusDays(1)) : null;
-//
-//        if (product != null && !product.isEmpty()) {
-//            filteredList = filteredList.stream().filter(inventary -> inventary.getIdProduct().equals(product)).collect(Collectors.toCollection(FXCollections::observableArrayList));
-//        }
-//
-//        if (location != null && !location.isEmpty()) {
-//            filteredList = filteredList.stream().filter(inventary -> inventary.getIdLocation().equals(location)).collect(Collectors.toCollection(FXCollections::observableArrayList));
-//        }
-//
-//        if (from != null) {
-//            filteredList = filteredList.stream().filter(inventary -> !inventary.getDateOfEntry().before(from)).collect(Collectors.toCollection(FXCollections::observableArrayList));
-//        }
-//
-//        if (to != null) {
-//            filteredList = filteredList.stream().filter(inventary -> !inventary.getDateOfEntry().after(to)).collect(Collectors.toCollection(FXCollections::observableArrayList));
-//        }
+        String product = incrementos_filtrar_productos.getSelectionModel().getSelectedItem();
+        String location = incrementos_filtrar_sede.getSelectionModel().getSelectedItem();
+        Timestamp from = incrementos_filtrar_desdeDate.getValue() != null ? Timestamp.valueOf(incrementos_filtrar_desdeDate.getValue().atStartOfDay()) : null;
+        Timestamp to = incrementos_filtrar_hastaDate.getValue() != null ? Timestamp.valueOf(incrementos_filtrar_hastaDate.getValue().atStartOfDay().plusDays(1)) : null;
 
-        inventarios_tableView.setItems(filteredList);
-        inventarios_tableView.refresh();
+        if (product != null && !product.isEmpty()) {
+            filteredList = filteredList.stream().filter(increments -> increments.getProductName().equals(product)).collect(Collectors.toCollection(FXCollections::observableArrayList));
+        }
+
+        if (location != null && !location.isEmpty()) {
+            filteredList = filteredList.stream().filter(increments -> increments.getIdLocation().equals(location)).collect(Collectors.toCollection(FXCollections::observableArrayList));
+        }
+
+        if (from != null) {
+            filteredList = filteredList.stream().filter(increments -> !increments.getDateOfEntry().before(from)).collect(Collectors.toCollection(FXCollections::observableArrayList));
+        }
+
+        if (to != null) {
+            filteredList = filteredList.stream().filter(increments -> !increments.getDateOfEntry().after(to)).collect(Collectors.toCollection(FXCollections::observableArrayList));
+        }
+
+        incrementos_tableView.setItems(filteredList);
+        incrementos_tableView.refresh();
+
+        incrementos_lblTotalIncrementos.setText(String.valueOf(filteredList.size()));
     }
 
     private void cargarCuentas() {
@@ -890,7 +654,7 @@ public class AdminController implements Initializable {
     }
 
     private void agregarEventoDobleClickPacientes() {
-        pacientes_tableViewPacientes.setRowFactory(tv -> {
+        pacientes_tableView.setRowFactory(tv -> {
             TableRow<PatientDTO> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2 && (!row.isEmpty())) {
@@ -908,7 +672,7 @@ public class AdminController implements Initializable {
     }
 
     private void agregarEventoDobleClickHistorial() {
-        pacientes_historial_tableViewMovimientos.setRowFactory(tv -> {
+        pacientes_historial_tableView.setRowFactory(tv -> {
             TableRow<ViewHistoryDTO> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2 && (!row.isEmpty())) {
@@ -947,7 +711,7 @@ public class AdminController implements Initializable {
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.setTitle("Detalles de la Venta");
-
+            stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/natursalas/natursalassystem/view/assets/logo.png"))));
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
         } catch (IOException e) {
@@ -964,6 +728,7 @@ public class AdminController implements Initializable {
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.setTitle("Agregar Producto");
+            stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/natursalas/natursalassystem/view/assets/logo.png"))));
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
 
@@ -976,7 +741,7 @@ public class AdminController implements Initializable {
 
     @FXML
     private void editarProducto() {
-        ProductDTO product = inventarios_tableView_Productos.getSelectionModel().getSelectedItem();
+        ProductDTO product = productos_tableView_Productos.getSelectionModel().getSelectedItem();
 
         if (product == null) {
             AlertMessages.mostrarAlerta("Por favor, seleccione un producto de la tabla para poder editarlo.", Alert.AlertType.WARNING);
@@ -993,6 +758,7 @@ public class AdminController implements Initializable {
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.setTitle("Editar Producto");
+            stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/natursalas/natursalassystem/view/assets/logo.png"))));
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
 
@@ -1140,6 +906,7 @@ public class AdminController implements Initializable {
         }
 
         ventas_filtrar_productos.setItems(productosNombres);
+        incrementos_filtrar_productos.setItems(productosNombres);
     }
 
     private void cargarSedesComboBox() {
@@ -1152,7 +919,19 @@ public class AdminController implements Initializable {
             sedesNombres.add(sede.getIdLocation());
         }
 
+        pacientes_comboBoxSede.setItems(sedesNombres);
         ventas_filtrar_sede.setItems(sedesNombres);
+        incrementos_filtrar_sede.setItems(sedesNombres);
+    }
+
+    private void inicializarEventosBorrarFiltroPacientes() {
+        pacientes_comboBoxSede.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.DELETE) {
+                pacientes_comboBoxSede.getSelectionModel().clearSelection();
+                pacientes_comboBoxSede.setValue(null);
+                cargarPacientes();
+            }
+        });
     }
 
     private void inicializarEventosBorrarFiltroVentas() {
@@ -1196,36 +975,35 @@ public class AdminController implements Initializable {
     }
 
     private void inicializarEventosBorrarFiltroIncrementos() {
-//        PARA INCREMENTOS
-//        ventas_filtrar_productos.setOnKeyPressed(event -> {
-//            if (event.getCode() == KeyCode.DELETE) {
-//                ventas_filtrar_productos.getSelectionModel().clearSelection();
-//                ventas_filtrar_productos.setValue(null);
-//                filtrarIncrementos();
-//            }
-//        });
-//
-//        ventas_filtrar_sede.setOnKeyPressed(event -> {
-//            if (event.getCode() == KeyCode.DELETE) {
-//                ventas_filtrar_sede.getSelectionModel().clearSelection();
-//                ventas_filtrar_sede.setValue(null);
-//                filtrarIncrementos();
-//            }
-//        });
-//
-//        ventas_filtrar_desdeDate.getEditor().setOnKeyPressed(event -> {
-//            if (event.getCode() == KeyCode.DELETE) {
-//                ventas_filtrar_desdeDate.setValue(null);
-//                filtrarIncrementos();
-//            }
-//        });
-//
-//        ventas_filtrar_hastaDate.getEditor().setOnKeyPressed(event -> {
-//            if (event.getCode() == KeyCode.DELETE) {
-//                ventas_filtrar_hastaDate.setValue(null);
-//                filtrarIncrementos();
-//            }
-//        });
+        incrementos_filtrar_productos.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.DELETE) {
+                incrementos_filtrar_productos.getSelectionModel().clearSelection();
+                incrementos_filtrar_productos.setValue(null);
+                filtrarIncrementos();
+            }
+        });
+
+        incrementos_filtrar_sede.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.DELETE) {
+                incrementos_filtrar_sede.getSelectionModel().clearSelection();
+                incrementos_filtrar_sede.setValue(null);
+                filtrarIncrementos();
+            }
+        });
+
+        incrementos_filtrar_desdeDate.getEditor().setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.DELETE) {
+                incrementos_filtrar_desdeDate.setValue(null);
+                filtrarIncrementos();
+            }
+        });
+
+        incrementos_filtrar_hastaDate.getEditor().setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.DELETE) {
+                incrementos_filtrar_hastaDate.setValue(null);
+                filtrarIncrementos();
+            }
+        });
     }
 
     @FXML
@@ -1233,8 +1011,8 @@ public class AdminController implements Initializable {
         cargarInformacion();
         cargarPacientes();
         cargarVentas();
-        cargarIncrementos();
         cargarProductos();
+        cargarIncrementos();
         cargarCuentas();
         cargarTipoVentasComboBox();
         cargarProductosComboBox();

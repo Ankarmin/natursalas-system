@@ -16,6 +16,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
@@ -41,19 +43,48 @@ public class SedesController implements Initializable {
     private final ObservableList<ViewHistoryDTO> historyList = FXCollections.observableArrayList();
     private final ObservableList<ViewSaleDTO> salesList = FXCollections.observableArrayList();
     private final ObservableList<String> productsNames = FXCollections.observableArrayList();
-    private final ObservableList<ViewInventaryDTO> incrementsList = FXCollections.observableArrayList();
+    private final ObservableList<ViewIncrementsDTO> incrementsList = FXCollections.observableArrayList();
     private final ObservableList<ProductsForLocationDTO> productsForLocationList = FXCollections.observableArrayList();
     private final ObservableList<PatientDTO> patientsListInfo = FXCollections.observableArrayList();
+
+    @FXML
+    private Button bttnCerrarSesion;
+    @FXML
+    private Button bttnIncrementos;
     @FXML
     private Button bttnInformacion;
     @FXML
     private Button bttnPacientes;
     @FXML
-    private Button bttnInventario;
+    private Button bttnProductos;
     @FXML
     private Button bttnVentas;
     @FXML
-    private Label informacion_blPacientesNuevos;
+    private ImageView font_refresh;
+    @FXML
+    private Button incrementos_bttnAumentar;
+    @FXML
+    private TableColumn<ViewIncrementsDTO, Integer> incrementos_columna_cantidadAumentada;
+    @FXML
+    private TableColumn<ViewIncrementsDTO, String> incrementos_columna_categoria;
+    @FXML
+    private TableColumn<ViewIncrementsDTO, Timestamp> incrementos_columna_fechaAumento;
+    @FXML
+    private TableColumn<ViewIncrementsDTO, String> incrementos_columna_idProducto;
+    @FXML
+    private TableColumn<ViewIncrementsDTO, String> incrementos_columna_producto;
+    @FXML
+    private DatePicker incrementos_filtrar_desdeDate;
+    @FXML
+    private DatePicker incrementos_filtrar_hastaDate;
+    @FXML
+    private ComboBox<String> incrementos_filtrar_productos;
+    @FXML
+    private Label incrementos_lblTotalIncrementos;
+    @FXML
+    private TableView<ViewIncrementsDTO> incrementos_tableView;
+    @FXML
+    private Label informacion_lblPacientesNuevos;
     @FXML
     private TableColumn<PatientDTO, String> informacion_columna_apellidosPaciente;
     @FXML
@@ -69,25 +100,17 @@ public class SedesController implements Initializable {
     @FXML
     private Label informacion_lblProductosVendidos;
     @FXML
-    private TableView<PatientDTO> informacion_tableViewClientesAtendidos;
-    @FXML
-    private TableColumn<ProductsForLocationDTO, String> inventarios_columna_cantidad;
-    @FXML
-    private TableColumn<ProductsForLocationDTO, String> inventarios_columna_categoria;
-    @FXML
-    private TableColumn<ProductsForLocationDTO, String> inventarios_columna_idProducto;
-    @FXML
-    private TableColumn<ProductsForLocationDTO, Integer> inventarios_columna_precio;
-    @FXML
-    private TableColumn<ProductsForLocationDTO, String> inventarios_columna_producto;
-    @FXML
-    private TableView<ProductsForLocationDTO> inventarios_tableView;
-    @FXML
-    private TextField inventario_textFieldProductos;
+    private TableView<PatientDTO> informacion_tableView;
     @FXML
     private Label lblFecha;
     @FXML
     private Label lblNombreCuenta;
+    @FXML
+    private Label lblPath1;
+    @FXML
+    private Button pacientes_bttnAgregarPaciente;
+    @FXML
+    private Button pacientes_bttnEditarPaciente;
     @FXML
     private TableColumn<PatientDTO, String> pacientes_columna_apellidos;
     @FXML
@@ -100,6 +123,10 @@ public class SedesController implements Initializable {
     private TableColumn<PatientDTO, String> pacientes_columna_nombres;
     @FXML
     private TableColumn<PatientDTO, String> pacientes_columna_telefono;
+    @FXML
+    private DatePicker pacientes_filtrar_desdeDate;
+    @FXML
+    private DatePicker pacientes_filtrar_hastaDate;
     @FXML
     private TableColumn<ViewHistoryDTO, String> pacientes_historial_columna_diagnostico;
     @FXML
@@ -115,9 +142,11 @@ public class SedesController implements Initializable {
     @FXML
     private Label pacientes_historial_name;
     @FXML
-    private TableView<ViewHistoryDTO> pacientes_historial_tableViewMovimientos;
+    private TableView<ViewHistoryDTO> pacientes_historial_tableView;
     @FXML
     private Label pacientes_historial_telefono;
+    @FXML
+    private Label pacientes_lblTotalPacientes;
     @FXML
     private TableView<PatientDTO> pacientes_tableViewPacientes;
     @FXML
@@ -129,33 +158,41 @@ public class SedesController implements Initializable {
     @FXML
     private AnchorPane panelProductos;
     @FXML
+    private AnchorPane panelIncrementos;
+    @FXML
     private AnchorPane panelVentas;
     @FXML
-    private TableColumn<ViewInventaryDTO, Integer> productos_columna_cantidadAumentada;
+    private TableColumn<ProductsForLocationDTO, Integer> productos_columna_cantidad;
     @FXML
-    private TableColumn<ViewInventaryDTO, String> productos_columna_categoria;
+    private TableColumn<ProductsForLocationDTO, String> productos_columna_categoria;
     @FXML
-    private TableColumn<ViewInventaryDTO, Timestamp> productos_columna_fechaAumento;
+    private TableColumn<ProductsForLocationDTO, String> productos_columna_idProducto;
     @FXML
-    private TableColumn<ViewInventaryDTO, String> productos_columna_idProducto;
+    private TableColumn<ProductsForLocationDTO, Integer> productos_columna_precio;
     @FXML
-    private TableColumn<ViewInventaryDTO, String> productos_columna_producto;
+    private TableColumn<ProductsForLocationDTO, String> productos_columna_producto;
     @FXML
-    private TableView<ViewInventaryDTO> productos_tableViewInventario;
+    private Label productos_lblTotalProductos;
+    @FXML
+    private TableView<ProductsForLocationDTO> productos_tableView;
+    @FXML
+    private TextField productos_textFieldProductos;
+    @FXML
+    private Button ventas_bttnAgregarVenta;
+    @FXML
+    private TableColumn<ViewSaleDTO, Integer> ventas_columna_cantidad;
+    @FXML
+    private TableColumn<ViewSaleDTO, String> ventas_columna_dniPaciente;
+    @FXML
+    private TableColumn<ViewSaleDTO, Timestamp> ventas_columna_fechaVenta;
+    @FXML
+    private TableColumn<ViewSaleDTO, String> ventas_columna_nombrePaciente;
     @FXML
     private TableColumn<ViewSaleDTO, Integer> ventas_columna_precioTotal;
     @FXML
     private TableColumn<ViewSaleDTO, String> ventas_columna_producto;
     @FXML
-    private TableColumn<ViewSaleDTO, String> ventas_columna_cantidad;
-    @FXML
-    private TableColumn<ViewSaleDTO, String> ventas_columna_dniPaciente;
-    @FXML
     private TableColumn<ViewSaleDTO, String> ventas_columna_tipoVenta;
-    @FXML
-    private TableColumn<ViewSaleDTO, Timestamp> ventas_columna_fechaVenta;
-    @FXML
-    private TableColumn<ViewSaleDTO, String> ventas_columna_nombrePaciente;
     @FXML
     private DatePicker ventas_filtrar_desdeDate;
     @FXML
@@ -167,246 +204,9 @@ public class SedesController implements Initializable {
     @FXML
     private ComboBox<String> ventas_filtrar_tipoVenta;
     @FXML
-    private TableView<ViewSaleDTO> ventas_tableViewVentas;
-
-    /*
-     @FXML
-    private Button bttnCerrarSesion;
-
-    @FXML
-    private Button bttnIncrementos;
-
-    @FXML
-    private Button bttnInformacion;
-
-    @FXML
-    private Button bttnPacientes;
-
-    @FXML
-    private Button bttnProductos;
-
-    @FXML
-    private Button bttnVentas;
-
-    @FXML
-    private ImageView font_refresh;
-
-    @FXML
-    private Button incrementos_bttnAumentar;
-
-    @FXML
-    private TableColumn<?, ?> incrementos_columna_cantidadAumentada;
-
-    @FXML
-    private TableColumn<?, ?> incrementos_columna_categoria;
-
-    @FXML
-    private TableColumn<?, ?> incrementos_columna_fechaAumento;
-
-    @FXML
-    private TableColumn<?, ?> incrementos_columna_idProducto;
-
-    @FXML
-    private TableColumn<?, ?> incrementos_columna_producto;
-
-    @FXML
-    private DatePicker incrementos_filtrar_desdeDate;
-
-    @FXML
-    private DatePicker incrementos_filtrar_hastaDate;
-
-    @FXML
-    private ComboBox<?> incrementos_filtrar_productos;
-
-    @FXML
-    private Label incrementos_lblTtoalIncrementos;
-
-    @FXML
-    private TableView<?> incrementos_tableViewInventario;
-
-    @FXML
-    private Label informacion_blPacientesNuevos;
-
-    @FXML
-    private TableColumn<?, ?> informacion_columna_apellidosPaciente;
-
-    @FXML
-    private TableColumn<?, ?> informacion_columna_dni;
-
-    @FXML
-    private TableColumn<?, ?> informacion_columna_nombrePaciente;
-
-    @FXML
-    private TableColumn<?, ?> informacion_columna_numeroPaciente;
-
-    @FXML
-    private Label informacion_lblPacientesAtendidos;
-
-    @FXML
-    private Label informacion_lblProductoMasVendido;
-
-    @FXML
-    private Label informacion_lblProductosVendidos;
-
-    @FXML
-    private TableView<?> informacion_tableViewClientesAtendidos;
-
-    @FXML
-    private Label lblFecha;
-
-    @FXML
-    private Label lblNombreCuenta;
-
-    @FXML
-    private Label lblPath1;
-
-    @FXML
-    private Button pacientes_bttnAgregarPaciente;
-
-    @FXML
-    private Button pacientes_bttnEditarPaciente;
-
-    @FXML
-    private TableColumn<?, ?> pacientes_columna_apellidos;
-
-    @FXML
-    private TableColumn<?, ?> pacientes_columna_dni;
-
-    @FXML
-    private TableColumn<?, ?> pacientes_columna_edad;
-
-    @FXML
-    private TableColumn<?, ?> pacientes_columna_nacimiento;
-
-    @FXML
-    private TableColumn<?, ?> pacientes_columna_nombres;
-
-    @FXML
-    private TableColumn<?, ?> pacientes_columna_telefono;
-
-    @FXML
-    private TableColumn<?, ?> pacientes_historial_columna_diagnostico;
-
-    @FXML
-    private TableColumn<?, ?> pacientes_historial_columna_fecha;
-
-    @FXML
-    private TableColumn<?, ?> pacientes_historial_columna_precioTotal;
-
-    @FXML
-    private Label pacientes_historial_dni;
-
-    @FXML
-    private Label pacientes_historial_lastName;
-
-    @FXML
-    private Label pacientes_historial_nacimiento;
-
-    @FXML
-    private Label pacientes_historial_name;
-
-    @FXML
-    private TableView<?> pacientes_historial_tableViewMovimientos;
-
-    @FXML
-    private Label pacientes_historial_telefono;
-
-    @FXML
-    private TableView<?> pacientes_tableViewPacientes;
-
-    @FXML
-    private TextField pacientes_txtFieldBuscarDNI;
-
-    @FXML
-    private AnchorPane panelInformacion;
-
-    @FXML
-    private AnchorPane panelPacientes;
-
-    @FXML
-    private AnchorPane panelProductos;
-
-    @FXML
-    private AnchorPane panelProductos1;
-
-    @FXML
-    private AnchorPane panelVentas;
-
-    @FXML
-    private TableColumn<?, ?> productos_columna_cantidad;
-
-    @FXML
-    private TableColumn<?, ?> productos_columna_categoria;
-
-    @FXML
-    private TableColumn<?, ?> productos_columna_idProducto;
-
-    @FXML
-    private TableColumn<?, ?> productos_columna_precio;
-
-    @FXML
-    private TableColumn<?, ?> productos_columna_producto;
-
-    @FXML
-    private Label productos_lblTotalProductos;
-
-    @FXML
-    private TableView<?> productos_tableView;
-
-    @FXML
-    private TextField productos_textFieldProductos;
-
-    @FXML
-    private Button ventas_bttnAgregarVenta;
-
-    @FXML
-    private TableColumn<?, ?> ventas_columna_cantidad;
-
-    @FXML
-    private TableColumn<?, ?> ventas_columna_dniPaciente;
-
-    @FXML
-    private TableColumn<?, ?> ventas_columna_fechaVenta;
-
-    @FXML
-    private TableColumn<?, ?> ventas_columna_nombrePaciente;
-
-    @FXML
-    private TableColumn<?, ?> ventas_columna_precioTotal;
-
-    @FXML
-    private TableColumn<?, ?> ventas_columna_producto;
-
-    @FXML
-    private TableColumn<?, ?> ventas_columna_tipoVenta;
-
-    @FXML
-    private DatePicker ventas_comboBoxDesde;
-
-    @FXML
-    private DatePicker ventas_comboBoxHasta;
-
-    @FXML
-    private DatePicker ventas_filtrar_desdeDate;
-
-    @FXML
-    private DatePicker ventas_filtrar_hastaDate;
-
-    @FXML
-    private ComboBox<?> ventas_filtrar_pacientes;
-
-    @FXML
-    private ComboBox<?> ventas_filtrar_productos;
-
-    @FXML
-    private ComboBox<?> ventas_filtrar_tipoVenta;
-
-    @FXML
     private Label ventas_lblTotalVentas;
-
     @FXML
-    private TableView<?> ventas_tableViewVentas;
-    * */
+    private TableView<ViewSaleDTO> ventas_tableViewVentas;
 
     private String idLocation;
     private PatientService patientService;
@@ -434,6 +234,7 @@ public class SedesController implements Initializable {
 
         cargarProductosComboBox();
 
+        inicializarEventosBorrarFiltroPacientes();
         inicializarEventosBorrarFiltroVentas();
         inicializarEventosBorrarFiltroIncrementos();
     }
@@ -475,7 +276,8 @@ public class SedesController implements Initializable {
         panelInformacion.setVisible(event.getSource() == bttnInformacion);
         panelPacientes.setVisible(event.getSource() == bttnPacientes);
         panelVentas.setVisible(event.getSource() == bttnVentas);
-        panelProductos.setVisible(event.getSource() == bttnInventario);
+        panelProductos.setVisible(event.getSource() == bttnProductos);
+        panelIncrementos.setVisible(event.getSource() == bttnIncrementos);
     }
 
     @FXML
@@ -487,31 +289,18 @@ public class SedesController implements Initializable {
                 Stage stage = new Stage();
                 stage.setScene(new Scene(root));
                 stage.setTitle("Inicio de Sesión");
+                stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/natursalas/natursalassystem/view/assets/logo.png"))));
                 Stage currentStage = (Stage) lblNombreCuenta.getScene().getWindow();
                 currentStage.close();
-
                 stage.setOnCloseRequest(event -> {
                     Platform.exit();
                     System.exit(0);
                 });
-
                 stage.show();
             } catch (IOException e) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar sesión y cargar pantalla de login", e);
             }
         }
-    }
-
-    private void cargarInformacion(String idLocation) {
-        patientsListInfo.clear();
-        SedeInfoDTO sedeInfo = sedeInfoService.getSedeInfo(idLocation);
-        informacion_lblProductoMasVendido.setText(sedeInfo.getBestSellingProduct());
-        informacion_lblProductosVendidos.setText(String.valueOf(sedeInfo.getProductsSoldToday()));
-        informacion_lblPacientesAtendidos.setText(String.valueOf(sedeInfo.getPatientsAttendedToday()));
-        informacion_blPacientesNuevos.setText(String.valueOf(sedeInfo.getNewPatientsToday()));
-        patientsListInfo.addAll(sedeInfo.getPatientsAttendedTodayList());
-        informacion_tableViewClientesAtendidos.setItems(patientsListInfo);
-        informacion_tableViewClientesAtendidos.refresh();
     }
 
     private void configurarColumnasPacientes() {
@@ -540,19 +329,19 @@ public class SedesController implements Initializable {
     }
 
     private void configurarColumnasProductos() {
-        inventarios_columna_idProducto.setCellValueFactory(new PropertyValueFactory<>("idProduct"));
-        inventarios_columna_producto.setCellValueFactory(new PropertyValueFactory<>("productName"));
-        inventarios_columna_categoria.setCellValueFactory(new PropertyValueFactory<>("category"));
-        inventarios_columna_precio.setCellValueFactory(new PropertyValueFactory<>("price"));
-        inventarios_columna_cantidad.setCellValueFactory(new PropertyValueFactory<>("stock"));
-    }
-
-    private void configurarColumnasIncrementos() {
-        productos_columna_fechaAumento.setCellValueFactory(new PropertyValueFactory<>("dateOfEntry"));
         productos_columna_idProducto.setCellValueFactory(new PropertyValueFactory<>("idProduct"));
         productos_columna_producto.setCellValueFactory(new PropertyValueFactory<>("productName"));
         productos_columna_categoria.setCellValueFactory(new PropertyValueFactory<>("category"));
-        productos_columna_cantidadAumentada.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        productos_columna_precio.setCellValueFactory(new PropertyValueFactory<>("price"));
+        productos_columna_cantidad.setCellValueFactory(new PropertyValueFactory<>("stock"));
+    }
+
+    private void configurarColumnasIncrementos() {
+        incrementos_columna_fechaAumento.setCellValueFactory(new PropertyValueFactory<>("dateOfEntry"));
+        incrementos_columna_idProducto.setCellValueFactory(new PropertyValueFactory<>("idProduct"));
+        incrementos_columna_producto.setCellValueFactory(new PropertyValueFactory<>("productName"));
+        incrementos_columna_categoria.setCellValueFactory(new PropertyValueFactory<>("category"));
+        incrementos_columna_cantidadAumentada.setCellValueFactory(new PropertyValueFactory<>("quantity"));
     }
 
     private void configurarColumnasInformacion() {
@@ -560,6 +349,18 @@ public class SedesController implements Initializable {
         informacion_columna_nombrePaciente.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         informacion_columna_apellidosPaciente.setCellValueFactory(new PropertyValueFactory<>("lastName"));
         informacion_columna_numeroPaciente.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
+    }
+
+    private void cargarInformacion(String idLocation) {
+        patientsListInfo.clear();
+        SedeInfoDTO sedeInfo = sedeInfoService.getSedeInfo(idLocation);
+        informacion_lblProductoMasVendido.setText(sedeInfo.getBestSellingProduct());
+        informacion_lblProductosVendidos.setText(String.valueOf(sedeInfo.getProductsSoldToday()));
+        informacion_lblPacientesAtendidos.setText(String.valueOf(sedeInfo.getPatientsAttendedToday()));
+        informacion_lblPacientesNuevos.setText(String.valueOf(sedeInfo.getNewPatientsToday()));
+        patientsListInfo.addAll(sedeInfo.getPatientsAttendedTodayList());
+        informacion_tableView.setItems(patientsListInfo);
+        informacion_tableView.refresh();
     }
 
     private void cargarPacientes(String idLocation) {
@@ -570,6 +371,8 @@ public class SedesController implements Initializable {
         }
         pacientes_tableViewPacientes.setItems(patientsList);
         pacientes_tableViewPacientes.refresh();
+
+        pacientes_lblTotalPacientes.setText(String.valueOf(patientsList.size()));
     }
 
     @FXML
@@ -587,6 +390,29 @@ public class SedesController implements Initializable {
 
         pacientes_tableViewPacientes.setItems(filteredList);
         pacientes_tableViewPacientes.refresh();
+
+        pacientes_lblTotalPacientes.setText(String.valueOf(filteredList.size()));
+    }
+
+    @FXML
+    private void filtrarPacientes() {
+        ObservableList<PatientDTO> filteredList = FXCollections.observableArrayList(patientsList);
+
+        Timestamp from = pacientes_filtrar_desdeDate.getValue() != null ? Timestamp.valueOf(pacientes_filtrar_desdeDate.getValue().atStartOfDay()) : null;
+        Timestamp to = pacientes_filtrar_hastaDate.getValue() != null ? Timestamp.valueOf(pacientes_filtrar_hastaDate.getValue().atStartOfDay().plusDays(1)) : null;
+
+        if (from != null) {
+            filteredList = filteredList.stream().filter(paciente -> !paciente.getDateOfEntry().before(from)).collect(Collectors.toCollection(FXCollections::observableArrayList));
+        }
+
+        if (to != null) {
+            filteredList = filteredList.stream().filter(paciente -> !paciente.getDateOfEntry().after(to)).collect(Collectors.toCollection(FXCollections::observableArrayList));
+        }
+
+        pacientes_tableViewPacientes.setItems(filteredList);
+        pacientes_tableViewPacientes.refresh();
+
+        pacientes_lblTotalPacientes.setText(String.valueOf(filteredList.size()));
     }
 
     @FXML
@@ -601,6 +427,7 @@ public class SedesController implements Initializable {
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.setTitle("Agregar Paciente");
+            stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/natursalas/natursalassystem/view/assets/logo.png"))));
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
             cargarPacientes(idLocation);
@@ -626,6 +453,7 @@ public class SedesController implements Initializable {
                 Stage stage = new Stage();
                 stage.setScene(new Scene(root));
                 stage.setTitle("Editar Paciente");
+                stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/natursalas/natursalassystem/view/assets/logo.png"))));
                 stage.initModality(Modality.APPLICATION_MODAL);
                 stage.showAndWait();
                 cargarPacientes(idLocation);
@@ -635,11 +463,7 @@ public class SedesController implements Initializable {
                 LOGGER.log(Level.SEVERE, "Error al abrir la ventana de editar paciente para la sede: " + idLocation, e);
             }
         } else {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Editar Paciente");
-            alert.setHeaderText("No se ha seleccionado un paciente");
-            alert.setContentText("Por favor, seleccione un paciente de la tabla para poder editarlo.");
-            alert.showAndWait();
+            AlertMessages.mostrarAlerta("Seleccione un paciente para editar", Alert.AlertType.WARNING);
         }
     }
 
@@ -651,8 +475,8 @@ public class SedesController implements Initializable {
             historyList.add(new ViewHistoryDTO(sale.getIdSale(), sale.getSaleDate(), sale.getIdLocation(), sale.getDiagnosis(), sale.getSubtotal()));
         }
 
-        pacientes_historial_tableViewMovimientos.setItems(historyList);
-        pacientes_historial_tableViewMovimientos.refresh();
+        pacientes_historial_tableView.setItems(historyList);
+        pacientes_historial_tableView.refresh();
     }
 
     private void cargarVentas(String idLocation) {
@@ -669,6 +493,8 @@ public class SedesController implements Initializable {
 
         ventas_tableViewVentas.setItems(salesList);
         ventas_tableViewVentas.refresh();
+
+        ventas_lblTotalVentas.setText(String.valueOf(salesList.size()));
     }
 
     @FXML
@@ -683,6 +509,7 @@ public class SedesController implements Initializable {
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.setTitle("Agregar Venta");
+            stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/natursalas/natursalassystem/view/assets/logo.png"))));
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
             cargarVentas(idLocation);
@@ -726,6 +553,8 @@ public class SedesController implements Initializable {
 
         ventas_tableViewVentas.setItems(filteredList);
         ventas_tableViewVentas.refresh();
+
+        ventas_lblTotalVentas.setText(String.valueOf(filteredList.size()));
     }
 
     private void cargarProductos(String idLocation) {
@@ -733,16 +562,18 @@ public class SedesController implements Initializable {
         List<ProductsForLocationDTO> productsForLocation = productsForLocationService.getProductsForLocation(idLocation);
         List<ProductsForLocationDTO> filteredProducts = productsForLocation.stream().filter(product -> product.getStock() > 0).toList();
         productsForLocationList.addAll(filteredProducts);
-        inventarios_tableView.setItems(productsForLocationList);
-        inventarios_tableView.refresh();
+        productos_tableView.setItems(productsForLocationList);
+        productos_tableView.refresh();
+
+        productos_lblTotalProductos.setText(String.valueOf(productsForLocationList.size()));
     }
 
     @FXML
     private void buscarInventarioProductos() {
-        String referencia = inventario_textFieldProductos.getText().trim().toLowerCase();
+        String referencia = productos_textFieldProductos.getText().trim().toLowerCase();
 
         if (referencia.isEmpty()) {
-            inventarios_tableView.setItems(productsForLocationList);
+            productos_tableView.setItems(productsForLocationList);
             return;
         }
 
@@ -751,8 +582,10 @@ public class SedesController implements Initializable {
         ObservableList<ProductsForLocationDTO> filteredList = FXCollections.observableArrayList(productsForLocationList.stream().filter(product -> palabrasClave.stream().anyMatch(palabra -> product.getProductName().toLowerCase().contains(palabra) || product.getIdProduct().toLowerCase().contains(palabra)  // También busca en idProduct
         )).collect(Collectors.toList()));
 
-        inventarios_tableView.setItems(filteredList);
-        inventarios_tableView.refresh();
+        productos_tableView.setItems(filteredList);
+        productos_tableView.refresh();
+
+        productos_lblTotalProductos.setText(String.valueOf(filteredList.size()));
     }
 
     private void cargarIncrementos(String idLocation) {
@@ -762,35 +595,39 @@ public class SedesController implements Initializable {
         for (ProductsIncreaseDTO productIncrease : productsIncrease) {
             ProductsForLocationDTO product = productsForLocationService.getProductInLocation(productIncrease.getIdProduct(), productIncrease.getIdLocation());
             if (product != null) {
-                incrementsList.add(new ViewInventaryDTO(productIncrease.getDateOfEntry(), productIncrease.getIdLocation(), productIncrease.getIdProduct(), product.getProductName(), product.getCategory(), productIncrease.getQuantity()));
+                incrementsList.add(new ViewIncrementsDTO(productIncrease.getDateOfEntry(), productIncrease.getIdLocation(), productIncrease.getIdProduct(), product.getProductName(), product.getCategory(), productIncrease.getQuantity()));
             }
         }
-        productos_tableViewInventario.setItems(incrementsList);
-        productos_tableViewInventario.refresh();
+        incrementos_tableView.setItems(incrementsList);
+        incrementos_tableView.refresh();
+
+        incrementos_lblTotalIncrementos.setText(String.valueOf(incrementsList.size()));
     }
 
     @FXML
     private void filtrarIncrementos() {
-        ObservableList<ViewInventaryDTO> filteredList = FXCollections.observableArrayList(incrementsList);
+        ObservableList<ViewIncrementsDTO> filteredList = FXCollections.observableArrayList(incrementsList);
 
-//        String product = .getSelectionModel().getSelectedItem();
-//        Timestamp from = .getValue() != null ? Timestamp.valueOf(ventas_filtrar_desdeDate.getValue().atStartOfDay()) : null;
-//        Timestamp to = .getValue() != null ? Timestamp.valueOf(ventas_filtrar_hastaDate.getValue().atStartOfDay().plusDays(1)) : null;
-//
-//        if (product != null && !product.isEmpty()) {
-//            filteredList = filteredList.stream().filter(inventary -> inventary.getIdProduct().equals(product)).collect(Collectors.toCollection(FXCollections::observableArrayList));
-//        }
-//
-//        if (from != null) {
-//            filteredList = filteredList.stream().filter(inventary -> !inventary.getDateOfEntry().before(from)).collect(Collectors.toCollection(FXCollections::observableArrayList));
-//        }
-//
-//        if (to != null) {
-//            filteredList = filteredList.stream().filter(inventary -> !inventary.getDateOfEntry().after(to)).collect(Collectors.toCollection(FXCollections::observableArrayList));
-//        }
+        String product = incrementos_filtrar_productos.getSelectionModel().getSelectedItem();
+        Timestamp from = incrementos_filtrar_desdeDate.getValue() != null ? Timestamp.valueOf(incrementos_filtrar_desdeDate.getValue().atStartOfDay()) : null;
+        Timestamp to = incrementos_filtrar_hastaDate.getValue() != null ? Timestamp.valueOf(incrementos_filtrar_hastaDate.getValue().atStartOfDay().plusDays(1)) : null;
 
-        productos_tableViewInventario.setItems(filteredList);
-        productos_tableViewInventario.refresh();
+        if (product != null && !product.isEmpty()) {
+            filteredList = filteredList.stream().filter(inventary -> inventary.getProductName().equals(product)).collect(Collectors.toCollection(FXCollections::observableArrayList));
+        }
+
+        if (from != null) {
+            filteredList = filteredList.stream().filter(inventary -> !inventary.getDateOfEntry().before(from)).collect(Collectors.toCollection(FXCollections::observableArrayList));
+        }
+
+        if (to != null) {
+            filteredList = filteredList.stream().filter(inventary -> !inventary.getDateOfEntry().after(to)).collect(Collectors.toCollection(FXCollections::observableArrayList));
+        }
+
+        incrementos_tableView.setItems(filteredList);
+        incrementos_tableView.refresh();
+
+        incrementos_lblTotalIncrementos.setText(String.valueOf(filteredList.size()));
     }
 
     @FXML
@@ -805,6 +642,7 @@ public class SedesController implements Initializable {
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.setTitle("Aumentar productos");
+            stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/natursalas/natursalassystem/view/assets/logo.png"))));
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
             cargarProductos(idLocation);
@@ -833,7 +671,7 @@ public class SedesController implements Initializable {
     }
 
     private void agregarEventoDobleClickHistorial() {
-        pacientes_historial_tableViewMovimientos.setRowFactory(tv -> {
+        pacientes_historial_tableView.setRowFactory(tv -> {
             TableRow<ViewHistoryDTO> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2 && (!row.isEmpty())) {
@@ -853,6 +691,7 @@ public class SedesController implements Initializable {
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.setTitle("Detalles de la Venta");
+            stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/natursalas/natursalassystem/view/assets/logo.png"))));
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
         } catch (IOException e) {
@@ -879,6 +718,7 @@ public class SedesController implements Initializable {
         }
 
         ventas_filtrar_productos.setItems(productsNames);
+        incrementos_filtrar_productos.setItems(productsNames);
     }
 
     private void cargarPacientesComboBox(String idLocation) {
@@ -892,6 +732,22 @@ public class SedesController implements Initializable {
         }
 
         ventas_filtrar_pacientes.setItems(pacientesNombres);
+    }
+
+    private void inicializarEventosBorrarFiltroPacientes() {
+        pacientes_filtrar_desdeDate.getEditor().setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.DELETE) {
+                pacientes_filtrar_desdeDate.setValue(null);
+                cargarPacientes(idLocation);
+            }
+        });
+
+        pacientes_filtrar_hastaDate.getEditor().setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.DELETE) {
+                pacientes_filtrar_hastaDate.setValue(null);
+                cargarPacientes(idLocation);
+            }
+        });
     }
 
     private void inicializarEventosBorrarFiltroVentas() {
@@ -935,28 +791,27 @@ public class SedesController implements Initializable {
     }
 
     private void inicializarEventosBorrarFiltroIncrementos() {
-//        PARA INCREMENTOS
-//        ventas_filtrar_productos.setOnKeyPressed(event -> {
-//            if (event.getCode() == KeyCode.DELETE) {
-//                ventas_filtrar_productos.getSelectionModel().clearSelection();
-//                ventas_filtrar_productos.setValue(null);
-//                filtrarIncrementos();
-//            }
-//        });
-//
-//        ventas_filtrar_desdeDate.getEditor().setOnKeyPressed(event -> {
-//            if (event.getCode() == KeyCode.DELETE) {
-//                ventas_filtrar_desdeDate.setValue(null);
-//                filtrarIncrementos();
-//            }
-//        });
-//
-//        ventas_filtrar_hastaDate.getEditor().setOnKeyPressed(event -> {
-//            if (event.getCode() == KeyCode.DELETE) {
-//                ventas_filtrar_hastaDate.setValue(null);
-//                filtrarIncrementos();
-//            }
-//        });
+        incrementos_filtrar_productos.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.DELETE) {
+                incrementos_filtrar_productos.getSelectionModel().clearSelection();
+                incrementos_filtrar_productos.setValue(null);
+                filtrarIncrementos();
+            }
+        });
+
+        incrementos_filtrar_desdeDate.getEditor().setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.DELETE) {
+                incrementos_filtrar_desdeDate.setValue(null);
+                filtrarIncrementos();
+            }
+        });
+
+        incrementos_filtrar_hastaDate.getEditor().setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.DELETE) {
+                incrementos_filtrar_hastaDate.setValue(null);
+                filtrarIncrementos();
+            }
+        });
     }
 
     @FXML

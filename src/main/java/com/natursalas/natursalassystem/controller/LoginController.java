@@ -11,12 +11,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
@@ -88,10 +90,10 @@ public class LoginController implements Initializable {
     private void abrirPanelSegunRol(String role, String idLocation) {
         switch (role) {
             case "admin":
-                abrirVentana("Admin", "/com/natursalas/natursalassystem/view/fxml/Admin.fxml", null);
+                abrirVentana("Sistema de Administrador", "/com/natursalas/natursalassystem/view/fxml/Admin.fxml", null);
                 break;
             case "user":
-                abrirVentana("Sede", "/com/natursalas/natursalassystem/view/fxml/Sedes.fxml", idLocation);
+                abrirVentana("Sistema para Sede", "/com/natursalas/natursalassystem/view/fxml/Sedes.fxml", idLocation);
                 break;
             default:
                 AlertMessages.mostrarAlerta("Rol de usuario no reconocido.", Alert.AlertType.ERROR);
@@ -114,12 +116,11 @@ public class LoginController implements Initializable {
             Stage nuevaVentana = new Stage();
             nuevaVentana.setTitle(titulo);
             nuevaVentana.setScene(new Scene(root));
-
+            nuevaVentana.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/natursalas/natursalassystem/view/assets/logo.png"))));
             nuevaVentana.setOnCloseRequest(event -> {
                 Platform.exit();
                 System.exit(0);
             });
-
             nuevaVentana.show();
         } catch (IOException e) {
             AlertMessages.mostrarAlerta("Error al abrir la ventana de " + titulo + ".", Alert.AlertType.ERROR);
