@@ -695,7 +695,7 @@
                                                 styleClass="button-general" stylesheets="@../css/AdminDesign.css"
                                                 text="Editar" AnchorPane.rightAnchor="22.0"/>
                                         <TextField fx:id="productos_textFieldProductos" layoutX="146.0" layoutY="9.0"
-                                                   onKeyTyped="#buscarInventarioProductos" styleClass="text-field-1"
+                                                   onKeyTyped="#buscarProductos" styleClass="text-field-1"
                                                    stylesheets="@../css/AdminDesign.css"/>
                                         <Label layoutX="22.0" layoutY="609.0" text="Total de productos:"
                                                AnchorPane.bottomAnchor="24.599999999999955"

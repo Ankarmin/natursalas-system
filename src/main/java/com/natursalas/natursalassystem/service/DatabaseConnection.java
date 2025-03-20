@@ -5,9 +5,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DatabaseConnection {
-    private static final String URL = "jdbc:mysql://localhost:3306/salasdatabase";
-    private static final String USER = "root";
-    private static final String PASSWORD = "MySQLRootDSPR-";
+    private static final String URL = "jdbc:mysql://natursalasdatabase.c7aiu42g2cnf.us-east-2.rds.amazonaws.com:3306/natursalasdatabase";
+    private static final String USER = "admin";
+    private static final String PASSWORD = "natursalasdatabase";
 
     private static Connection connection;
 

@@ -575,7 +575,59 @@ public class AdminController implements Initializable {
     }
 
     @FXML
-    private void buscarInventarioProductos() {
+    private void agregarProducto() {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/natursalas/natursalassystem/view/fxml/AdminAgregarProducto.fxml"));
+            Parent root = fxmlLoader.load();
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Agregar Producto");
+            stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/natursalas/natursalassystem/view/assets/logo.png"))));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+
+            limpiarFiltrosProductos();
+            cargarProductos();
+        } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, "Error al abrir ventana de agregar producto: {0}", e.getMessage());
+            AlertMessages.mostrarAlerta("Ocurrió un error al abrir la ventana para agregar un producto.", Alert.AlertType.ERROR);
+        }
+    }
+
+    @FXML
+    private void editarProducto() {
+        ProductDTO product = productos_tableView_Productos.getSelectionModel().getSelectedItem();
+
+        if (product == null) {
+            AlertMessages.mostrarAlerta("Por favor, seleccione un producto de la tabla para poder editarlo.", Alert.AlertType.WARNING);
+            return;
+        }
+
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/natursalas/natursalassystem/view/fxml/AdminEditarProducto.fxml"));
+            Parent root = fxmlLoader.load();
+
+            AdminEditarProductoController controller = fxmlLoader.getController();
+            controller.setProductDTO(product);
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Editar Producto");
+            stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/natursalas/natursalassystem/view/assets/logo.png"))));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+
+            limpiarFiltrosProductos();
+            cargarProductos();
+        } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, "Error al abrir ventana de editar producto: {0}", e.getMessage());
+            AlertMessages.mostrarAlerta("Ocurrió un error al abrir la ventana para editar un producto.", Alert.AlertType.ERROR);
+        }
+    }
+
+    @FXML
+    private void buscarProductos() {
         String referencia = productos_textFieldProductos.getText().trim().toLowerCase();
 
         if (referencia.isEmpty()) {
@@ -653,122 +705,6 @@ public class AdminController implements Initializable {
         cuentas_tableViewCuentas.refresh();
     }
 
-    private void agregarEventoDobleClickPacientes() {
-        pacientes_tableView.setRowFactory(tv -> {
-            TableRow<PatientDTO> row = new TableRow<>();
-            row.setOnMouseClicked(event -> {
-                if (event.getClickCount() == 2 && (!row.isEmpty())) {
-                    PatientDTO rowData = row.getItem();
-                    cargarHistorialVentas(rowData.getDNI());
-                    pacientes_historial_name.setText(rowData.getFirstName());
-                    pacientes_historial_lastName.setText(rowData.getLastName());
-                    pacientes_historial_dni.setText(rowData.getDNI());
-                    pacientes_historial_telefono.setText(rowData.getPhoneNumber());
-                    pacientes_historial_nacimiento.setText(rowData.getDateOfBirth().toString());
-                }
-            });
-            return row;
-        });
-    }
-
-    private void agregarEventoDobleClickHistorial() {
-        pacientes_historial_tableView.setRowFactory(tv -> {
-            TableRow<ViewHistoryDTO> row = new TableRow<>();
-            row.setOnMouseClicked(event -> {
-                if (event.getClickCount() == 2 && (!row.isEmpty())) {
-                    abrirVentanaSaleDetail(row.getItem());
-                }
-            });
-            return row;
-        });
-    }
-
-    private void agregarEventoDobleClickCuentas() {
-        cuentas_tableViewCuentas.setRowFactory(tv -> {
-            TableRow<ViewAccountDTO> row = new TableRow<>();
-            row.setOnMouseClicked(event -> {
-                if (event.getClickCount() == 2 && (!row.isEmpty())) {
-                    ViewAccountDTO rowData = row.getItem();
-                    cuentas_editar_pswFieldContrasena.setText(rowData.getPassword());
-                    cuentas_editar_txtFieldContrasena.setText(rowData.getPassword());
-                    cuentas_editar_txtFieldCorreo.setText(rowData.getEmail());
-                    cuentas_editar_txtFieldSede_.setText(rowData.getIdLocation());
-                    cuentas_editar_txtFieldUbicacion.setText(rowData.getAddress());
-                }
-            });
-            return row;
-        });
-    }
-
-    private void abrirVentanaSaleDetail(ViewHistoryDTO history) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/natursalas/natursalassystem/view/fxml/AdminSaleDetails.fxml"));
-            Parent root = fxmlLoader.load();
-
-            AdminSaleDetailsController controller = fxmlLoader.getController();
-            controller.cargarDetallesVenta(history.getIdSale());
-
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Detalles de la Venta");
-            stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/natursalas/natursalassystem/view/assets/logo.png"))));
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.showAndWait();
-        } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, "Error al abrir ventana de detalles de venta", e);
-        }
-    }
-
-    @FXML
-    private void agregarProducto() {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/natursalas/natursalassystem/view/fxml/AdminAgregarProducto.fxml"));
-            Parent root = fxmlLoader.load();
-
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Agregar Producto");
-            stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/natursalas/natursalassystem/view/assets/logo.png"))));
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.showAndWait();
-
-            cargarProductos();
-        } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, "Error al abrir ventana de agregar producto: {0}", e.getMessage());
-            AlertMessages.mostrarAlerta("Ocurrió un error al abrir la ventana para agregar un producto.", Alert.AlertType.ERROR);
-        }
-    }
-
-    @FXML
-    private void editarProducto() {
-        ProductDTO product = productos_tableView_Productos.getSelectionModel().getSelectedItem();
-
-        if (product == null) {
-            AlertMessages.mostrarAlerta("Por favor, seleccione un producto de la tabla para poder editarlo.", Alert.AlertType.WARNING);
-            return;
-        }
-
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/natursalas/natursalassystem/view/fxml/AdminEditarProducto.fxml"));
-            Parent root = fxmlLoader.load();
-
-            AdminEditarProductoController controller = fxmlLoader.getController();
-            controller.setProductDTO(product);
-
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Editar Producto");
-            stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/natursalas/natursalassystem/view/assets/logo.png"))));
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.showAndWait();
-
-            cargarProductos();
-        } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, "Error al abrir ventana de editar producto: {0}", e.getMessage());
-            AlertMessages.mostrarAlerta("Ocurrió un error al abrir la ventana para editar un producto.", Alert.AlertType.ERROR);
-        }
-    }
-
     @FXML
     private void crearCuenta() {
         String email = cuentas_crear_txtFieldCorreo.getText();
@@ -840,8 +776,9 @@ public class AdminController implements Initializable {
         }
 
         AlertMessages.mostrarAlerta("Cuenta actualizada correctamente.", Alert.AlertType.INFORMATION);
-        cargarCuentas();
+
         limpiarCamposEditar();
+        cargarCuentas();
     }
 
     @FXML
@@ -869,6 +806,72 @@ public class AdminController implements Initializable {
 
         limpiarCamposEditar();
         cargarCuentas();
+    }
+
+    private void agregarEventoDobleClickPacientes() {
+        pacientes_tableView.setRowFactory(tv -> {
+            TableRow<PatientDTO> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (!row.isEmpty())) {
+                    PatientDTO rowData = row.getItem();
+                    cargarHistorialVentas(rowData.getDNI());
+                    pacientes_historial_name.setText(rowData.getFirstName());
+                    pacientes_historial_lastName.setText(rowData.getLastName());
+                    pacientes_historial_dni.setText(rowData.getDNI());
+                    pacientes_historial_telefono.setText(rowData.getPhoneNumber());
+                    pacientes_historial_nacimiento.setText(rowData.getDateOfBirth().toString());
+                }
+            });
+            return row;
+        });
+    }
+
+    private void agregarEventoDobleClickHistorial() {
+        pacientes_historial_tableView.setRowFactory(tv -> {
+            TableRow<ViewHistoryDTO> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (!row.isEmpty())) {
+                    abrirVentanaSaleDetail(row.getItem());
+                }
+            });
+            return row;
+        });
+    }
+
+    private void agregarEventoDobleClickCuentas() {
+        cuentas_tableViewCuentas.setRowFactory(tv -> {
+            TableRow<ViewAccountDTO> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (!row.isEmpty())) {
+                    ViewAccountDTO rowData = row.getItem();
+                    cuentas_editar_pswFieldContrasena.setText(rowData.getPassword());
+                    cuentas_editar_txtFieldContrasena.setText(rowData.getPassword());
+                    cuentas_editar_txtFieldCorreo.setText(rowData.getEmail());
+                    cuentas_editar_txtFieldSede_.setText(rowData.getIdLocation());
+                    cuentas_editar_txtFieldUbicacion.setText(rowData.getAddress());
+                }
+            });
+            return row;
+        });
+    }
+
+    private void abrirVentanaSaleDetail(ViewHistoryDTO history) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/natursalas/natursalassystem/view/fxml/AdminSaleDetails.fxml"));
+            Parent root = fxmlLoader.load();
+
+            AdminSaleDetailsController controller = fxmlLoader.getController();
+            controller.cargarDetallesVenta(history.getIdSale());
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Detalles de la Venta");
+            stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/natursalas/natursalassystem/view/assets/logo.png"))));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+        } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, "Error al abrir ventana de detalles de venta", e);
+        }
     }
 
     private void limpiarCamposEditar() {
@@ -1017,5 +1020,23 @@ public class AdminController implements Initializable {
         cargarTipoVentasComboBox();
         cargarProductosComboBox();
         cargarSedesComboBox();
+    }
+
+    private void limpiarFiltrosProductos() {
+        productos_textFieldProductos.clear();
+    }
+
+    private void limpiarFiltrosEditarCuenta() {
+        cuentas_editar_txtFieldCorreo.clear();
+        cuentas_editar_txtFieldContrasena.clear();
+        cuentas_editar_txtFieldSede_.clear();
+        cuentas_editar_txtFieldUbicacion.clear();
+    }
+
+    private void limpiarFiltrosCrearCuenta() {
+        cuentas_crear_txtFieldCorreo.clear();
+        cuentas_crear_txtFieldContrasena.clear();
+        cuentas_crear_txtFieldSede.clear();
+        cuentas_crear_txtFieldUbicacion.clear();
     }
 }

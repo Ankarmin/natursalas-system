@@ -189,8 +189,6 @@ END$$
 -- ==============================
 -- 📌 Evento para actualizar edad de pacientes
 -- ==============================
-SET GLOBAL event_scheduler = ON;
-
 CREATE EVENT update_patient_age_daily
 ON SCHEDULE EVERY 1 DAY STARTS CURRENT_TIMESTAMP
 DO BEGIN

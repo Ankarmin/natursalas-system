@@ -430,6 +430,8 @@ public class SedesController implements Initializable {
             stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/natursalas/natursalassystem/view/assets/logo.png"))));
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
+
+            limpiarFiltroPacientes();
             cargarPacientes(idLocation);
             cargarPacientesComboBox(idLocation);
             cargarInformacion(idLocation);
@@ -456,6 +458,8 @@ public class SedesController implements Initializable {
                 stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/natursalas/natursalassystem/view/assets/logo.png"))));
                 stage.initModality(Modality.APPLICATION_MODAL);
                 stage.showAndWait();
+
+                limpiarFiltroPacientes();
                 cargarPacientes(idLocation);
                 cargarPacientesComboBox(idLocation);
                 cargarInformacion(idLocation);
@@ -512,6 +516,8 @@ public class SedesController implements Initializable {
             stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/natursalas/natursalassystem/view/assets/logo.png"))));
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
+
+            limpiarFiltroVentas();
             cargarVentas(idLocation);
             cargarProductos(idLocation);
             cargarInformacion(idLocation);
@@ -645,6 +651,8 @@ public class SedesController implements Initializable {
             stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/natursalas/natursalassystem/view/assets/logo.png"))));
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
+            
+            limpiarFiltroIncrementos();
             cargarProductos(idLocation);
             cargarIncrementos(idLocation);
         } catch (IOException e) {
@@ -824,5 +832,29 @@ public class SedesController implements Initializable {
         cargarTipoVentasComboBox(idLocation);
         cargarProductosComboBox();
         cargarPacientesComboBox(idLocation);
+    }
+
+    private void limpiarFiltroPacientes() {
+        pacientes_txtFieldBuscarDNI.clear();
+        pacientes_filtrar_desdeDate.setValue(null);
+        pacientes_filtrar_hastaDate.setValue(null);
+    }
+
+    private void limpiarFiltroVentas() {
+        ventas_filtrar_productos.getSelectionModel().clearSelection();
+        ventas_filtrar_productos.setValue(null);
+        ventas_filtrar_pacientes.getSelectionModel().clearSelection();
+        ventas_filtrar_pacientes.setValue(null);
+        ventas_filtrar_desdeDate.setValue(null);
+        ventas_filtrar_hastaDate.setValue(null);
+        ventas_filtrar_tipoVenta.getSelectionModel().clearSelection();
+        ventas_filtrar_tipoVenta.setValue(null);
+    }
+
+    private void limpiarFiltroIncrementos() {
+        incrementos_filtrar_productos.getSelectionModel().clearSelection();
+        incrementos_filtrar_productos.setValue(null);
+        incrementos_filtrar_desdeDate.setValue(null);
+        incrementos_filtrar_hastaDate.setValue(null);
     }
 }

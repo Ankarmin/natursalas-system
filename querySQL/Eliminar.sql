@@ -4,7 +4,7 @@ DROP TABLE IF EXISTS salesDetail;
 DROP TABLE IF EXISTS sale;
 DROP TABLE IF EXISTS productsIncrease;
 DROP TABLE IF EXISTS product;
-DROP TABLE IF EXISTS productsforlocation;
+DROP TABLE IF EXISTS productsForLocation;
 DROP TABLE IF EXISTS patient;
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS location;
