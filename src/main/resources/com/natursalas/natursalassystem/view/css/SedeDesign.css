@@ -234,3 +234,18 @@
     -fx-text-fill: white;
     -fx-font-weight: bold;
 }
+
+.text-left {
+    -fx-text-alignment: left;
+    -fx-alignment: center-left;
+}
+
+.text-center {
+    -fx-text-alignment: center;
+    -fx-alignment: center;
+}
+
+.text-right {
+    -fx-text-alignment: right;
+    -fx-alignment: center-right;
+}
