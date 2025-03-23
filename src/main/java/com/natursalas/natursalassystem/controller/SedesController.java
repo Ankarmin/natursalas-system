@@ -398,6 +398,8 @@ public class SedesController implements Initializable {
 
     @FXML
     private void filtrarPacientes() {
+        pacientes_txtFieldBuscarDNI.clear();
+
         ObservableList<PatientDTO> filteredList = FXCollections.observableArrayList(patientsList);
 
         Timestamp from = pacientes_filtrar_desdeDate.getValue() != null ? Timestamp.valueOf(pacientes_filtrar_desdeDate.getValue().atStartOfDay()) : null;

@@ -463,26 +463,28 @@ public class AdminController implements Initializable {
     @FXML
     private void cargarPaciente() {
         String referencia = pacientes_txtFieldBuscarDNI.getText().trim().toLowerCase();
+        String filtroSeleccionado = pacientes_comboBoxSede.getValue();
+
+        ObservableList<PatientDTO> listaBase = (filtroSeleccionado != null && !filtroSeleccionado.isEmpty()) ? FXCollections.observableArrayList(patientsList.stream().filter(paciente -> paciente.getIdLocation().equalsIgnoreCase(filtroSeleccionado)).collect(Collectors.toList())) : patientsList;
 
         if (referencia.isEmpty()) {
-            pacientes_tableView.setItems(patientsList);
-            pacientes_tableView.refresh();
-            pacientes_lblTotalPacientes.setText(String.valueOf(patientsList.size()));
-            return;
+            pacientes_tableView.setItems(listaBase);
+        } else {
+            List<String> palabrasClave = Arrays.asList(referencia.split("\\s+"));
+
+            ObservableList<PatientDTO> filteredList = FXCollections.observableArrayList(listaBase.stream().filter(paciente -> palabrasClave.stream().anyMatch(palabra -> paciente.getDNI().toLowerCase().contains(palabra) || paciente.getFirstName().toLowerCase().contains(palabra) || paciente.getLastName().toLowerCase().contains(palabra))).collect(Collectors.toList()));
+
+            pacientes_tableView.setItems(filteredList);
         }
 
-        List<String> palabrasClave = Arrays.asList(referencia.split("\\s+"));
-
-        ObservableList<PatientDTO> filteredList = FXCollections.observableArrayList(patientsList.stream().filter(paciente -> palabrasClave.stream().anyMatch(palabra -> paciente.getDNI().toLowerCase().contains(palabra) || paciente.getFirstName().toLowerCase().contains(palabra) || paciente.getLastName().toLowerCase().contains(palabra))).collect(Collectors.toList()));
-
-        pacientes_tableView.setItems(filteredList);
         pacientes_tableView.refresh();
-
-        pacientes_lblTotalPacientes.setText(String.valueOf(filteredList.size()));
+        pacientes_lblTotalPacientes.setText(String.valueOf(pacientes_tableView.getItems().size()));
     }
 
     @FXML
     private void filtrarPacientes() {
+        pacientes_txtFieldBuscarDNI.clear();
+
         ObservableList<PatientDTO> filteredList = FXCollections.observableArrayList(patientsList);
 
         String location = pacientes_comboBoxSede.getSelectionModel().getSelectedItem();

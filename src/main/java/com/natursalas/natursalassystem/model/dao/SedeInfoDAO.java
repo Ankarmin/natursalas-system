@@ -41,13 +41,13 @@ public class SedeInfoDAO implements ISedeInfoDAO {
 
     private String getBestSellingProduct(String idLocation) {
         String query = """
-                SELECT p.productName, COUNT(sd.idProduct) as cantidad
+                SELECT p.productName, SUM(sd.quantity) AS total_vendido
                 FROM salesDetail sd
                 JOIN sale s ON sd.idSale = s.idSale
                 JOIN product p ON sd.idProduct = p.idProduct
                 WHERE s.idLocation = ? AND DATE(s.saleDate) = CURDATE()
-                GROUP BY sd.idProduct, p.productName
-                ORDER BY cantidad DESC
+                GROUP BY p.productName
+                ORDER BY total_vendido DESC
                 LIMIT 1;
                 """;
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
