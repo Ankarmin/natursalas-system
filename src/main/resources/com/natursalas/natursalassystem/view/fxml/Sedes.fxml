@@ -477,7 +477,7 @@
                                                 </TableView>
                                             </children>
                                         </AnchorPane>
-                                        <TextField fx:id="productos_textFieldProductos" layoutX="759.0" layoutY="23.0" onKeyTyped="#buscarInventarioProductos" prefHeight="31.0" prefWidth="224.0" styleClass="text-field-1" stylesheets="@../css/SedeDesign.css" AnchorPane.rightAnchor="19.0" />
+                                        <TextField fx:id="productos_textFieldProductos" layoutX="759.0" layoutY="23.0" onKeyTyped="#buscarProductos" prefHeight="31.0" prefWidth="224.0" styleClass="text-field-1" stylesheets="@../css/SedeDesign.css" AnchorPane.rightAnchor="19.0" />
                                         <Label layoutX="644.0" layoutY="25.0" text="Buscador" AnchorPane.rightAnchor="253.60000000000002">
                                             <font>
                                                 <Font size="18.0" />

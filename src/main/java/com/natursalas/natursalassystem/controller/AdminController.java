@@ -466,6 +466,8 @@ public class AdminController implements Initializable {
 
         if (referencia.isEmpty()) {
             pacientes_tableView.setItems(patientsList);
+            pacientes_tableView.refresh();
+            pacientes_lblTotalPacientes.setText(String.valueOf(patientsList.size()));
             return;
         }
 
@@ -632,6 +634,8 @@ public class AdminController implements Initializable {
 
         if (referencia.isEmpty()) {
             productos_tableView_Productos.setItems(productsList);
+            productos_tableView_Productos.refresh();
+            productos_lblTotalProductos.setText(String.valueOf(productsList.size()));
             return;
         }
 
@@ -932,7 +936,7 @@ public class AdminController implements Initializable {
             if (event.getCode() == KeyCode.DELETE) {
                 pacientes_comboBoxSede.getSelectionModel().clearSelection();
                 pacientes_comboBoxSede.setValue(null);
-                cargarPacientes();
+                filtrarPacientes();
             }
         });
     }
@@ -1020,6 +1024,12 @@ public class AdminController implements Initializable {
         cargarTipoVentasComboBox();
         cargarProductosComboBox();
         cargarSedesComboBox();
+
+        limpiarFiltrosProductos();
+        limpiarFiltrosEditarCuenta();
+        limpiarFiltrosCrearCuenta();
+        limpiarCamposEditar();
+        limpiarCamposCrear();
     }
 
     private void limpiarFiltrosProductos() {

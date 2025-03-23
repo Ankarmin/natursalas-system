@@ -381,6 +381,8 @@ public class SedesController implements Initializable {
 
         if (referencia.isEmpty()) {
             pacientes_tableViewPacientes.setItems(patientsList);
+            pacientes_tableViewPacientes.refresh();
+            pacientes_lblTotalPacientes.setText(String.valueOf(patientsList.size()));
             return;
         }
 
@@ -575,11 +577,13 @@ public class SedesController implements Initializable {
     }
 
     @FXML
-    private void buscarInventarioProductos() {
+    private void buscarProductos() {
         String referencia = productos_textFieldProductos.getText().trim().toLowerCase();
 
         if (referencia.isEmpty()) {
             productos_tableView.setItems(productsForLocationList);
+            productos_tableView.refresh();
+            productos_lblTotalProductos.setText(String.valueOf(productsForLocationList.size()));
             return;
         }
 
@@ -651,7 +655,7 @@ public class SedesController implements Initializable {
             stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/natursalas/natursalassystem/view/assets/logo.png"))));
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
-            
+
             limpiarFiltroIncrementos();
             cargarProductos(idLocation);
             cargarIncrementos(idLocation);
@@ -832,6 +836,10 @@ public class SedesController implements Initializable {
         cargarTipoVentasComboBox(idLocation);
         cargarProductosComboBox();
         cargarPacientesComboBox(idLocation);
+
+        limpiarFiltroPacientes();
+        limpiarFiltroVentas();
+        limpiarFiltroIncrementos();
     }
 
     private void limpiarFiltroPacientes() {
