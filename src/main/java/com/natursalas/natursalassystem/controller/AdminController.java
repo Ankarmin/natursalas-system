@@ -646,7 +646,6 @@ public class AdminController implements Initializable {
         ObservableList<ProductDTO> filteredList = FXCollections.observableArrayList(productsList.stream().filter(product -> palabrasClave.stream().anyMatch(palabra -> product.getProductName().toLowerCase().contains(palabra) || product.getIdProduct().toLowerCase().contains(palabra))).collect(Collectors.toList()));
 
         productos_tableView_Productos.setItems(filteredList);
-
         productos_lblTotalProductos.setText(String.valueOf(filteredList.size()));
     }
 
@@ -655,7 +654,8 @@ public class AdminController implements Initializable {
         List<ProductsIncreaseDTO> productsIncrease = productIncreaseService.getAllProductsIncreases();
 
         for (ProductsIncreaseDTO productIncrease : productsIncrease) {
-            ProductsForLocationDTO product = productsForLocationService.getProductInLocation(productIncrease.getIdProduct(), productIncrease.getIdLocation());
+            ProductsForLocationDTO productForLocation = productsForLocationService.getProductInLocation(productIncrease.getIdProduct(), productIncrease.getIdLocation());
+            ProductDTO product = productService.getProduct(productIncrease.getIdProduct());
             if (product != null) {
                 incrementsList.add(new ViewIncrementsDTO(productIncrease.getDateOfEntry(), productIncrease.getIdLocation(), productIncrease.getIdProduct(), product.getProductName(), product.getCategory(), productIncrease.getQuantity()));
             }

@@ -105,11 +105,16 @@ public class SedeAgregarVentaController implements Initializable {
     private void cargarProductosComboBox(String idLocation) {
         productsNames.clear();
         List<ProductsForLocationDTO> productsForLocation = productsForLocationService.getProductsForLocation(idLocation);
-        List<ProductsForLocationDTO> filteredProducts = new ArrayList<>(productsForLocation.stream().filter(product -> product.getStock() > 0).toList());
+        List<ProductsForLocationDTO> productsForLocationFiltered = new ArrayList<>(productsForLocation.stream().filter(product -> product.getStock() > 0).toList());
+        List<ViewProductsForLocationDTO> filteredProducts = new ArrayList<>();
+        for (ProductsForLocationDTO product : productsForLocationFiltered) {
+            ProductDTO productInfo = productService.getProduct(product.getIdProduct());
+            filteredProducts.add(new ViewProductsForLocationDTO(product.getIdProduct(), productInfo.getCategory(), productInfo.getProductName(), productInfo.getPrice(), product.getIdLocation(), product.getStock()));
+        }
 
-        filteredProducts.sort(Comparator.comparing(ProductsForLocationDTO::getProductName));
+        filteredProducts.sort(Comparator.comparing(ViewProductsForLocationDTO::getProductName));
 
-        for (ProductsForLocationDTO producto : filteredProducts) {
+        for (ViewProductsForLocationDTO producto : filteredProducts) {
             productsNames.add(producto.getProductName());
         }
 
@@ -147,11 +152,12 @@ public class SedeAgregarVentaController implements Initializable {
         }
 
         String productId = productService.getProductIdByProductName(productName);
-        ProductsForLocationDTO productInfo = productsForLocationService.getProductInLocation(productId, idLocation);
+        ProductsForLocationDTO productForLocation = productsForLocationService.getProductInLocation(productId, idLocation);
+        ProductDTO productInfo = productService.getProduct(productId);
 
         if (productInfo != null) {
             agregarVenta_txtFieldPrecioProducto.setText(String.valueOf(productInfo.getPrice()));
-            agregarVenta_lblStockProducto.setText(String.valueOf(productInfo.getStock()));
+            agregarVenta_lblStockProducto.setText(String.valueOf(productForLocation.getStock()));
         } else {
             AlertMessages.mostrarAlerta("No se pudo cargar la información del producto.", Alert.AlertType.ERROR);
         }

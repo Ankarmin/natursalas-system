@@ -5,4 +5,4 @@ SELECT * FROM product;
 SELECT * FROM productsincrease;
 SELECT * FROM productsforlocation;
 SELECT * FROM sale;
-SELECT * FROM salesdetail;
+SELECT * FROM salesDetail;

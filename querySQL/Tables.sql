@@ -41,9 +41,6 @@ CREATE TABLE product (
 -- Productos en ubicaciones con stock
 CREATE TABLE productsForLocation (
     idProduct VARCHAR(20),
-    category VARCHAR(30) NOT NULL,
-    productName VARCHAR(50) NOT NULL,
-    price INT NOT NULL CHECK (price >= 0),
     idLocation VARCHAR(50),
     stock INT NOT NULL DEFAULT 0 CHECK (stock >= 0),
     PRIMARY KEY (idProduct, idLocation),
@@ -97,8 +94,8 @@ CREATE TRIGGER afterInsertProduct
 AFTER INSERT ON product
 FOR EACH ROW
 BEGIN
-    INSERT INTO productsForLocation (idProduct, category, productName, price, idLocation, stock)
-    SELECT NEW.idProduct, NEW.category, NEW.productName, NEW.price, idLocation, 0 FROM location;
+    INSERT INTO productsForLocation (idProduct, idLocation, stock)
+    SELECT NEW.idProduct, idLocation, 0 FROM location;
 END$$
 
 -- ✅ Insertar productos en una nueva locación con stock = 0
@@ -106,8 +103,8 @@ CREATE TRIGGER afterInsertLocation
 AFTER INSERT ON location
 FOR EACH ROW
 BEGIN
-    INSERT INTO productsForLocation (idProduct, category, productName, price, idLocation, stock)
-    SELECT idProduct, category, productName, price, NEW.idLocation, 0 FROM product;
+    INSERT INTO productsForLocation (idProduct, idLocation, stock)
+    SELECT idProduct, NEW.idLocation, 0 FROM product;
 END$$
 
 -- ✅ Actualizar stock al incrementar productos
@@ -126,8 +123,9 @@ BEFORE INSERT ON salesDetail
 FOR EACH ROW
 BEGIN
     DECLARE currentStock INT;
-    SELECT stock INTO currentStock FROM productsForLocation
-    WHERE idProduct = NEW.idProduct AND idLocation = (SELECT idLocation FROM sale WHERE idSale = NEW.idSale);
+    SELECT stock INTO currentStock 
+    FROM productsForLocation 
+    WHERE idProduct = NEW.idProduct AND idLocation = NEW.idLocation;
     
     IF currentStock < NEW.quantity THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Stock insuficiente para la venta';

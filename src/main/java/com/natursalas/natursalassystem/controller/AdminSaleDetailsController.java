@@ -1,9 +1,11 @@
 package com.natursalas.natursalassystem.controller;
 
+import com.natursalas.natursalassystem.model.dto.ProductDTO;
 import com.natursalas.natursalassystem.model.dto.ProductsForLocationDTO;
 import com.natursalas.natursalassystem.model.dto.SaleDetailDTO;
 import com.natursalas.natursalassystem.model.dto.ViewSaleDetailDTO;
 import com.natursalas.natursalassystem.service.DatabaseConnection;
+import com.natursalas.natursalassystem.service.ProductService;
 import com.natursalas.natursalassystem.service.ProductsForLocationService;
 import com.natursalas.natursalassystem.service.SaleDetailService;
 import javafx.collections.FXCollections;
@@ -36,6 +38,7 @@ public class AdminSaleDetailsController implements Initializable {
     private TableView<ViewSaleDetailDTO> saleDetails_tableViewDetalles;
 
     private SaleDetailService saleDetailService;
+    private ProductService productService;
     private ProductsForLocationService productsForLocationService;
 
     @Override
@@ -47,6 +50,7 @@ public class AdminSaleDetailsController implements Initializable {
     private void configurarBaseDatos() {
         Connection connection = DatabaseConnection.getConnection();
         saleDetailService = new SaleDetailService(connection);
+        productService = new ProductService(connection);
         productsForLocationService = new ProductsForLocationService(connection);
     }
 
@@ -62,7 +66,8 @@ public class AdminSaleDetailsController implements Initializable {
         List<SaleDetailDTO> saleDetails = saleDetailService.getSalesDetailsBySaleId(idSale);
 
         for (SaleDetailDTO saleDetail : saleDetails) {
-            ProductsForLocationDTO product = productsForLocationService.getProductInLocation(saleDetail.getIdProduct(), saleDetail.getIdLocation());
+            ProductsForLocationDTO productForLocation = productsForLocationService.getProductInLocation(saleDetail.getIdProduct(), saleDetail.getIdLocation());
+            ProductDTO product = productService.getProduct(saleDetail.getIdProduct());
             if (product != null) {
                 observableList.add(new ViewSaleDetailDTO(saleDetail.getIdLocation(), product.getProductName(), saleDetail.getPrice(), saleDetail.getQuantity(), saleDetail.getSubtotal()));
             }

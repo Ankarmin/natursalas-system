@@ -44,7 +44,7 @@ public class SedesController implements Initializable {
     private final ObservableList<ViewSaleDTO> salesList = FXCollections.observableArrayList();
     private final ObservableList<String> productsNames = FXCollections.observableArrayList();
     private final ObservableList<ViewIncrementsDTO> incrementsList = FXCollections.observableArrayList();
-    private final ObservableList<ProductsForLocationDTO> productsForLocationList = FXCollections.observableArrayList();
+    private final ObservableList<ViewProductsForLocationDTO> productsForLocationList = FXCollections.observableArrayList();
     private final ObservableList<PatientDTO> patientsListInfo = FXCollections.observableArrayList();
 
     @FXML
@@ -162,19 +162,19 @@ public class SedesController implements Initializable {
     @FXML
     private AnchorPane panelVentas;
     @FXML
-    private TableColumn<ProductsForLocationDTO, Integer> productos_columna_cantidad;
+    private TableColumn<ViewProductsForLocationDTO, Integer> productos_columna_cantidad;
     @FXML
-    private TableColumn<ProductsForLocationDTO, String> productos_columna_categoria;
+    private TableColumn<ViewProductsForLocationDTO, String> productos_columna_categoria;
     @FXML
-    private TableColumn<ProductsForLocationDTO, String> productos_columna_idProducto;
+    private TableColumn<ViewProductsForLocationDTO, String> productos_columna_idProducto;
     @FXML
-    private TableColumn<ProductsForLocationDTO, Integer> productos_columna_precio;
+    private TableColumn<ViewProductsForLocationDTO, Integer> productos_columna_precio;
     @FXML
-    private TableColumn<ProductsForLocationDTO, String> productos_columna_producto;
+    private TableColumn<ViewProductsForLocationDTO, String> productos_columna_producto;
     @FXML
     private Label productos_lblTotalProductos;
     @FXML
-    private TableView<ProductsForLocationDTO> productos_tableView;
+    private TableView<ViewProductsForLocationDTO> productos_tableView;
     @FXML
     private TextField productos_textFieldProductos;
     @FXML
@@ -571,7 +571,10 @@ public class SedesController implements Initializable {
         productsForLocationList.clear();
         List<ProductsForLocationDTO> productsForLocation = productsForLocationService.getProductsForLocation(idLocation);
         List<ProductsForLocationDTO> filteredProducts = productsForLocation.stream().filter(product -> product.getStock() > 0).toList();
-        productsForLocationList.addAll(filteredProducts);
+        for (ProductsForLocationDTO product : filteredProducts) {
+            ProductDTO productDTO = productService.getProduct(product.getIdProduct());
+            productsForLocationList.add(new ViewProductsForLocationDTO(product.getIdProduct(), productDTO.getCategory(), productDTO.getProductName(), productDTO.getPrice(), product.getIdLocation(), product.getStock()));
+        }
         productos_tableView.setItems(productsForLocationList);
         productos_tableView.refresh();
 
@@ -591,7 +594,7 @@ public class SedesController implements Initializable {
 
         List<String> palabrasClave = Arrays.asList(referencia.split("\\s+"));
 
-        ObservableList<ProductsForLocationDTO> filteredList = FXCollections.observableArrayList(productsForLocationList.stream().filter(product -> palabrasClave.stream().anyMatch(palabra -> product.getProductName().toLowerCase().contains(palabra) || product.getIdProduct().toLowerCase().contains(palabra)  // También busca en idProduct
+        ObservableList<ViewProductsForLocationDTO> filteredList = FXCollections.observableArrayList(productsForLocationList.stream().filter(product -> palabrasClave.stream().anyMatch(palabra -> product.getProductName().toLowerCase().contains(palabra) || product.getIdProduct().toLowerCase().contains(palabra)  // También busca en idProduct
         )).collect(Collectors.toList()));
 
         productos_tableView.setItems(filteredList);
@@ -605,7 +608,8 @@ public class SedesController implements Initializable {
         List<ProductsIncreaseDTO> productsIncrease = productIncreaseService.getProductsIncreaseByLocation(idLocation);
 
         for (ProductsIncreaseDTO productIncrease : productsIncrease) {
-            ProductsForLocationDTO product = productsForLocationService.getProductInLocation(productIncrease.getIdProduct(), productIncrease.getIdLocation());
+            ProductsForLocationDTO productForLocation = productsForLocationService.getProductInLocation(productIncrease.getIdProduct(), productIncrease.getIdLocation());
+            ProductDTO product = productService.getProduct(productForLocation.getIdProduct());
             if (product != null) {
                 incrementsList.add(new ViewIncrementsDTO(productIncrease.getDateOfEntry(), productIncrease.getIdLocation(), productIncrease.getIdProduct(), product.getProductName(), product.getCategory(), productIncrease.getQuantity()));
             }

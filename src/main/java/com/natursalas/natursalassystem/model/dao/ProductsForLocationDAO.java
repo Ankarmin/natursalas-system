@@ -27,7 +27,7 @@ public class ProductsForLocationDAO implements IProductsForLocationDAO {
             stmt.setString(2, locationId);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return new ProductsForLocationDTO(rs.getString("idProduct"), rs.getString("category"), rs.getString("productName"), rs.getInt("price"), rs.getString("idLocation"), rs.getInt("stock"));
+                    return new ProductsForLocationDTO(rs.getString("idProduct"), rs.getString("idLocation"), rs.getInt("stock"));
                 }
             }
         } catch (SQLException e) {
@@ -45,7 +45,7 @@ public class ProductsForLocationDAO implements IProductsForLocationDAO {
             stmt.setString(1, idLocation);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    products.add(new ProductsForLocationDTO(rs.getString("idProduct"), rs.getString("category"), rs.getString("productName"), rs.getInt("price"), rs.getString("idLocation"), rs.getInt("stock")));
+                    products.add(new ProductsForLocationDTO(rs.getString("idProduct"), rs.getString("idLocation"), rs.getInt("stock")));
                 }
             }
         } catch (SQLException e) {

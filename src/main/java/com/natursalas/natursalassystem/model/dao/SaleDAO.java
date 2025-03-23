@@ -23,14 +23,15 @@ public class SaleDAO implements ISaleDAO {
             return false;
         }
 
-        String query = "UPDATE sale SET DNI = ?, diagnosis = ?, category = ?, idLocation = ?, subtotal = ? WHERE idSale = ?";
+        String query = "UPDATE sale SET DNI = ?, diagnosis = ?, category = ?, idLocation = ?, subtotal = ?, saleDate = ? WHERE idSale = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, updatedSale.getDNI());
             stmt.setString(2, updatedSale.getDiagnosis());
             stmt.setString(3, updatedSale.getCategory());
             stmt.setString(4, updatedSale.getIdLocation());
             stmt.setInt(5, updatedSale.getSubtotal());
-            stmt.setString(6, updatedSale.getIdSale());
+            stmt.setTimestamp(6, updatedSale.getSaleDate());
+            stmt.setString(7, updatedSale.getIdSale());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error updating sale", e);
