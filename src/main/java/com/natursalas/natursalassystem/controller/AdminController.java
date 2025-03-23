@@ -1025,11 +1025,18 @@ public class AdminController implements Initializable {
         cargarProductosComboBox();
         cargarSedesComboBox();
 
+        limpiarFiltrosPacientes();
         limpiarFiltrosProductos();
         limpiarFiltrosEditarCuenta();
         limpiarFiltrosCrearCuenta();
         limpiarCamposEditar();
         limpiarCamposCrear();
+    }
+
+    private void limpiarFiltrosPacientes() {
+        pacientes_txtFieldBuscarDNI.clear();
+        pacientes_comboBoxSede.getSelectionModel().clearSelection();
+        pacientes_comboBoxSede.setValue(null);
     }
 
     private void limpiarFiltrosProductos() {
