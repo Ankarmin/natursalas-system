@@ -22,21 +22,7 @@ public class SedeInfoDAO implements ISedeInfoDAO {
 
     @Override
     public SedeInfoDTO getSedeInfo(String idLocation) {
-        String bestSellingProduct = getBestSellingProduct(idLocation);
-        int productsSoldToday = getProductsSoldToday(idLocation);
-        int patientsAttendedToday = executeSingleIntQuery("""
-                 SELECT COUNT(DISTINCT s.DNI)\s
-                 FROM sale s\s
-                 WHERE s.idLocation = ? AND DATE(s.saleDate) = CURDATE();
-                \s""", idLocation);
-        int newPatientsToday = executeSingleIntQuery("""
-                 SELECT COUNT(*)\s
-                 FROM patient\s
-                 WHERE idLocation = ? AND DATE(dateOfEntry) = CURDATE();
-                \s""", idLocation);
-        List<PatientDTO> patientsAttendedTodayList = getPatientsAttendedTodayList(idLocation);
-
-        return new SedeInfoDTO(bestSellingProduct, productsSoldToday, patientsAttendedToday, newPatientsToday, patientsAttendedTodayList);
+        return new SedeInfoDTO(getBestSellingProduct(idLocation), getProductsSoldToday(idLocation), getPatientsAttendedToday(idLocation), getNewPatientsToday(idLocation), getPatientsAttendedTodayList(idLocation));
     }
 
     private String getBestSellingProduct(String idLocation) {
@@ -53,24 +39,37 @@ public class SedeInfoDAO implements ISedeInfoDAO {
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, idLocation);
             try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getString("productName");
-                }
+                return rs.next() ? rs.getString("productName") : "Sin ventas hoy";
             }
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error al obtener el producto más vendido", e);
+            LOGGER.log(Level.SEVERE, "Error al obtener el producto más vendido. Query: " + query, e);
+            return "Error al obtener datos";
         }
-        return "Sin ventas hoy";
     }
 
     private int getProductsSoldToday(String idLocation) {
-        String query = """
-                 SELECT COALESCE(SUM(sd.quantity), 0)\s
+        return executeSingleIntQuery("""
+                 SELECT COALESCE(SUM(sd.quantity), 0)
                  FROM salesDetail sd
                  JOIN sale s ON sd.idSale = s.idSale
                  WHERE s.idLocation = ? AND DATE(s.saleDate) = CURDATE();
-                \s""";
-        return executeSingleIntQuery(query, idLocation);
+                """, idLocation);
+    }
+
+    private int getPatientsAttendedToday(String idLocation) {
+        return executeSingleIntQuery("""
+                SELECT COUNT(DISTINCT s.DNI)
+                FROM sale s
+                WHERE s.idLocation = ? AND DATE(s.saleDate) = CURDATE();
+                """, idLocation);
+    }
+
+    private int getNewPatientsToday(String idLocation) {
+        return executeSingleIntQuery("""
+                SELECT COUNT(*)
+                FROM patient
+                WHERE idLocation = ? AND DATE(dateOfEntry) = CURDATE();
+                """, idLocation);
     }
 
     private List<PatientDTO> getPatientsAttendedTodayList(String idLocation) {
@@ -89,7 +88,7 @@ public class SedeInfoDAO implements ISedeInfoDAO {
                 }
             }
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error al obtener la lista de pacientes atendidos hoy", e);
+            LOGGER.log(Level.SEVERE, "Error al obtener la lista de pacientes atendidos hoy. Query: " + query, e);
         }
         return patients;
     }
@@ -98,13 +97,11 @@ public class SedeInfoDAO implements ISedeInfoDAO {
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, idLocation);
             try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt(1);
-                }
+                return rs.next() ? rs.getInt(1) : 0;
             }
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error ejecutando consulta", e);
+            LOGGER.log(Level.SEVERE, "Error ejecutando consulta. Query: " + query, e);
+            return 0;
         }
-        return 0;
     }
 }

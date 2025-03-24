@@ -1,5 +1,6 @@
 package com.natursalas.natursalassystem.model.dto;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 public class ViewHistoryDTO {
@@ -7,9 +8,12 @@ public class ViewHistoryDTO {
     private Timestamp saleDate;
     private String idLocation;
     private String diagnosis;
-    private int subtotal;
+    private BigDecimal subtotal;
 
-    public ViewHistoryDTO(String idSale, Timestamp saleDate, String idLocation, String diagnosis, int subtotal) {
+    public ViewHistoryDTO() {
+    }
+
+    public ViewHistoryDTO(String idSale, Timestamp saleDate, String idLocation, String diagnosis, BigDecimal subtotal) {
         this.idSale = idSale;
         this.saleDate = saleDate;
         this.idLocation = idLocation;
@@ -49,12 +53,11 @@ public class ViewHistoryDTO {
         this.diagnosis = diagnosis;
     }
 
-    public int getSubtotal() {
+    public BigDecimal getSubtotal() {
         return subtotal;
     }
 
-    public void setSubtotal(int subtotal) {
+    public void setSubtotal(BigDecimal subtotal) {
         this.subtotal = subtotal;
     }
-
 }

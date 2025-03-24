@@ -11,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
+import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -34,9 +35,9 @@ public class SedeAgregarVentaController implements Initializable {
     @FXML
     private TableColumn<ViewAddSaleDTO, String> agregarVenta_columna_idProducto;
     @FXML
-    private TableColumn<ViewAddSaleDTO, Integer> agregarVenta_columna_precioTotal;
+    private TableColumn<ViewAddSaleDTO, BigDecimal> agregarVenta_columna_precioTotal;
     @FXML
-    private TableColumn<ViewAddSaleDTO, Integer> agregarVenta_columna_precioUnitario;
+    private TableColumn<ViewAddSaleDTO, BigDecimal> agregarVenta_columna_precioUnitario;
     @FXML
     private TableColumn<ViewAddSaleDTO, String> agregarVenta_columna_producto;
     @FXML
@@ -174,12 +175,14 @@ public class SedeAgregarVentaController implements Initializable {
             return;
         }
 
-        int quantity, price;
+        int quantity;
+        BigDecimal price;
+
         try {
             quantity = Integer.parseInt(cantidadTexto);
-            price = Integer.parseInt(precioTexto);
+            price = new BigDecimal(precioTexto);
 
-            if (quantity <= 0) {
+            if (quantity <= 0 || price.compareTo(BigDecimal.ZERO) <= 0) {
                 throw new NumberFormatException();
             }
         } catch (NumberFormatException e) {
@@ -202,7 +205,9 @@ public class SedeAgregarVentaController implements Initializable {
             }
         }
 
-        productsSelected.add(new ViewAddSaleDTO(productId, productName, price, quantity, price * quantity));
+        BigDecimal subtotal = price.multiply(BigDecimal.valueOf(quantity));
+
+        productsSelected.add(new ViewAddSaleDTO(productId, productName, price, quantity, subtotal));
         limpiarDatos();
         agregarVenta_tableViewProductosSeleccionados.setItems(productsSelected);
     }
@@ -255,12 +260,13 @@ public class SedeAgregarVentaController implements Initializable {
             String idSale = java.util.UUID.randomUUID().toString();
 
             List<SaleDetailDTO> saleDetails = new ArrayList<>();
-            int total = 0;
+            BigDecimal total = BigDecimal.ZERO;
 
             for (ViewAddSaleDTO product : productsSelected) {
-                SaleDetailDTO detail = new SaleDetailDTO(idSale, product.getIdProduct(), idLocation, product.getQuantity(), product.getPrice(), product.getPrice() * product.getQuantity());
+                BigDecimal subtotal = product.getPrice().multiply(BigDecimal.valueOf(product.getQuantity())); // Multiplicación con BigDecimal
+                SaleDetailDTO detail = new SaleDetailDTO(idSale, product.getIdProduct(), idLocation, product.getQuantity(), product.getPrice(), subtotal);
                 saleDetails.add(detail);
-                total += product.getSubtotal();
+                total = total.add(subtotal);
             }
 
             boolean detallesInsertados = saleDetailService.addSalesDetails(idSale, saleDetails);
@@ -278,6 +284,7 @@ public class SedeAgregarVentaController implements Initializable {
             updatedSale.setSaleDate();
             updatedSale.setIdLocation(idLocation);
             updatedSale.setSubtotal(total);
+
             boolean ventaActualizada = saleService.updateSale(updatedSale);
 
             if (ventaActualizada) {

@@ -28,7 +28,7 @@ public class ProductDAO implements IProductDAO {
             stmt.setString(1, newProduct.getIdProduct());
             stmt.setString(2, newProduct.getCategory());
             stmt.setString(3, newProduct.getProductName());
-            stmt.setInt(4, newProduct.getPrice());
+            stmt.setBigDecimal(4, newProduct.getPrice());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error adding product", e);
@@ -47,7 +47,7 @@ public class ProductDAO implements IProductDAO {
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, updatedProduct.getCategory());
             stmt.setString(2, updatedProduct.getProductName());
-            stmt.setInt(3, updatedProduct.getPrice());
+            stmt.setBigDecimal(3, updatedProduct.getPrice());
             stmt.setString(4, updatedProduct.getIdProduct());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -63,7 +63,7 @@ public class ProductDAO implements IProductDAO {
             stmt.setString(1, productId);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return new ProductDTO(rs.getString("idProduct"), rs.getString("category"), rs.getString("productName"), rs.getInt("price"));
+                    return new ProductDTO(rs.getString("idProduct"), rs.getString("category"), rs.getString("productName"), rs.getBigDecimal("price"));
                 }
             }
         } catch (SQLException e) {
@@ -78,7 +78,7 @@ public class ProductDAO implements IProductDAO {
         String query = "SELECT * FROM product";
         try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
             while (rs.next()) {
-                products.add(new ProductDTO(rs.getString("idProduct"), rs.getString("category"), rs.getString("productName"), rs.getInt("price")));
+                products.add(new ProductDTO(rs.getString("idProduct"), rs.getString("category"), rs.getString("productName"), rs.getBigDecimal("price")));
             }
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error retrieving all products", e);

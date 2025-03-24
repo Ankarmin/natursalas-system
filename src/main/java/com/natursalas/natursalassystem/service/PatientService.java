@@ -32,4 +32,8 @@ public class PatientService {
     public List<PatientDTO> getPatientsByLocation(String idLocation) {
         return patientDAO.getPatientsByLocation(idLocation);
     }
+
+    public PatientDTO getPatientByDNI(String idPatient) {
+        return patientDAO.getPatientByDNI(idPatient);
+    }
 }

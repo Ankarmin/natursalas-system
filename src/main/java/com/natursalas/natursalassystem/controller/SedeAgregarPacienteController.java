@@ -71,11 +71,17 @@ public class SedeAgregarPacienteController implements Initializable {
             }
 
             String DNI = agregarPaciente_dni.getText().trim();
-            String phoneNumber = agregarPaciente_telefono.getText().trim();
             if (!DNI.matches("\\d{8}")) {
                 AlertMessages.mostrarAlerta("El DNI debe tener 8 dígitos.", Alert.AlertType.WARNING);
                 return;
             }
+
+            if (patientService.getPatientByDNI(DNI) != null) {
+                AlertMessages.mostrarAlerta("El paciente con DNI " + DNI + " ya está registrado en el sistema.", Alert.AlertType.ERROR);
+                return;
+            }
+
+            String phoneNumber = agregarPaciente_telefono.getText().trim();
             if (!phoneNumber.matches("\\d{9}")) {
                 AlertMessages.mostrarAlerta("El número de teléfono debe tener 9 dígitos.", Alert.AlertType.WARNING);
                 return;
@@ -95,7 +101,6 @@ public class SedeAgregarPacienteController implements Initializable {
 
             Date dateOfBirth = Date.valueOf(agregarPaciente_fechaNacimiento.getValue());
             Date currentDate = new Date(System.currentTimeMillis());
-
             if (!dateOfBirth.before(currentDate)) {
                 AlertMessages.mostrarAlerta("La fecha de nacimiento debe ser anterior a la fecha actual.", Alert.AlertType.WARNING);
                 return;

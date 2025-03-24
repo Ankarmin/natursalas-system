@@ -100,4 +100,20 @@ public class PatientDAO implements IPatientDAO {
         }
         return patients;
     }
+
+    @Override
+    public PatientDTO getPatientByDNI(String DNI) {
+        String query = "SELECT * FROM patient WHERE DNI = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, DNI);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return new PatientDTO(rs.getString("DNI"), rs.getString("firstName"), rs.getString("lastName"), rs.getInt("age"), rs.getString("phoneNumber"), rs.getTimestamp("dateOfEntry"), rs.getDate("dateOfBirth"), rs.getString("idLocation"));
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error retrieving patient by ID (DNI)", e);
+        }
+        return null;
+    }
 }

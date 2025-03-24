@@ -2,13 +2,13 @@
 -- 📌 Estructura de la Base de Datos
 -- ==============================
 
--- Ubicaciones
+-- 📌 Ubicaciones
 CREATE TABLE location (
     idLocation VARCHAR(50) PRIMARY KEY,
     address VARCHAR(100)
 );
 
--- Usuarios
+-- 📌 Usuarios
 CREATE TABLE user (
     email VARCHAR(50) PRIMARY KEY,
     password VARCHAR(50) NOT NULL,
@@ -17,7 +17,7 @@ CREATE TABLE user (
     FOREIGN KEY (idLocation) REFERENCES location(idLocation)
 );
 
--- Pacientes
+-- 📌 Pacientes
 CREATE TABLE patient (
     DNI CHAR(8) PRIMARY KEY,
     firstName VARCHAR(50) NOT NULL,
@@ -30,15 +30,15 @@ CREATE TABLE patient (
     FOREIGN KEY (idLocation) REFERENCES location(idLocation)
 );
 
--- Productos
+-- 📌 Productos (ahora con precio decimal)
 CREATE TABLE product (
     idProduct VARCHAR(20) PRIMARY KEY,
     category VARCHAR(30) NOT NULL,
     productName VARCHAR(50) NOT NULL,
-    price INT NOT NULL CHECK (price >= 0)
+    price DECIMAL(10,2) NOT NULL CHECK (price >= 0.00)
 );
 
--- Productos en ubicaciones con stock
+-- 📌 Productos en ubicaciones con stock
 CREATE TABLE productsForLocation (
     idProduct VARCHAR(20),
     idLocation VARCHAR(50),
@@ -48,7 +48,7 @@ CREATE TABLE productsForLocation (
     FOREIGN KEY (idLocation) REFERENCES location(idLocation)
 );
 
--- Incremento de stock
+-- 📌 Incremento de stock
 CREATE TABLE productsIncrease (
     idProductIncrease INT AUTO_INCREMENT PRIMARY KEY,
     idProduct VARCHAR(20) NOT NULL,
@@ -58,19 +58,19 @@ CREATE TABLE productsIncrease (
     FOREIGN KEY (idProduct, idLocation) REFERENCES productsForLocation(idProduct, idLocation)
 );
 
--- Detalles de ventas
+-- 📌 Detalles de ventas (precio en DECIMAL)
 CREATE TABLE salesDetail (
     idSale CHAR(36),
     idProduct VARCHAR(20) NOT NULL,
     idLocation VARCHAR(50) NOT NULL,
     quantity INT NOT NULL CHECK (quantity > 0),
-    price INT NOT NULL CHECK (price >= 0),
-    subtotal INT GENERATED ALWAYS AS (quantity * price) STORED,
+    price DECIMAL(10,2) NOT NULL CHECK (price >= 0.00),
+    subtotal DECIMAL(10,2) GENERATED ALWAYS AS (quantity * price) STORED,
     PRIMARY KEY (idSale, idProduct, idLocation),
     FOREIGN KEY (idProduct, idLocation) REFERENCES productsForLocation(idProduct, idLocation)
 );
 
--- Ventas
+-- 📌 Ventas
 CREATE TABLE sale (
     idSale CHAR(36) PRIMARY KEY,
     DNI CHAR(8) NOT NULL,
@@ -78,7 +78,7 @@ CREATE TABLE sale (
     category VARCHAR(30) NOT NULL,
     saleDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     idLocation VARCHAR(50) NOT NULL,
-    subtotal INT NOT NULL,
+    subtotal DECIMAL(10,2) NOT NULL,
     FOREIGN KEY (idSale) REFERENCES salesDetail(idSale) ON DELETE CASCADE,
     FOREIGN KEY (DNI) REFERENCES patient(DNI),
     FOREIGN KEY (idLocation) REFERENCES location(idLocation)
@@ -150,7 +150,7 @@ BEGIN
 
     -- Actualizar subtotal de la venta
     UPDATE sale
-    SET subtotal = (SELECT COALESCE(SUM(subtotal), 0) FROM salesDetail WHERE idSale = NEW.idSale)
+    SET subtotal = (SELECT COALESCE(SUM(subtotal), 0.00) FROM salesDetail WHERE idSale = NEW.idSale)
     WHERE idSale = NEW.idSale;
 END$$
 
@@ -160,7 +160,7 @@ AFTER UPDATE ON salesDetail
 FOR EACH ROW
 BEGIN
     UPDATE sale
-    SET subtotal = (SELECT COALESCE(SUM(subtotal), 0) FROM salesDetail WHERE idSale = NEW.idSale)
+    SET subtotal = (SELECT COALESCE(SUM(subtotal), 0.00) FROM salesDetail WHERE idSale = NEW.idSale)
     WHERE idSale = NEW.idSale;
 END$$
 

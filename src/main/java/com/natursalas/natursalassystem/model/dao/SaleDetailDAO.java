@@ -33,7 +33,7 @@ public class SaleDetailDAO implements ISalesDetailDAO {
                 stmt.setString(2, detail.getIdProduct());
                 stmt.setString(3, detail.getIdLocation());
                 stmt.setInt(4, detail.getQuantity());
-                stmt.setInt(5, detail.getPrice());
+                stmt.setBigDecimal(5, detail.getPrice());
                 stmt.addBatch();
             }
             stmt.executeBatch();
@@ -53,7 +53,7 @@ public class SaleDetailDAO implements ISalesDetailDAO {
             stmt.setString(1, idSale);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    salesDetails.add(new SaleDetailDTO(rs.getString("idSale"), rs.getString("idProduct"), rs.getString("idLocation"), rs.getInt("quantity"), rs.getInt("price"), rs.getInt("subtotal")));
+                    salesDetails.add(new SaleDetailDTO(rs.getString("idSale"), rs.getString("idProduct"), rs.getString("idLocation"), rs.getInt("quantity"), rs.getBigDecimal("price"), rs.getBigDecimal("subtotal")));
                 }
             }
         } catch (SQLException e) {

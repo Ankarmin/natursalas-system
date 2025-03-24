@@ -11,6 +11,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URL;
 import java.sql.Connection;
 import java.util.ResourceBundle;
@@ -62,7 +64,7 @@ public class AdminEditarProductoController implements Initializable {
     private void editarProducto() {
         try {
             String nombre = editarProducto_textFieldNombre.getText().trim();
-            String precioTexto = editarProducto_textFieldPrecio.getText().trim();
+            String precioTexto = editarProducto_textFieldPrecio.getText().trim().replace(",", ".");
             String categoria = editarProducto_comboBoxCategoria.getValue();
 
             if (nombre.isEmpty() || precioTexto.isEmpty() || categoria == null) {
@@ -70,14 +72,19 @@ public class AdminEditarProductoController implements Initializable {
                 return;
             }
 
-            int precio;
+            if (!precioTexto.matches("^\\d+(\\.\\d{1,2})?$")) {
+                AlertMessages.mostrarAlerta("El precio debe ser un número positivo con máximo 2 decimales.", javafx.scene.control.Alert.AlertType.WARNING);
+                return;
+            }
+
+            BigDecimal precio;
             try {
-                precio = Integer.parseInt(precioTexto);
-                if (precio <= 0) {
+                precio = new BigDecimal(precioTexto).setScale(2, RoundingMode.HALF_UP);
+                if (precio.compareTo(BigDecimal.ZERO) <= 0) {
                     throw new NumberFormatException();
                 }
             } catch (NumberFormatException e) {
-                AlertMessages.mostrarAlerta("El precio debe ser un número positivo.", javafx.scene.control.Alert.AlertType.WARNING);
+                AlertMessages.mostrarAlerta("El precio debe ser un número positivo con máximo 2 decimales.", javafx.scene.control.Alert.AlertType.WARNING);
                 return;
             }
 
@@ -93,6 +100,7 @@ public class AdminEditarProductoController implements Initializable {
             } else {
                 AlertMessages.mostrarAlerta("No se pudo actualizar el producto. Inténtelo nuevamente.", javafx.scene.control.Alert.AlertType.ERROR);
             }
+
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error al actualizar producto: {0}", e.getMessage());
             AlertMessages.mostrarAlerta("Ocurrió un error inesperado al actualizar el producto.", javafx.scene.control.Alert.AlertType.ERROR);

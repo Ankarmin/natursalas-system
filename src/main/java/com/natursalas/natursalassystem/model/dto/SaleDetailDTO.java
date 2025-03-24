@@ -1,17 +1,19 @@
 package com.natursalas.natursalassystem.model.dto;
 
+import java.math.BigDecimal;
+
 public class SaleDetailDTO {
     private String idSale;
     private String idProduct;
     private String idLocation;
     private int quantity;
-    private int price;
-    private int subtotal;
+    private BigDecimal price;
+    private BigDecimal subtotal;
 
     public SaleDetailDTO() {
     }
 
-    public SaleDetailDTO(String idSale, String idProduct, String idLocation, int quantity, int price, int subtotal) {
+    public SaleDetailDTO(String idSale, String idProduct, String idLocation, int quantity, BigDecimal price, BigDecimal subtotal) {
         this.idSale = idSale;
         this.idProduct = idProduct;
         this.idLocation = idLocation;
@@ -52,19 +54,19 @@ public class SaleDetailDTO {
         this.quantity = quantity;
     }
 
-    public int getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
-    public int getSubtotal() {
+    public BigDecimal getSubtotal() {
         return subtotal;
     }
 
-    public void setSubtotal(int subtotal) {
+    public void setSubtotal(BigDecimal subtotal) {
         this.subtotal = subtotal;
     }
 }

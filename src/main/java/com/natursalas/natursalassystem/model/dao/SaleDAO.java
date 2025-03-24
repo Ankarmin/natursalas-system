@@ -23,15 +23,14 @@ public class SaleDAO implements ISaleDAO {
             return false;
         }
 
-        String query = "UPDATE sale SET DNI = ?, diagnosis = ?, category = ?, idLocation = ?, subtotal = ?, saleDate = ? WHERE idSale = ?";
+        String query = "UPDATE sale SET DNI = ?, diagnosis = ?, category = ?, idLocation = ?, subtotal = ? WHERE idSale = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, updatedSale.getDNI());
             stmt.setString(2, updatedSale.getDiagnosis());
             stmt.setString(3, updatedSale.getCategory());
             stmt.setString(4, updatedSale.getIdLocation());
-            stmt.setInt(5, updatedSale.getSubtotal());
-            stmt.setTimestamp(6, updatedSale.getSaleDate());
-            stmt.setString(7, updatedSale.getIdSale());
+            stmt.setBigDecimal(5, updatedSale.getSubtotal());
+            stmt.setString(6, updatedSale.getIdSale());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error updating sale", e);
@@ -47,7 +46,7 @@ public class SaleDAO implements ISaleDAO {
         try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
 
             while (rs.next()) {
-                salesList.add(new SaleDTO(rs.getString("idSale"), rs.getString("DNI"), rs.getString("diagnosis"), rs.getString("category"), rs.getTimestamp("saleDate"), rs.getString("idLocation"), rs.getInt("subtotal")));
+                salesList.add(new SaleDTO(rs.getString("idSale"), rs.getString("DNI"), rs.getString("diagnosis"), rs.getString("category"), rs.getTimestamp("saleDate"), rs.getString("idLocation"), rs.getBigDecimal("subtotal")));
             }
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error retrieving all sales", e);
@@ -64,7 +63,7 @@ public class SaleDAO implements ISaleDAO {
             stmt.setString(1, dni);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    salesList.add(new SaleDTO(rs.getString("idSale"), rs.getString("DNI"), rs.getString("diagnosis"), rs.getString("category"), rs.getTimestamp("saleDate"), rs.getString("idLocation"), rs.getInt("subtotal")));
+                    salesList.add(new SaleDTO(rs.getString("idSale"), rs.getString("DNI"), rs.getString("diagnosis"), rs.getString("category"), rs.getTimestamp("saleDate"), rs.getString("idLocation"), rs.getBigDecimal("subtotal")));
                 }
             }
         } catch (SQLException e) {
@@ -82,7 +81,7 @@ public class SaleDAO implements ISaleDAO {
             stmt.setString(1, idLocation);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    salesList.add(new SaleDTO(rs.getString("idSale"), rs.getString("DNI"), rs.getString("diagnosis"), rs.getString("category"), rs.getTimestamp("saleDate"), rs.getString("idLocation"), rs.getInt("subtotal")));
+                    salesList.add(new SaleDTO(rs.getString("idSale"), rs.getString("DNI"), rs.getString("diagnosis"), rs.getString("category"), rs.getTimestamp("saleDate"), rs.getString("idLocation"), rs.getBigDecimal("subtotal")));
                 }
             }
         } catch (SQLException e) {

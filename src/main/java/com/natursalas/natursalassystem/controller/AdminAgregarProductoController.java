@@ -12,6 +12,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -53,7 +55,7 @@ public class AdminAgregarProductoController implements Initializable {
         try {
             String nombre = agregarProducto_textFieldNombre.getText().trim();
             String codigo = agregarProducto_textFieldCodigo.getText().trim();
-            String precioTexto = agregarProducto_textFieldPrecio.getText().trim();
+            String precioTexto = agregarProducto_textFieldPrecio.getText().trim().replace(",", ".");
             String categoria = agregarProducto_comboBoxCategoria.getValue();
 
             if (nombre.isEmpty() || codigo.isEmpty() || precioTexto.isEmpty() || categoria == null) {
@@ -66,14 +68,19 @@ public class AdminAgregarProductoController implements Initializable {
                 return;
             }
 
-            int precio;
+            if (!precioTexto.matches("^\\d+(\\.\\d{1,2})?$")) {
+                AlertMessages.mostrarAlerta("El precio debe ser un número positivo con máximo 2 decimales.", Alert.AlertType.WARNING);
+                return;
+            }
+
+            BigDecimal precio;
             try {
-                precio = Integer.parseInt(precioTexto);
-                if (precio <= 0) {
+                precio = new BigDecimal(precioTexto).setScale(2, RoundingMode.HALF_UP);
+                if (precio.compareTo(BigDecimal.ZERO) <= 0) {
                     throw new NumberFormatException();
                 }
             } catch (NumberFormatException e) {
-                AlertMessages.mostrarAlerta("El precio debe ser un número positivo.", Alert.AlertType.WARNING);
+                AlertMessages.mostrarAlerta("El precio debe ser un número positivo con máximo 2 decimales.", Alert.AlertType.WARNING);
                 return;
             }
 

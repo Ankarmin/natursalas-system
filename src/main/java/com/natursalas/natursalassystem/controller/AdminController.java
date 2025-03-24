@@ -25,6 +25,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.Timestamp;
@@ -173,7 +174,7 @@ public class AdminController implements Initializable {
     @FXML
     private TableColumn<ViewHistoryDTO, Timestamp> pacientes_historial_columna_fecha;
     @FXML
-    private TableColumn<ViewHistoryDTO, Integer> pacientes_historial_columna_precioTotal;
+    private TableColumn<ViewHistoryDTO, BigDecimal> pacientes_historial_columna_precioTotal;
     @FXML
     private TableColumn<ViewHistoryDTO, String> pacientes_historial_columna_sede;
     @FXML
@@ -217,7 +218,7 @@ public class AdminController implements Initializable {
     @FXML
     private TableColumn<ProductDTO, String> productos_columna_nombre;
     @FXML
-    private TableColumn<ProductDTO, Integer> productos_columna_precio;
+    private TableColumn<ProductDTO, BigDecimal> productos_columna_precio;
     @FXML
     private Label productos_lblTotalProductos;
     @FXML
@@ -225,7 +226,7 @@ public class AdminController implements Initializable {
     @FXML
     private TextField productos_textFieldProductos;
     @FXML
-    private TableColumn<ViewSaleDTO, Integer> ventas_columna_precioTotal;
+    private TableColumn<ViewSaleDTO, BigDecimal> ventas_columna_precioTotal;
     @FXML
     private TableColumn<ViewSaleDTO, Integer> ventas_columna_cantidad;
     @FXML
